@@ -13,11 +13,12 @@
 		842316E71F2030C300D189D1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 842316E51F2030C300D189D1 /* Main.storyboard */; };
 		842316EC1F2030C300D189D1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 842316EA1F2030C300D189D1 /* LaunchScreen.storyboard */; };
 		84ABEA0A1F3D15E70052D547 /* Assets.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 84ABEA091F3D15E70052D547 /* Assets.scnassets */; };
+		C31966B71FA0C44A00CA6059 /* Floor.scn in Resources */ = {isa = PBXBuildFile; fileRef = C31966B61FA0C44A00CA6059 /* Floor.scn */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		112FE5661F4F95A200BF85EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		42C7E84282F6D67073B8CDDB /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE.txt; sourceTree = "<group>"; };
+		42C7E84282F6D67073B8CDDB /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		842316DC1F2030C300D189D1 /* ARKitBasics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARKitBasics.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		842316DF1F2030C300D189D1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		842316E31F2030C300D189D1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -25,6 +26,7 @@
 		842316EB1F2030C300D189D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		842316ED1F2030C300D189D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84ABEA091F3D15E70052D547 /* Assets.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = Assets.scnassets; sourceTree = "<group>"; };
+		C31966B61FA0C44A00CA6059 /* Floor.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = Floor.scn; path = ARKitBasics/Assets.scnassets/Floor.scn; sourceTree = "<group>"; };
 		C85709121F34FC2200BB957F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E992F9D8F8B95C1D0CEEB4BF /* SampleCode.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = SampleCode.xcconfig; path = Configuration/SampleCode.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -45,7 +47,6 @@
 			children = (
 				42C7E84282F6D67073B8CDDB /* LICENSE.txt */,
 			);
-			name = LICENSE;
 			path = LICENSE;
 			sourceTree = "<group>";
 		};
@@ -60,6 +61,7 @@
 		842316D31F2030C300D189D1 = {
 			isa = PBXGroup;
 			children = (
+				C31966B61FA0C44A00CA6059 /* Floor.scn */,
 				C85709121F34FC2200BB957F /* README.md */,
 				842316DE1F2030C300D189D1 /* ARKitBasics */,
 				842316DD1F2030C300D189D1 /* Products */,
@@ -149,6 +151,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				84ABEA0A1F3D15E70052D547 /* Assets.scnassets in Resources */,
+				C31966B71FA0C44A00CA6059 /* Floor.scn in Resources */,
 				842316EC1F2030C300D189D1 /* LaunchScreen.storyboard in Resources */,
 				112FE5671F4F95A200BF85EA /* Assets.xcassets in Resources */,
 				842316E71F2030C300D189D1 /* Main.storyboard in Resources */,
@@ -303,7 +306,7 @@
 			baseConfigurationReference = E992F9D8F8B95C1D0CEEB4BF /* SampleCode.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = Z6364RF362;
 				INFOPLIST_FILE = ARKitBasics/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.ARKitBasics${SAMPLE_CODE_DISAMBIGUATOR}";
@@ -319,7 +322,7 @@
 			baseConfigurationReference = E992F9D8F8B95C1D0CEEB4BF /* SampleCode.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = Z6364RF362;
 				INFOPLIST_FILE = ARKitBasics/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.ARKitBasics${SAMPLE_CODE_DISAMBIGUATOR}";

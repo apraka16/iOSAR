@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="7dh-A0-qGE">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="7dh-A0-qGE">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13171"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,18 +24,18 @@
                                 </connections>
                             </arscnView>
                             <visualEffectView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="37h-bD-Iyn">
-                                <rect key="frame" x="15" y="596" width="191" height="38"/>
+                                <rect key="frame" x="15" y="596" width="174" height="38"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="pkc-hu-yuO">
-                                    <rect key="frame" x="0.0" y="0.0" width="191" height="38"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="174" height="38"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Initializing AR session." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hCE-IA-wLv">
-                                            <rect key="frame" x="8" y="8" width="169" height="22"/>
+                                            <rect key="frame" x="8" y="8" width="152" height="22"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22" id="7j0-wl-8x9"/>
                                                 <constraint firstAttribute="width" relation="lessThanOrEqual" constant="200" id="awR-PG-icx"/>
                                             </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -54,6 +54,19 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </visualEffectView>
+                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="koH-Oz-0mB">
+                                <rect key="frame" x="295" y="583" width="64" height="64"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="64" id="XoC-B5-DBj"/>
+                                    <constraint firstAttribute="width" constant="64" id="h4q-t1-hix"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <state key="normal" title="+"/>
+                                <connections>
+                                    <action selector="addObject:" destination="7dh-A0-qGE" eventType="touchUpInside" id="OIk-bG-YbH"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -62,7 +75,9 @@
                             <constraint firstItem="71x-2l-AWw" firstAttribute="trailing" secondItem="BrB-h1-WRS" secondAttribute="trailing" id="a3B-9u-pb1"/>
                             <constraint firstItem="71x-2l-AWw" firstAttribute="bottom" secondItem="37h-bD-Iyn" secondAttribute="bottom" constant="33" id="j5m-RQ-OjM"/>
                             <constraint firstItem="37h-bD-Iyn" firstAttribute="leading" secondItem="71x-2l-AWw" secondAttribute="leading" constant="15" id="lLK-x7-VyJ"/>
+                            <constraint firstItem="71x-2l-AWw" firstAttribute="trailing" secondItem="koH-Oz-0mB" secondAttribute="trailing" constant="16" id="ric-LN-b8W"/>
                             <constraint firstAttribute="top" secondItem="BrB-h1-WRS" secondAttribute="top" id="ulI-xa-35w"/>
+                            <constraint firstItem="71x-2l-AWw" firstAttribute="bottom" secondItem="koH-Oz-0mB" secondAttribute="bottom" constant="20" id="vq4-Pi-Mnh"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="71x-2l-AWw"/>
                     </view>

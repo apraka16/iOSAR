@@ -16,7 +16,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 	@IBOutlet weak var sessionInfoLabel: UILabel!
 	@IBOutlet weak var sceneView: ARSCNView!
 
-	// MARK: - View Life Cycle
+    @IBAction func addObject(_ sender: UIButton) {
+        for count in 0..<wrapperNodes.count {
+            let cube = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0)
+            let cubeNode = SCNNode(geometry: cube)
+            cubeNode.position.z = wrapperNodes[count].position.z + 0.05
+            wrapperNodes[count].addChildNode(cubeNode)
+        }
+
+    }
+    // MARK: - View Life Cycle
 	
     /// - Tag: StartARSession
     override func viewDidAppear(_ animated: Bool) {
@@ -62,6 +71,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 		sceneView.session.pause()
 	}
 	
+    private var wrapperNodes = [SCNNode]()
+    
 	// MARK: - ARSCNViewDelegate
     
     /// - Tag: PlaceARContent
@@ -70,24 +81,33 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
 
         // Create a SceneKit plane to visualize the plane anchor using its position and extent.
-        let plane = SCNPlane(width: CGFloat(planeAnchor.extent.x), height: CGFloat(planeAnchor.extent.z))
-        let planeNode = SCNNode(geometry: plane)
-        planeNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
+//        let plane = SCNPlane(width: CGFloat(planeAnchor.extent.x), height: CGFloat(planeAnchor.extent.z))
+//        let planeNode = SCNNode(geometry: plane)
+//        planeNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
+        
+        guard let virtualObject = SCNScene(named: "Floor.scn", inDirectory: "Assets.scnassets") else { return }
+        let wrapperNode = SCNNode()
+        for child in virtualObject.rootNode.childNodes {
+            wrapperNode.addChildNode(child)
+        }
+        wrapperNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
+        wrapperNode.eulerAngles.x = -.pi / 2
         
         /*
          `SCNPlane` is vertically oriented in its local coordinate space, so
          rotate the plane to match the horizontal orientation of `ARPlaneAnchor`.
         */
-        planeNode.eulerAngles.x = -.pi / 2
+//        planeNode.eulerAngles.x = -.pi / 2
         
         // Make the plane visualization semitransparent to clearly show real-world placement.
-        planeNode.opacity = 0.25
+//        planeNode.opacity = 0.25
         
         /*
          Add the plane visualization to the ARKit-managed node so that it tracks
          changes in the plane anchor as plane estimation continues.
         */
-        node.addChildNode(planeNode)
+        wrapperNodes.append(wrapperNode)
+        node.addChildNode(wrapperNode)
 	}
 
     /// - Tag: UpdateARContent
