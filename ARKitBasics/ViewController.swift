@@ -17,11 +17,19 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 	@IBOutlet weak var sceneView: ARSCNView!
 
     @IBAction func addObject(_ sender: UIButton) {
+        
+        guard let virtualBoxScene = SCNScene(named: "Cube.scn", inDirectory: "Assets.scnassets") else { return }
+        let boxWrapperNode = SCNNode()
+        for child in virtualBoxScene.rootNode.childNodes {
+            boxWrapperNode.addChildNode(child)
+        }
+        
         for count in 0..<wrapperNodes.count {
-            let cube = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0)
-            let cubeNode = SCNNode(geometry: cube)
-            cubeNode.position.z = wrapperNodes[count].position.z + 0.05
-            wrapperNodes[count].addChildNode(cubeNode)
+            boxWrapperNode.position.z = wrapperNodes[count].position.z + 0.05
+            if wrapperNodes[count].parent != nil {
+                wrapperNodes[count].parent!.addChildNode(boxWrapperNode)
+                wrapperNodes[count].removeFromParentNode()
+            }
         }
 
     }
