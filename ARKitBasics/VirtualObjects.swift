@@ -35,10 +35,8 @@ class VirtualObjects {
                     wrapperNode.addChildNode(child)
                 }
             }
-            
             objectNodes.append(wrapperNode)
         }
-        
         return objectNodes
         
     }

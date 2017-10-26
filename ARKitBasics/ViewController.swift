@@ -13,6 +13,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 	// MARK: - IBOutlets
     
     @IBAction func userTap(_ sender: UITapGestureRecognizer) {
+        
         let objects = VirtualObjects()
         var objectNodes = objects.virtualObjectNodes
         var objectToBeAdded: SCNNode?
@@ -26,23 +27,22 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
 
-        printSample()
         let touchLocation = sender.location(in: view)
         let hits = sceneView.hitTest(touchLocation, options: nil)
         if let tappedNode = hits.first?.node {
             if objectToBeAdded != nil {
                 objectToBeAdded!.position.z = tappedNode.position.z + 0.05
-                tappedNode.addChildNode(objectToBeAdded!)
+                tappedNode.parent?.addChildNode(objectToBeAdded!)
+//                objectToBeAdded!.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 1, y: 1, z: 1, duration: 1.0)))
             }
         }
     }
-    
     
     @IBAction func userSwipe(_ sender: UISwipeGestureRecognizer) {
         let touchLocation = sender.location(in: view)
         let hits = sceneView.hitTest(touchLocation, options: nil)
         if let swipedNode = hits.first?.node {
-            swipedNode.removeFromParentNode()
+            swipedNode.runAction(SCNAction.rotateBy(x: 0, y: 0, z: 1, duration: 0.5))
         }
     }
     
@@ -52,10 +52,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     @IBOutlet weak var cube: UIButton!
     @IBOutlet weak var sphere: UIButton!
-    
-    func printSample() {
-        print(sceneView.center.x)
-    }
     
     private var buttonTapped: String = ""
     
@@ -112,6 +108,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         // Show debug UI to view performance metrics (e.g. frames per second).
         sceneView.showsStatistics = true
+        
+//        sceneView.automaticallyUpdatesLighting = false
     }
 	
 	override func viewWillDisappear(_ animated: Bool) {
@@ -121,7 +119,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 		sceneView.session.pause()
 	}
 	
-    
 	// MARK: - ARSCNViewDelegate
     
     /// - Tag: PlaceARContent
