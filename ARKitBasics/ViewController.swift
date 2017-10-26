@@ -9,26 +9,72 @@ import UIKit
 import SceneKit
 import ARKit
 
-class ViewController: VCLLoggingViewController, ARSCNViewDelegate, ARSessionDelegate {
+class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 	// MARK: - IBOutlets
+    
+    @IBAction func userTap(_ sender: UITapGestureRecognizer) {
+        let objects = VirtualObjects()
+        var objectNodes = objects.virtualObjectNodes
+        var objectToBeAdded: SCNNode?
+        
+        switch buttonTapped {
+        case "C":
+            objectToBeAdded = objectNodes[0]
+        case "S":
+            objectToBeAdded = objectNodes[1]
+        default:
+            return
+        }
+
+        printSample()
+        let touchLocation = sender.location(in: view)
+        let hits = sceneView.hitTest(touchLocation, options: nil)
+        if let tappedNode = hits.first?.node {
+            if objectToBeAdded != nil {
+                objectToBeAdded!.position.z = tappedNode.position.z + 0.05
+                tappedNode.addChildNode(objectToBeAdded!)
+            }
+        }
+    }
+    
+    
+    @IBAction func userSwipe(_ sender: UISwipeGestureRecognizer) {
+        let touchLocation = sender.location(in: view)
+        let hits = sceneView.hitTest(touchLocation, options: nil)
+        if let swipedNode = hits.first?.node {
+            swipedNode.removeFromParentNode()
+        }
+    }
     
     @IBOutlet weak var sessionInfoView: UIView!
 	@IBOutlet weak var sessionInfoLabel: UILabel!
 	@IBOutlet weak var sceneView: ARSCNView!
-
-    @IBAction func addObject(_ sender: UIButton) {
-        
-        let objects = VirtualObjects()
-        let objectNodes = objects.virtualObjectNodes
-        
-        for count in 0..<wrapperNodes.count {
-            objectNodes[1].position.y = wrapperNodes[count].position.y + 0.05
-            if wrapperNodes[count].parent != nil {
-                wrapperNodes[count].parent!.addChildNode(objectNodes[1])
-            }
-        }
-
+    
+    @IBOutlet weak var cube: UIButton!
+    @IBOutlet weak var sphere: UIButton!
+    
+    func printSample() {
+        print(sceneView.center.x)
     }
+    
+    private var buttonTapped: String = ""
+    
+    @IBAction func addCube(_ sender: UIButton) {
+        sphere.backgroundColor = UIColor.clear
+        cube.backgroundColor = UIColor.white
+        if sender.currentTitle != nil {
+            buttonTapped = sender.currentTitle!
+        }
+    }
+    
+    @IBAction func addSphere(_ sender: UIButton) {
+        cube.backgroundColor = UIColor.clear
+        sphere.backgroundColor = UIColor.white
+        if sender.currentTitle != nil {
+            buttonTapped = sender.currentTitle!
+        }
+    }
+    
     // MARK: - View Life Cycle
 	
     /// - Tag: StartARSession
@@ -75,7 +121,6 @@ class ViewController: VCLLoggingViewController, ARSCNViewDelegate, ARSessionDele
 		sceneView.session.pause()
 	}
 	
-    private var wrapperNodes = [SCNNode]()
     
 	// MARK: - ARSCNViewDelegate
     
@@ -110,7 +155,7 @@ class ViewController: VCLLoggingViewController, ARSCNViewDelegate, ARSessionDele
          Add the plane visualization to the ARKit-managed node so that it tracks
          changes in the plane anchor as plane estimation continues.
         */
-        wrapperNodes.append(wrapperNode)
+        
         node.addChildNode(wrapperNode)
 	}
 

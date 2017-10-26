@@ -6,19 +6,24 @@
 //  Copyright © 2017 Apple. All rights reserved.
 //
 
+/** Class created to change .scn objects to node and add those into an array **/
+
 import Foundation
 import SceneKit
 
 class VirtualObjects {
     
+    // Stored Property for .scn objects
     private var virtualObjects = ["Cube.scn", "Sphere.scn"]
     
+    // Computed Property - Public to get all nodes
     var virtualObjectNodes: [SCNNode] {
         get {
             return createNodes(from: virtualObjects)
         }
     }
     
+    // Private method to create nodes from .scn objects
     private func createNodes(from objects: [String]) -> [SCNNode] {
         
         var objectNodes = [SCNNode]()
