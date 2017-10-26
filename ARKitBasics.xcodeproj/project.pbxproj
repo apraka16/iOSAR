@@ -18,6 +18,7 @@
 		C31966BD1FA0E03F00CA6059 /* VirtualObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31966BC1FA0E03F00CA6059 /* VirtualObjects.swift */; };
 		C31966BF1FA0E6C100CA6059 /* Sphere.scn in Resources */ = {isa = PBXBuildFile; fileRef = C31966BE1FA0E6C100CA6059 /* Sphere.scn */; };
 		C31966C31FA0EB0E00CA6059 /* VCLLoggingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31966C21FA0EB0E00CA6059 /* VCLLoggingViewController.swift */; };
+		C3BFD7FA1FA2625C002DC265 /* FocusSquare.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BFD7F91FA2625C002DC265 /* FocusSquare.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		C31966BC1FA0E03F00CA6059 /* VirtualObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualObjects.swift; sourceTree = "<group>"; };
 		C31966BE1FA0E6C100CA6059 /* Sphere.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = Sphere.scn; path = ARKitBasics/Assets.scnassets/Sphere.scn; sourceTree = "<group>"; };
 		C31966C21FA0EB0E00CA6059 /* VCLLoggingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCLLoggingViewController.swift; sourceTree = "<group>"; };
+		C3BFD7F91FA2625C002DC265 /* FocusSquare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusSquare.swift; sourceTree = "<group>"; };
 		C85709121F34FC2200BB957F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E992F9D8F8B95C1D0CEEB4BF /* SampleCode.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = SampleCode.xcconfig; path = Configuration/SampleCode.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -94,6 +96,7 @@
 				842316DF1F2030C300D189D1 /* AppDelegate.swift */,
 				842316E31F2030C300D189D1 /* ViewController.swift */,
 				C31966BC1FA0E03F00CA6059 /* VirtualObjects.swift */,
+				C3BFD7F91FA2625C002DC265 /* FocusSquare.swift */,
 				C31966C21FA0EB0E00CA6059 /* VCLLoggingViewController.swift */,
 				842316E51F2030C300D189D1 /* Main.storyboard */,
 				842316EA1F2030C300D189D1 /* LaunchScreen.storyboard */,
@@ -183,6 +186,7 @@
 				C31966BD1FA0E03F00CA6059 /* VirtualObjects.swift in Sources */,
 				842316E41F2030C300D189D1 /* ViewController.swift in Sources */,
 				842316E01F2030C300D189D1 /* AppDelegate.swift in Sources */,
+				C3BFD7FA1FA2625C002DC265 /* FocusSquare.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

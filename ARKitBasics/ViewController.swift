@@ -111,7 +111,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
 //        sceneView.automaticallyUpdatesLighting = false
     }
-	
+
+    
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
 		
@@ -153,8 +154,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
          changes in the plane anchor as plane estimation continues.
         */
         
+        // MARK: @TODO: Streamline FocusSquare and remove floorNode
+        let focusSquare = FocusSquare()
+        let focusSquareObject = focusSquare.createFocusSquare(atX: CGFloat(planeAnchor.center.x), atY: CGFloat(planeAnchor.center.y))
+        focusSquareObject.eulerAngles.x = -.pi / 2
+        focusSquareObject.position.y += 0.05
+        node.addChildNode(focusSquareObject)
+        
         node.addChildNode(wrapperNode)
 	}
+    
 
     /// - Tag: UpdateARContent
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
