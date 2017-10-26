@@ -23,3 +23,7 @@ Swipe | Remove swiped 3D object from the current location
 * Smooth Transition: To make transition of plane detection and consequent plane udpate smooth so as to have better UI
 * Add multipleGesture recognition and create separate class/ sourceCode for multiple gesture driven animation/ user interaction.
 * Create and add Blender models
+
+## Special Thanks
+* Paul Hegarty (Stanford) lectures and Logging sourcecode.
+* Apple team - ARKit starter sourcecode.
