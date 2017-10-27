@@ -10,10 +10,13 @@ import SceneKit
 import ARKit
 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
-	// MARK: - IBOutlets
     
+    // MARK: - Debug Purposes
+    
+    private var currentNumberOfLiveObjectNodes = 0
+    
+	// MARK: - IBOutlets
     @IBAction func userTap(_ sender: UITapGestureRecognizer) {
-        
         let objects = VirtualObjects()
         var objectNodes = objects.virtualObjectNodes
         var objectToBeAdded: SCNNode?
@@ -26,13 +29,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         default:
             return
         }
-
+        
+        
         let touchLocation = sender.location(in: view)
         let hits = sceneView.hitTest(touchLocation, options: nil)
         if let tappedNode = hits.first?.node {
             if objectToBeAdded != nil {
                 objectToBeAdded!.position.z = tappedNode.position.z + 0.05
                 tappedNode.parent?.addChildNode(objectToBeAdded!)
+                currentNumberOfLiveObjectNodes += 1
+                print("Number of live nodes in Scene: \(currentNumberOfLiveObjectNodes)")
 //                objectToBeAdded!.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 1, y: 1, z: 1, duration: 1.0)))
             }
         }
@@ -156,9 +162,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         // MARK: @TODO: Streamline FocusSquare and remove floorNode
         let focusSquare = FocusSquare()
-        let focusSquareObject = focusSquare.createFocusSquare(atX: CGFloat(planeAnchor.center.x), atY: CGFloat(planeAnchor.center.y))
+        let focusSquareObject = focusSquare.createFocusSquare()
+        focusSquareObject.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
         focusSquareObject.eulerAngles.x = -.pi / 2
-        focusSquareObject.position.y += 0.05
+//        focusSquareObject.position.y += 0.05
         node.addChildNode(focusSquareObject)
         
         node.addChildNode(wrapperNode)

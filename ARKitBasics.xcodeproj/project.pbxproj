@@ -18,6 +18,7 @@
 		C31966BD1FA0E03F00CA6059 /* VirtualObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31966BC1FA0E03F00CA6059 /* VirtualObjects.swift */; };
 		C31966BF1FA0E6C100CA6059 /* Sphere.scn in Resources */ = {isa = PBXBuildFile; fileRef = C31966BE1FA0E6C100CA6059 /* Sphere.scn */; };
 		C31966C31FA0EB0E00CA6059 /* VCLLoggingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31966C21FA0EB0E00CA6059 /* VCLLoggingViewController.swift */; };
+		C3B6CF751FA31F570031DDA0 /* OpenSquare.scn in Resources */ = {isa = PBXBuildFile; fileRef = C3B6CF741FA31F570031DDA0 /* OpenSquare.scn */; };
 		C3BFD7FA1FA2625C002DC265 /* FocusSquare.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BFD7F91FA2625C002DC265 /* FocusSquare.swift */; };
 /* End PBXBuildFile section */
 
@@ -36,6 +37,7 @@
 		C31966BC1FA0E03F00CA6059 /* VirtualObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualObjects.swift; sourceTree = "<group>"; };
 		C31966BE1FA0E6C100CA6059 /* Sphere.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = Sphere.scn; path = ARKitBasics/Assets.scnassets/Sphere.scn; sourceTree = "<group>"; };
 		C31966C21FA0EB0E00CA6059 /* VCLLoggingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCLLoggingViewController.swift; sourceTree = "<group>"; };
+		C3B6CF741FA31F570031DDA0 /* OpenSquare.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = OpenSquare.scn; path = ARKitBasics/Assets.scnassets/OpenSquare.scn; sourceTree = "<group>"; };
 		C3BFD7F91FA2625C002DC265 /* FocusSquare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusSquare.swift; sourceTree = "<group>"; };
 		C85709121F34FC2200BB957F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E992F9D8F8B95C1D0CEEB4BF /* SampleCode.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = SampleCode.xcconfig; path = Configuration/SampleCode.xcconfig; sourceTree = "<group>"; };
@@ -71,6 +73,7 @@
 		842316D31F2030C300D189D1 = {
 			isa = PBXGroup;
 			children = (
+				C3B6CF741FA31F570031DDA0 /* OpenSquare.scn */,
 				C31966BE1FA0E6C100CA6059 /* Sphere.scn */,
 				C31966B81FA0D7B400CA6059 /* Cube.scn */,
 				C31966B61FA0C44A00CA6059 /* Floor.scn */,
@@ -168,6 +171,7 @@
 				84ABEA0A1F3D15E70052D547 /* Assets.scnassets in Resources */,
 				C31966B71FA0C44A00CA6059 /* Floor.scn in Resources */,
 				C31966BF1FA0E6C100CA6059 /* Sphere.scn in Resources */,
+				C3B6CF751FA31F570031DDA0 /* OpenSquare.scn in Resources */,
 				842316EC1F2030C300D189D1 /* LaunchScreen.storyboard in Resources */,
 				C31966B91FA0D7B400CA6059 /* Cube.scn in Resources */,
 				112FE5671F4F95A200BF85EA /* Assets.xcassets in Resources */,

@@ -28,20 +28,23 @@ import SceneKit
 class FocusSquare {
     
     // MARK: Instance variables
-    private let color: UIColor = UIColor.red
-    private let fillColor: UIColor = UIColor.green
+    
+    // No instance variable?
     
     // MARK: Instance Method to create Square1
-    func createFocusSquare(atX xCoord: CGFloat, atY yCoord: CGFloat) -> SCNNode {
-        let path = UIBezierPath(rect: CGRect(x: xCoord, y: yCoord, width: 0.2, height: 0.2))
-        path.lineWidth = 0.01
-        color.setStroke()
-        path.stroke()
-        fillColor.setFill()
-        path.fill()
+    func createFocusSquare() -> SCNNode {
         
-        let shape = SCNShape(path: path, extrusionDepth: 0)
+        let wrapperNode = SCNNode()
         
-        return SCNNode(geometry: shape)
+        if let virtualObject = SCNScene(named: "OpenSquare.scn", inDirectory: "Assets.scnassets") {
+            for child in virtualObject.rootNode.childNodes {
+                wrapperNode.addChildNode(child)
+            }
+        }
+        
+        // Actual Size of the OpenSquare is  3*3*3 which is scaled down below
+        wrapperNode.scale = SCNVector3(0.1, 0.1, 0.1)
+
+        return wrapperNode
     }
 }
