@@ -24,7 +24,6 @@
                                 <connections>
                                     <outlet property="delegate" destination="7dh-A0-qGE" id="6YV-aS-dot"/>
                                     <outletCollection property="gestureRecognizers" destination="G7e-u0-8OZ" appends="YES" id="PdB-Rg-7jX"/>
-                                    <outletCollection property="gestureRecognizers" destination="Wwy-d8-QWO" appends="YES" id="ZR5-4o-ech"/>
                                 </connections>
                             </arscnView>
                             <visualEffectView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="37h-bD-Iyn">
@@ -118,11 +117,6 @@
                         <action selector="userTap:" destination="7dh-A0-qGE" id="QTZ-Vy-eUr"/>
                     </connections>
                 </tapGestureRecognizer>
-                <swipeGestureRecognizer direction="right" id="Wwy-d8-QWO">
-                    <connections>
-                        <action selector="userSwipe:" destination="7dh-A0-qGE" id="Pw6-Z6-moj"/>
-                    </connections>
-                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1029.5999999999999" y="-222.63868065967017"/>
         </scene>

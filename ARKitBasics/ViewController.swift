@@ -30,13 +30,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
         
-        
         let touchLocation = sender.location(in: view)
         let hits = sceneView.hitTest(touchLocation, options: nil)
         if let tappedNode = hits.first?.node {
             if objectToBeAdded != nil {
                 objectToBeAdded!.position.z = tappedNode.position.z + 0.05
                 tappedNode.parent?.addChildNode(objectToBeAdded!)
+                
                 currentNumberOfLiveObjectNodes += 1
                 print("Number of live nodes in Scene: \(currentNumberOfLiveObjectNodes)")
 //                objectToBeAdded!.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 1, y: 1, z: 1, duration: 1.0)))
@@ -44,22 +44,35 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
     
-    @IBAction func userSwipe(_ sender: UISwipeGestureRecognizer) {
-        let touchLocation = sender.location(in: view)
-        let hits = sceneView.hitTest(touchLocation, options: nil)
-        if let swipedNode = hits.first?.node {
-            swipedNode.runAction(SCNAction.rotateBy(x: 0, y: 0, z: 1, duration: 0.5))
-        }
-    }
     
     @IBOutlet weak var sessionInfoView: UIView!
 	@IBOutlet weak var sessionInfoLabel: UILabel!
-	@IBOutlet weak var sceneView: ARSCNView!
+    @IBOutlet weak var sceneView: ARSCNView! {
+        didSet {
+            let swipeDownGesture = UISwipeGestureRecognizer(target: self, action: #selector(highlightObject(_:)))
+            swipeDownGesture.direction = .down
+            sceneView.addGestureRecognizer(swipeDownGesture)
+            
+            let swipeUpGesture = UISwipeGestureRecognizer(target: self, action: #selector(rotateObjectUp(_:)))
+            swipeUpGesture.direction = .up
+            sceneView.addGestureRecognizer(swipeUpGesture)
+            
+            let swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(rotateObjectToLeft(_:)))
+            swipeLeftGesture.direction = .left
+            sceneView.addGestureRecognizer(swipeLeftGesture)
+            
+            let swipeRightGesture = UISwipeGestureRecognizer(target: self, action: #selector(rotateObjectToRight(_:)))
+            swipeRightGesture.direction = .right
+            sceneView.addGestureRecognizer(swipeRightGesture)
+        }
+    }
     
     @IBOutlet weak var cube: UIButton!
     @IBOutlet weak var sphere: UIButton!
     
     private var buttonTapped: String = ""
+    
+
     
     @IBAction func addCube(_ sender: UIButton) {
         sphere.backgroundColor = UIColor.clear
@@ -132,7 +145,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 	func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         // Place content only for anchors found by plane detection.
         guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
-
+        
         // Create a SceneKit plane to visualize the plane anchor using its position and extent.
 //        let plane = SCNPlane(width: CGFloat(planeAnchor.extent.x), height: CGFloat(planeAnchor.extent.z))
 //        let planeNode = SCNNode(geometry: plane)
@@ -145,7 +158,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         wrapperNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
         wrapperNode.eulerAngles.x = -.pi / 2
-        
         /*
          `SCNPlane` is vertically oriented in its local coordinate space, so
          rotate the plane to match the horizontal orientation of `ARPlaneAnchor`.
@@ -265,5 +277,59 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = .horizontal
         sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+    }
+    
+    // MARK: - Gesture Methods
+    
+    // Rotate an object clockwise on Swiping Left in Z plane
+    @objc
+    func rotateObjectToLeft(_ gestureRecognize: UIGestureRecognizer) {
+        let p = gestureRecognize.location(in: sceneView)
+        let hitResults = sceneView.hitTest(p, options: [:])
+        if hitResults.count > 0 {
+            let result = hitResults[0]
+            result.node.runAction(SCNAction.rotateBy(x: 0, y: 0, z: -1, duration: 0.25))
+        }
+    }
+    // Rotate an object anticlockwise on Swiping Left in Z plane
+    @objc
+    func rotateObjectToRight(_ gestureRecognize: UIGestureRecognizer) {
+        let p = gestureRecognize.location(in: sceneView)
+        let hitResults = sceneView.hitTest(p, options: [:])
+        if hitResults.count > 0 {
+            let result = hitResults[0]
+            result.node.runAction(SCNAction.rotateBy(x: 0, y: 0, z: 1, duration: 0.25))
+        }
+    }
+    // Rotate an object upwards on Swiping Left in Y plane
+    @objc
+    func rotateObjectUp(_ gestureRecognize: UIGestureRecognizer) {
+        let p = gestureRecognize.location(in: sceneView)
+        let hitResults = sceneView.hitTest(p, options: [:])
+        if hitResults.count > 0 {
+            let result = hitResults[0]
+            result.node.runAction(SCNAction.rotateBy(x: 0, y: 1, z: 0, duration: 0.25))
+        }
+    }
+    
+    
+    @objc
+    func highlightObject(_ gestureRecognize: UIGestureRecognizer) {
+        let p = gestureRecognize.location(in: sceneView)
+        let hitResults = sceneView.hitTest(p, options: [:])
+        if hitResults.count > 0 {
+            let result = hitResults[0]
+            let material = result.node.geometry!.firstMaterial!
+            SCNTransaction.begin()
+            SCNTransaction.animationDuration = 0.5
+            SCNTransaction.completionBlock = {
+                SCNTransaction.begin()
+                SCNTransaction.animationDuration = 0.5
+                material.emission.contents = UIColor.black
+                SCNTransaction.commit()
+            }
+            material.emission.contents = UIColor.red
+            SCNTransaction.commit()
+        }
     }
 }
