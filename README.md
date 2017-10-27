@@ -18,7 +18,10 @@ Sphere | S
 Gesture | Action
 ------------ | -------------
 Tap | Add selected 3D object (cube, sphere, etc.) in the center of detected plane 
-Swipe | Remove swiped 3D object from the current location
+SwipeLeft | Rotate object anticlockwise
+SwipeRight | Rotate object clockwise
+SwipeUp | Rotate object upwards
+SwipeDown | Highlight Object for some seconds
 
 ## TODO:
 * Lighting Condition: To use environment lighting conditions to light up the shapes
