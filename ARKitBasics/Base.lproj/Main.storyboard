@@ -88,12 +88,21 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rfx-4y-c7X" customClass="CollectorView" customModule="ARKitBasics" customModuleProvider="target">
+                                <rect key="frame" x="295" y="583" width="64" height="64"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="64" id="6Uu-uO-aJt"/>
+                                    <constraint firstAttribute="width" constant="64" id="qgl-Fq-q4t"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="BrB-h1-WRS" secondAttribute="bottom" id="8rY-15-6Ru"/>
                             <constraint firstItem="mCV-Jk-wi5" firstAttribute="top" secondItem="71x-2l-AWw" secondAttribute="top" id="FQW-zl-BJx"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="71x-2l-AWw" secondAttribute="leading" id="QIa-Ri-qJo"/>
+                            <constraint firstItem="71x-2l-AWw" firstAttribute="trailing" secondItem="Rfx-4y-c7X" secondAttribute="trailing" constant="16" id="W8r-Eq-EPu"/>
+                            <constraint firstItem="71x-2l-AWw" firstAttribute="bottom" secondItem="Rfx-4y-c7X" secondAttribute="bottom" constant="20" id="Y5P-Y3-S3b"/>
                             <constraint firstItem="71x-2l-AWw" firstAttribute="trailing" secondItem="BrB-h1-WRS" secondAttribute="trailing" id="a3B-9u-pb1"/>
                             <constraint firstItem="71x-2l-AWw" firstAttribute="bottom" secondItem="37h-bD-Iyn" secondAttribute="bottom" constant="33" id="j5m-RQ-OjM"/>
                             <constraint firstItem="mCV-Jk-wi5" firstAttribute="trailing" secondItem="loo-cG-myf" secondAttribute="trailingMargin" id="jKW-La-59M"/>
@@ -103,6 +112,7 @@
                         <viewLayoutGuide key="safeArea" id="71x-2l-AWw"/>
                     </view>
                     <connections>
+                        <outlet property="collector" destination="Rfx-4y-c7X" id="14z-uZ-w3y"/>
                         <outlet property="cube" destination="KYe-0f-7Ma" id="lSi-xx-OIs"/>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="sgr-g8-kdG"/>
                         <outlet property="sessionInfoLabel" destination="hCE-IA-wLv" id="fqx-0o-IdX"/>

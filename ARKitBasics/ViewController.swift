@@ -12,14 +12,13 @@ import ARKit
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // MARK: - Debug Purposes
-    
-    private var currentNumberOfLiveObjectNodes = 0
+    private var scale: CGFloat = 1.0
+    private var objectToBeAdded: SCNNode?
     
 	// MARK: - IBOutlets
     @IBAction func userTap(_ sender: UITapGestureRecognizer) {
         let objects = VirtualObjects()
         var objectNodes = objects.virtualObjectNodes
-        var objectToBeAdded: SCNNode?
         
         switch buttonTapped {
         case "C":
@@ -36,14 +35,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             if objectToBeAdded != nil {
                 objectToBeAdded!.position.z = tappedNode.position.z + 0.05
                 tappedNode.parent?.addChildNode(objectToBeAdded!)
-                
-                currentNumberOfLiveObjectNodes += 1
-                print("Number of live nodes in Scene: \(currentNumberOfLiveObjectNodes)")
-//                objectToBeAdded!.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 1, y: 1, z: 1, duration: 1.0)))
             }
         }
     }
-    
     
     @IBOutlet weak var sessionInfoView: UIView!
 	@IBOutlet weak var sessionInfoLabel: UILabel!
@@ -64,15 +58,19 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             let swipeRightGesture = UISwipeGestureRecognizer(target: self, action: #selector(rotateObjectToRight(_:)))
             swipeRightGesture.direction = .right
             sceneView.addGestureRecognizer(swipeRightGesture)
+            
+            let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(changeScale(_:)))
+            sceneView.addGestureRecognizer(pinchGesture)
         }
     }
     
     @IBOutlet weak var cube: UIButton!
     @IBOutlet weak var sphere: UIButton!
     
-    private var buttonTapped: String = ""
+    // CollectorView variable 
+    @IBOutlet weak var collector: CollectorView!
     
-
+    private var buttonTapped: String = ""
     
     @IBAction func addCube(_ sender: UIButton) {
         sphere.backgroundColor = UIColor.clear
@@ -130,7 +128,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
 //        sceneView.automaticallyUpdatesLighting = false
     }
-
     
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
@@ -173,12 +170,11 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         */
         
         // MARK: @TODO: Streamline FocusSquare and remove floorNode
-        let focusSquare = FocusSquare()
-        let focusSquareObject = focusSquare.createFocusSquare()
-        focusSquareObject.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
-        focusSquareObject.eulerAngles.x = -.pi / 2
-//        focusSquareObject.position.y += 0.05
-        node.addChildNode(focusSquareObject)
+//        let focusSquare = FocusSquare()
+//        let focusSquareObject = focusSquare.createFocusSquare()
+//        focusSquareObject.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
+//        focusSquareObject.eulerAngles.x = -.pi / 2
+//        node.addChildNode(focusSquareObject)
         
         node.addChildNode(wrapperNode)
 	}
@@ -312,6 +308,21 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
     
+    // Change the size of object on pinch
+    @objc
+    func changeScale(_ gestureRecognize: UIPinchGestureRecognizer) {
+        let p = gestureRecognize.location(in: sceneView)
+        let hitResults = sceneView.hitTest(p, options: [:])
+        if hitResults.count > 0 {
+            let result = hitResults[0]
+            switch gestureRecognize.state {
+            case .changed, .ended:
+                result.node.scale = SCNVector3(gestureRecognize.scale, gestureRecognize.scale, gestureRecognize.scale)
+            default:
+                break
+            }
+        }
+    }
     
     @objc
     func highlightObject(_ gestureRecognize: UIGestureRecognizer) {
@@ -330,6 +341,34 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
             material.emission.contents = UIColor.red
             SCNTransaction.commit()
+            
+            // create a new scene
+            let scene = SCNScene()
+            
+            // create and add a camera to the scene
+            let cameraNode = SCNNode(); cameraNode.camera = SCNCamera(); scene.rootNode.addChildNode(cameraNode)
+
+            // place the camera
+            cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
+
+            // create and add a light to the scene
+            let lightNode = SCNNode(); lightNode.light = SCNLight(); lightNode.light!.type = .omni
+            lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
+            scene.rootNode.addChildNode(lightNode)
+
+            // create and add an ambient light to the scene
+            let ambientLightNode = SCNNode(); ambientLightNode.light = SCNLight(); ambientLightNode.light!.type = .ambient
+            ambientLightNode.light!.color = UIColor.darkGray
+            scene.rootNode.addChildNode(ambientLightNode)
+
+            // Add the result of hitTest, i.e., swiped-down node to collector view
+            scene.rootNode.addChildNode(result.node)
+            result.node.scale = SCNVector3(x: 70, y: 70, z: 70)
+            result.node.eulerAngles.y = -.pi/4
+            result.node.eulerAngles.z = -.pi/4
+            
+            // set the scene to the view
+            collector.scene = scene
         }
     }
 }
