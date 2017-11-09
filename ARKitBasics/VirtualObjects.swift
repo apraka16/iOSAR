@@ -14,7 +14,7 @@ import SceneKit
 class VirtualObjects {
     
     // Stored Property for .scn objects
-    private var virtualObjects = ["Cube.scn", "Sphere.scn"]
+    var virtualObjects = ["Cube.scn", "Sphere.scn"]
     
     // Computed Property - Public to get all nodes
     var virtualObjectNodes: [SCNNode] {

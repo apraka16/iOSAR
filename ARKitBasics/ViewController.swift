@@ -9,11 +9,13 @@ import UIKit
 import SceneKit
 import ARKit
 
-class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
+class ViewController: UIViewController {
     
     // MARK: - Debug Purposes
     private var scale: CGFloat = 1.0
     private var objectToBeAdded: SCNNode?
+    
+    private var tappedNode: SCNNode?
     
 	// MARK: - IBOutlets
     @IBAction func userTap(_ sender: UITapGestureRecognizer) {
@@ -31,14 +33,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         let touchLocation = sender.location(in: view)
         let hits = sceneView.hitTest(touchLocation, options: nil)
-        if let tappedNode = hits.first?.node {
+        if hits.first?.node != nil {
+            tappedNode = hits.first?.node
             if objectToBeAdded != nil {
-                objectToBeAdded!.position.z = tappedNode.position.z + 0.05
-                tappedNode.parent?.addChildNode(objectToBeAdded!)
+                objectToBeAdded!.position.z = (tappedNode?.position.z)! + 0.05
+                tappedNode?.parent?.addChildNode(objectToBeAdded!)
+                tappedNode?.isHidden = true
             }
         }
     }
-    
+
     @IBOutlet weak var sessionInfoView: UIView!
 	@IBOutlet weak var sessionInfoLabel: UILabel!
     @IBOutlet weak var sceneView: ARSCNView! {
@@ -66,6 +70,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     @IBOutlet weak var cube: UIButton!
     @IBOutlet weak var sphere: UIButton!
+    
+    @IBAction func chooseVirtualObject(from segue: UIStoryboardSegue) {
+        if let virtualObjectChosen = segue.source as? VirtualObjectTableViewController {
+            print(virtualObjectChosen.virtualObjectSelected)
+        }
+    }
     
     // CollectorView variable 
     @IBOutlet weak var collector: CollectorView!
@@ -128,7 +138,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
 //        sceneView.automaticallyUpdatesLighting = false
     }
-    
+
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
 		
@@ -137,143 +147,29 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 	}
 	
 	// MARK: - ARSCNViewDelegate
-    
-    /// - Tag: PlaceARContent
-	func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-        // Place content only for anchors found by plane detection.
-        guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
-        
-        // Create a SceneKit plane to visualize the plane anchor using its position and extent.
-//        let plane = SCNPlane(width: CGFloat(planeAnchor.extent.x), height: CGFloat(planeAnchor.extent.z))
-//        let planeNode = SCNNode(geometry: plane)
-//        planeNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
-        
-        guard let virtualObject = SCNScene(named: "Floor.scn", inDirectory: "Assets.scnassets") else { return }
-        let wrapperNode = SCNNode()
-        for child in virtualObject.rootNode.childNodes {
-            wrapperNode.addChildNode(child)
-        }
-        wrapperNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
-        wrapperNode.eulerAngles.x = -.pi / 2
-        /*
-         `SCNPlane` is vertically oriented in its local coordinate space, so
-         rotate the plane to match the horizontal orientation of `ARPlaneAnchor`.
-        */
-//        planeNode.eulerAngles.x = -.pi / 2
-        
-        // Make the plane visualization semitransparent to clearly show real-world placement.
-//        planeNode.opacity = 0.25
-        
-        /*
-         Add the plane visualization to the ARKit-managed node so that it tracks
-         changes in the plane anchor as plane estimation continues.
-        */
-        
-        // MARK: @TODO: Streamline FocusSquare and remove floorNode
-//        let focusSquare = FocusSquare()
-//        let focusSquareObject = focusSquare.createFocusSquare()
-//        focusSquareObject.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
-//        focusSquareObject.eulerAngles.x = -.pi / 2
-//        node.addChildNode(focusSquareObject)
-        
-        node.addChildNode(wrapperNode)
-	}
+//    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+//        DispatchQueue.main.async {
+//
+//            let plane = SCNPlane(width: 1.0, height: 1.0)
+//            let planeNode = SCNNode(geometry: plane)
+//            self.sceneView.scene.rootNode.addChildNode(planeNode)
+//
+//            let centralPoint = CGPoint(x: self.sceneView.bounds.midX, y: self.sceneView.bounds.midY)
+//            let testResults = self.sceneView.hitTest(centralPoint, types: ARHitTestResult.ResultType.existingPlane)
+//
+//            if testResults.count > 0 {
+//                for i in 0..<testResults.count {
+//                    planeNode.simdTransform = testResults[i].worldTransform
+//                    planeNode.eulerAngles.x = -.pi/2
+//                    planeNode.opacity = 0.25
+//                    print(self.sceneView.scene.rootNode.childNodes.count)
+//                }
+//            }
+//        }
+//    }
     
 
-    /// - Tag: UpdateARContent
-    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-        // Update content only for plane anchors and nodes matching the setup created in `renderer(_:didAdd:for:)`.
-        guard let planeAnchor = anchor as?  ARPlaneAnchor,
-            let planeNode = node.childNodes.first,
-            let plane = planeNode.geometry as? SCNPlane
-            else { return }
-        
-        // Plane estimation may shift the center of a plane relative to its anchor's transform.
-        planeNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
-        
-        /*
-         Plane estimation may extend the size of the plane, or combine previously detected
-         planes into a larger one. In the latter case, `ARSCNView` automatically deletes the
-         corresponding node for one plane, then calls this method to update the size of
-         the remaining plane.
-        */
-        plane.width = CGFloat(planeAnchor.extent.x)
-        plane.height = CGFloat(planeAnchor.extent.z)
-    }
 
-    // MARK: - ARSessionDelegate
-
-    func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
-        guard let frame = session.currentFrame else { return }
-        updateSessionInfoLabel(for: frame, trackingState: frame.camera.trackingState)
-    }
-
-    func session(_ session: ARSession, didRemove anchors: [ARAnchor]) {
-        guard let frame = session.currentFrame else { return }
-        updateSessionInfoLabel(for: frame, trackingState: frame.camera.trackingState)
-    }
-
-    func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
-        updateSessionInfoLabel(for: session.currentFrame!, trackingState: camera.trackingState)
-    }
-
-    // MARK: - ARSessionObserver
-	
-	func sessionWasInterrupted(_ session: ARSession) {
-		// Inform the user that the session has been interrupted, for example, by presenting an overlay.
-		sessionInfoLabel.text = "Session was interrupted"
-	}
-	
-	func sessionInterruptionEnded(_ session: ARSession) {
-		// Reset tracking and/or remove existing anchors if consistent tracking is required.
-		sessionInfoLabel.text = "Session interruption ended"
-		resetTracking()
-	}
-    
-    func session(_ session: ARSession, didFailWithError error: Error) {
-        // Present an error message to the user.
-        sessionInfoLabel.text = "Session failed: \(error.localizedDescription)"
-        resetTracking()
-    }
-
-    // MARK: - Private methods
-
-    private func updateSessionInfoLabel(for frame: ARFrame, trackingState: ARCamera.TrackingState) {
-        // Update the UI to provide feedback on the state of the AR experience.
-        let message: String
-
-        switch trackingState {
-        case .normal where frame.anchors.isEmpty:
-            // No planes detected; provide instructions for this app's AR interactions.
-            message = "Move the device around to detect horizontal surfaces."
-            
-        case .normal:
-            // No feedback needed when tracking is normal and planes are visible.
-            message = ""
-            
-        case .notAvailable:
-            message = "Tracking unavailable."
-            
-        case .limited(.excessiveMotion):
-            message = "Tracking limited - Move the device more slowly."
-            
-        case .limited(.insufficientFeatures):
-            message = "Tracking limited - Point the device at an area with visible surface detail, or improve lighting conditions."
-            
-        case .limited(.initializing):
-            message = "Initializing AR session."
-            
-        }
-
-        sessionInfoLabel.text = message
-        sessionInfoView.isHidden = message.isEmpty
-    }
-
-    private func resetTracking() {
-        let configuration = ARWorldTrackingConfiguration()
-        configuration.planeDetection = .horizontal
-        sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
-    }
     
     // MARK: - Gesture Methods
     
@@ -346,7 +242,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             let scene = SCNScene()
             
             // create and add a camera to the scene
-            let cameraNode = SCNNode(); cameraNode.camera = SCNCamera(); scene.rootNode.addChildNode(cameraNode)
+            let cameraNode = SCNNode(); cameraNode.camera = SCNCamera()
+            scene.rootNode.addChildNode(cameraNode)
 
             // place the camera
             cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
@@ -369,6 +266,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             
             // set the scene to the view
             collector.scene = scene
+            tappedNode?.isHidden = false
         }
     }
 }
