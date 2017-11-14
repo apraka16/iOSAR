@@ -19,6 +19,8 @@
 		C31966BD1FA0E03F00CA6059 /* VirtualObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31966BC1FA0E03F00CA6059 /* VirtualObjects.swift */; };
 		C31966BF1FA0E6C100CA6059 /* Sphere.scn in Resources */ = {isa = PBXBuildFile; fileRef = C31966BE1FA0E6C100CA6059 /* Sphere.scn */; };
 		C327F1921FB466EB00CB9750 /* VirtualObjectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C327F1911FB466EB00CB9750 /* VirtualObjectTableViewController.swift */; };
+		C32D60661FBAD4750012F6CC /* VirtualObjectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32D60651FBAD4750012F6CC /* VirtualObjectTableViewCell.swift */; };
+		C32D606A1FBB1B4C0012F6CC /* VirtualObjectDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32D60691FBB1B4C0012F6CC /* VirtualObjectDisplay.swift */; };
 		C37535401FB5A757003AC18F /* ContainerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C375353F1FB5A757003AC18F /* ContainerTableViewController.swift */; };
 		C3B6CF751FA31F570031DDA0 /* OpenSquare.scn in Resources */ = {isa = PBXBuildFile; fileRef = C3B6CF741FA31F570031DDA0 /* OpenSquare.scn */; };
 		C3BC38A01FB48323002E6844 /* ViewController+ARSCNView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BC389F1FB48323002E6844 /* ViewController+ARSCNView.swift */; };
@@ -41,6 +43,8 @@
 		C31966BC1FA0E03F00CA6059 /* VirtualObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualObjects.swift; sourceTree = "<group>"; };
 		C31966BE1FA0E6C100CA6059 /* Sphere.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = Sphere.scn; path = ARKitBasics/Assets.scnassets/Sphere.scn; sourceTree = "<group>"; };
 		C327F1911FB466EB00CB9750 /* VirtualObjectTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualObjectTableViewController.swift; sourceTree = "<group>"; };
+		C32D60651FBAD4750012F6CC /* VirtualObjectTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualObjectTableViewCell.swift; sourceTree = "<group>"; };
+		C32D60691FBB1B4C0012F6CC /* VirtualObjectDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualObjectDisplay.swift; sourceTree = "<group>"; };
 		C375353F1FB5A757003AC18F /* ContainerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerTableViewController.swift; sourceTree = "<group>"; };
 		C3B6CF741FA31F570031DDA0 /* OpenSquare.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = OpenSquare.scn; path = ARKitBasics/Assets.scnassets/OpenSquare.scn; sourceTree = "<group>"; };
 		C3BC389F1FB48323002E6844 /* ViewController+ARSCNView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+ARSCNView.swift"; sourceTree = "<group>"; };
@@ -103,12 +107,14 @@
 			isa = PBXGroup;
 			children = (
 				842316DF1F2030C300D189D1 /* AppDelegate.swift */,
+				C32D60691FBB1B4C0012F6CC /* VirtualObjectDisplay.swift */,
 				842316E31F2030C300D189D1 /* ViewController.swift */,
 				C3BC389F1FB48323002E6844 /* ViewController+ARSCNView.swift */,
 				C312238E1FA4D34E006CDC78 /* CollectorView.swift */,
 				C31966BC1FA0E03F00CA6059 /* VirtualObjects.swift */,
 				C3BFD7F91FA2625C002DC265 /* FocusSquare.swift */,
 				C327F1911FB466EB00CB9750 /* VirtualObjectTableViewController.swift */,
+				C32D60651FBAD4750012F6CC /* VirtualObjectTableViewCell.swift */,
 				C375353F1FB5A757003AC18F /* ContainerTableViewController.swift */,
 				842316E51F2030C300D189D1 /* Main.storyboard */,
 				842316EA1F2030C300D189D1 /* LaunchScreen.storyboard */,
@@ -200,7 +206,9 @@
 				C31966BD1FA0E03F00CA6059 /* VirtualObjects.swift in Sources */,
 				842316E41F2030C300D189D1 /* ViewController.swift in Sources */,
 				C3BC38A01FB48323002E6844 /* ViewController+ARSCNView.swift in Sources */,
+				C32D60661FBAD4750012F6CC /* VirtualObjectTableViewCell.swift in Sources */,
 				842316E01F2030C300D189D1 /* AppDelegate.swift in Sources */,
+				C32D606A1FBB1B4C0012F6CC /* VirtualObjectDisplay.swift in Sources */,
 				C37535401FB5A757003AC18F /* ContainerTableViewController.swift in Sources */,
 				C3BFD7FA1FA2625C002DC265 /* FocusSquare.swift in Sources */,
 			);

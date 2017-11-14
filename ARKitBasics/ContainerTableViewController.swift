@@ -76,10 +76,8 @@ extension UITableView {
         var height: CGFloat = 0
         for row in 0..<numberOfRows(inSection: section) {
             let indexPath = IndexPath(item: row, section: section)
-            print(indexPath.row)
             if let cell = cellForRow(at: indexPath) ?? dataSource?.tableView(self, cellForRowAt: indexPath) {
                 let cellSize = cell.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
-                print(cellSize)
                 width = max(width, cellSize.width)
 //                height += heightForRow(at: indexPath)
                 height += cellSize.height

@@ -37,7 +37,7 @@ struct VirtualObjects {
     }
     
     // Private method to create nodes from .scn objects
-    func createNodes(from object: String) -> SCNNode {
+    func createNodes(from object: String, with color: UIColor) -> SCNNode {
     
         let wrapperNode = SCNNode()
         if let virtualScene = SCNScene(named: object + ".scn", inDirectory: "Assets.scnassets") {
@@ -45,6 +45,8 @@ struct VirtualObjects {
                 wrapperNode.addChildNode(child)
             }
         }
+        let material = wrapperNode.childNodes[0].childNodes[1].geometry?.firstMaterial!
+        material?.emission.contents = color
         return wrapperNode
     }
     

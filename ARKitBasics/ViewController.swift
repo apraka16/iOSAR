@@ -9,26 +9,37 @@ import UIKit
 import SceneKit
 import ARKit
 
+protocol ColorObjectToVCDelegate {
+    func objectColor() -> UIColor
+}
+
 class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationControllerDelegate {
     
     // MARK: - Debug Purposes
-    
+    var delegate: ColorObjectToVCDelegate?
     private var scale: CGFloat = 1.0
     private var objectOnPathToBeAdded: Int?
     private var virtualObjectInstance = VirtualObjects()
     private var tappedNode: SCNNode?
+    private var virtualObjectColor: UIColor?
     
+    /* Segue Button at bottom right corner opens tableView (Container...) to keep score of
+     swiped down objects from main view */
+    // Outlet for changing background image of button depending on the object which is swiped down
     @IBOutlet weak var segueButton: UIButton!
+    
+    // Reset button - top right corner reset AR
     @IBAction func reset(_ sender: UIButton) {
         sender.showsTouchWhenHighlighted = true
         resetTracking()
     }
     
 	// MARK: - IBOutlets
+    // User tap on floor node to add 3D object
     @IBAction func userTap(_ sender: UITapGestureRecognizer) {
-        
+                
         if objectOnPathToBeAdded != nil {
-            let objectToBeAdded = virtualObjectInstance.createNodes(from: virtualObjectInstance.virtualObjectCountArray[objectOnPathToBeAdded!].name)
+            let objectToBeAdded = virtualObjectInstance.createNodes(from: virtualObjectInstance.virtualObjectCountArray[objectOnPathToBeAdded!].name, with: delegate?.objectColor() ?? UIColor.yellow)
             
             let touchLocation = sender.location(in: view)
             let hits = sceneView.hitTest(touchLocation, options: nil)
@@ -41,7 +52,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         }
     }
     
-    
+    // Segue button to segue to ContainerTableView
     @IBAction func btnPerformSeguePressed(_ sender: UIButton) {
         performSegue(withIdentifier: "ARSCNToTabView", sender: nil)
     }
@@ -58,6 +69,8 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             }
         } else if destinationViewController is VirtualObjectTableViewController {
             if let popoverPresentationController = segue.destination.popoverPresentationController {
+                popoverPresentationController.sourceView = sender as! UIButton
+                popoverPresentationController.sourceRect = (sender as! UIButton).bounds
                 popoverPresentationController.delegate = self
             }
         }
@@ -69,11 +82,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         } else {
             return .none
         }
-//        else if traitCollection.horizontalSizeClass == .compact {
-//            return .none
-//        } else {
-//            return .none
-//        }
     }
     
     func passVirtualObject() -> [(name: String, count: Int)] {
@@ -114,6 +122,11 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     }
     
     // MARK: - View Life Cycle
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        segueButton.isHidden = true
+    }
 	
     /// - Tag: StartARSession
     override func viewDidAppear(_ animated: Bool) {
@@ -212,6 +225,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         
     @objc
     func highlightObject(_ gestureRecognize: UIGestureRecognizer) {
+        segueButton.isHidden = false
         let p = gestureRecognize.location(in: sceneView)
         let hitResults = sceneView.hitTest(p, options: [:])
         if hitResults.count > 0 {
@@ -230,46 +244,29 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             
             if objectOnPathToBeAdded != nil {
                 if virtualObjectInstance.virtualObjectCountArray[objectOnPathToBeAdded!].name == "Cube" {
-                    segueButton.setBackgroundImage(UIImage(named: "cube"), for: .normal)
                     virtualObjectInstance.virtualObjects[objectOnPathToBeAdded!].count += 1
                 } else if virtualObjectInstance.virtualObjectCountArray[objectOnPathToBeAdded!].name == "Sphere" {
-                    segueButton.setBackgroundImage(UIImage(named: "sphere"), for: .normal)
                     virtualObjectInstance.virtualObjects[objectOnPathToBeAdded!].count += 1
                 }
             }
             
-            result.node.parent?.removeFromParentNode()
-            
-            // create a new scene
-            // let scene = SCNScene()
-            
-            // create and add a camera to the scene
-            // let cameraNode = SCNNode(); cameraNode.camera = SCNCamera()
-            // scene.rootNode.addChildNode(cameraNode)
-
-            // place the camera
-            // cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
-
-            // create and add a light to the scene
-            // let lightNode = SCNNode(); lightNode.light = SCNLight(); lightNode.light!.type = .omni
-            // lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
-            // scene.rootNode.addChildNode(lightNode)
-
-            // create and add an ambient light to the scene
-            // let ambientLightNode = SCNNode(); ambientLightNode.light = SCNLight(); ambientLightNode.light!.type = .ambient
-            // ambientLightNode.light!.color = UIColor.darkGray
-            // scene.rootNode.addChildNode(ambientLightNode)
-
-            // Add the result of hitTest, i.e., swiped-down node to collector view
-            // scene.rootNode.addChildNode(result.node)
-            // result.node.scale = SCNVector3(x: 70, y: 70, z: 70)
-            // result.node.eulerAngles.y = -.pi/4
-            // result.node.eulerAngles.z = -.pi/4
-            
-            // set the scene to the view
-            // collector.scene = scene
+            if (result.node.parent?.name) != nil {
+                let nodeToBeRemoved = (result.node.parent?.name)!
+                switch nodeToBeRemoved {
+                case "cube" :
+                    segueButton.setBackgroundImage(UIImage(named: "cube"), for: .normal)
+                    result.node.parent?.removeFromParentNode()
+                case "sphere" :
+                    segueButton.setBackgroundImage(UIImage(named: "sphere"), for: .normal)
+                    result.node.parent?.removeFromParentNode()
+                default:
+                    break
+                }
+            }
+        
+            // result.node.parent?.removeFromParentNode()
             tappedNode?.isHidden = false
-            
         }
     }
 }
+
