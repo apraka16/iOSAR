@@ -9,40 +9,77 @@ import UIKit
 import SceneKit
 import ARKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationControllerDelegate {
     
     // MARK: - Debug Purposes
-    private var scale: CGFloat = 1.0
-    private var objectToBeAdded: SCNNode?
     
+    private var scale: CGFloat = 1.0
+    private var objectOnPathToBeAdded: Int?
+    private var virtualObjectInstance = VirtualObjects()
     private var tappedNode: SCNNode?
+    
+    @IBOutlet weak var segueButton: UIButton!
+    @IBAction func reset(_ sender: UIButton) {
+        sender.showsTouchWhenHighlighted = true
+        resetTracking()
+    }
     
 	// MARK: - IBOutlets
     @IBAction func userTap(_ sender: UITapGestureRecognizer) {
-        let objects = VirtualObjects()
-        var objectNodes = objects.virtualObjectNodes
         
-        switch buttonTapped {
-        case "C":
-            objectToBeAdded = objectNodes[0]
-        case "S":
-            objectToBeAdded = objectNodes[1]
-        default:
-            return
-        }
-        
-        let touchLocation = sender.location(in: view)
-        let hits = sceneView.hitTest(touchLocation, options: nil)
-        if hits.first?.node != nil {
-            tappedNode = hits.first?.node
-            if objectToBeAdded != nil {
-                objectToBeAdded!.position.z = (tappedNode?.position.z)! + 0.05
-                tappedNode?.parent?.addChildNode(objectToBeAdded!)
+        if objectOnPathToBeAdded != nil {
+            let objectToBeAdded = virtualObjectInstance.createNodes(from: virtualObjectInstance.virtualObjectCountArray[objectOnPathToBeAdded!].name)
+            
+            let touchLocation = sender.location(in: view)
+            let hits = sceneView.hitTest(touchLocation, options: nil)
+            if hits.first?.node != nil {
+                tappedNode = hits.first?.node
+                objectToBeAdded.position.z = (tappedNode?.position.z)! + 0.05
+                tappedNode?.parent?.addChildNode(objectToBeAdded)
                 tappedNode?.isHidden = true
             }
         }
     }
-
+    
+    
+    @IBAction func btnPerformSeguePressed(_ sender: UIButton) {
+        performSegue(withIdentifier: "ARSCNToTabView", sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        var destinationViewController = segue.destination
+        if let navigationController = destinationViewController as? UINavigationController {
+            destinationViewController = navigationController.visibleViewController ?? destinationViewController
+        }
+        if let TableViewController = destinationViewController as? ContainerTableViewController {
+            TableViewController.delegate = self
+            if let popoverPresentationController = segue.destination.popoverPresentationController {
+                popoverPresentationController.delegate = self
+            }
+        } else if destinationViewController is VirtualObjectTableViewController {
+            if let popoverPresentationController = segue.destination.popoverPresentationController {
+                popoverPresentationController.delegate = self
+            }
+        }
+    }
+    
+    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        if traitCollection.verticalSizeClass == .compact {
+            return .none
+        } else {
+            return .none
+        }
+//        else if traitCollection.horizontalSizeClass == .compact {
+//            return .none
+//        } else {
+//            return .none
+//        }
+    }
+    
+    func passVirtualObject() -> [(name: String, count: Int)] {
+        return virtualObjectInstance.virtualObjectCountArray
+    }
+    
     @IBOutlet weak var sessionInfoView: UIView!
 	@IBOutlet weak var sessionInfoLabel: UILabel!
     @IBOutlet weak var sceneView: ARSCNView! {
@@ -68,33 +105,11 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBOutlet weak var cube: UIButton!
-    @IBOutlet weak var sphere: UIButton!
-    
     @IBAction func chooseVirtualObject(from segue: UIStoryboardSegue) {
         if let virtualObjectChosen = segue.source as? VirtualObjectTableViewController {
-            print(virtualObjectChosen.virtualObjectSelected)
-        }
-    }
-    
-    // CollectorView variable 
-    @IBOutlet weak var collector: CollectorView!
-    
-    private var buttonTapped: String = ""
-    
-    @IBAction func addCube(_ sender: UIButton) {
-        sphere.backgroundColor = UIColor.clear
-        cube.backgroundColor = UIColor.white
-        if sender.currentTitle != nil {
-            buttonTapped = sender.currentTitle!
-        }
-    }
-    
-    @IBAction func addSphere(_ sender: UIButton) {
-        cube.backgroundColor = UIColor.clear
-        sphere.backgroundColor = UIColor.white
-        if sender.currentTitle != nil {
-            buttonTapped = sender.currentTitle!
+            if let path = virtualObjectChosen.virtualObjectSelectedIndexPath {
+                objectOnPathToBeAdded = path
+            }
         }
     }
     
@@ -146,31 +161,6 @@ class ViewController: UIViewController {
 		sceneView.session.pause()
 	}
 	
-	// MARK: - ARSCNViewDelegate
-//    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-//        DispatchQueue.main.async {
-//
-//            let plane = SCNPlane(width: 1.0, height: 1.0)
-//            let planeNode = SCNNode(geometry: plane)
-//            self.sceneView.scene.rootNode.addChildNode(planeNode)
-//
-//            let centralPoint = CGPoint(x: self.sceneView.bounds.midX, y: self.sceneView.bounds.midY)
-//            let testResults = self.sceneView.hitTest(centralPoint, types: ARHitTestResult.ResultType.existingPlane)
-//
-//            if testResults.count > 0 {
-//                for i in 0..<testResults.count {
-//                    planeNode.simdTransform = testResults[i].worldTransform
-//                    planeNode.eulerAngles.x = -.pi/2
-//                    planeNode.opacity = 0.25
-//                    print(self.sceneView.scene.rootNode.childNodes.count)
-//                }
-//            }
-//        }
-//    }
-    
-
-
-    
     // MARK: - Gesture Methods
     
     // Rotate an object clockwise on Swiping Left in Z plane
@@ -219,7 +209,7 @@ class ViewController: UIViewController {
             }
         }
     }
-    
+        
     @objc
     func highlightObject(_ gestureRecognize: UIGestureRecognizer) {
         let p = gestureRecognize.location(in: sceneView)
@@ -238,35 +228,48 @@ class ViewController: UIViewController {
             material.emission.contents = UIColor.red
             SCNTransaction.commit()
             
+            if objectOnPathToBeAdded != nil {
+                if virtualObjectInstance.virtualObjectCountArray[objectOnPathToBeAdded!].name == "Cube" {
+                    segueButton.setBackgroundImage(UIImage(named: "cube"), for: .normal)
+                    virtualObjectInstance.virtualObjects[objectOnPathToBeAdded!].count += 1
+                } else if virtualObjectInstance.virtualObjectCountArray[objectOnPathToBeAdded!].name == "Sphere" {
+                    segueButton.setBackgroundImage(UIImage(named: "sphere"), for: .normal)
+                    virtualObjectInstance.virtualObjects[objectOnPathToBeAdded!].count += 1
+                }
+            }
+            
+            result.node.parent?.removeFromParentNode()
+            
             // create a new scene
-            let scene = SCNScene()
+            // let scene = SCNScene()
             
             // create and add a camera to the scene
-            let cameraNode = SCNNode(); cameraNode.camera = SCNCamera()
-            scene.rootNode.addChildNode(cameraNode)
+            // let cameraNode = SCNNode(); cameraNode.camera = SCNCamera()
+            // scene.rootNode.addChildNode(cameraNode)
 
             // place the camera
-            cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
+            // cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
 
             // create and add a light to the scene
-            let lightNode = SCNNode(); lightNode.light = SCNLight(); lightNode.light!.type = .omni
-            lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
-            scene.rootNode.addChildNode(lightNode)
+            // let lightNode = SCNNode(); lightNode.light = SCNLight(); lightNode.light!.type = .omni
+            // lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
+            // scene.rootNode.addChildNode(lightNode)
 
             // create and add an ambient light to the scene
-            let ambientLightNode = SCNNode(); ambientLightNode.light = SCNLight(); ambientLightNode.light!.type = .ambient
-            ambientLightNode.light!.color = UIColor.darkGray
-            scene.rootNode.addChildNode(ambientLightNode)
+            // let ambientLightNode = SCNNode(); ambientLightNode.light = SCNLight(); ambientLightNode.light!.type = .ambient
+            // ambientLightNode.light!.color = UIColor.darkGray
+            // scene.rootNode.addChildNode(ambientLightNode)
 
             // Add the result of hitTest, i.e., swiped-down node to collector view
-            scene.rootNode.addChildNode(result.node)
-            result.node.scale = SCNVector3(x: 70, y: 70, z: 70)
-            result.node.eulerAngles.y = -.pi/4
-            result.node.eulerAngles.z = -.pi/4
+            // scene.rootNode.addChildNode(result.node)
+            // result.node.scale = SCNVector3(x: 70, y: 70, z: 70)
+            // result.node.eulerAngles.y = -.pi/4
+            // result.node.eulerAngles.z = -.pi/4
             
             // set the scene to the view
-            collector.scene = scene
+            // collector.scene = scene
             tappedNode?.isHidden = false
+            
         }
     }
 }

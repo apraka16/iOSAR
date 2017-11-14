@@ -11,34 +11,41 @@
 import Foundation
 import SceneKit
 
-class VirtualObjects {
+struct VirtualObjects {
     
     // Stored Property for .scn objects
-    var virtualObjects = ["Cube.scn", "Sphere.scn"]
     
-    // Computed Property - Public to get all nodes
-    var virtualObjectNodes: [SCNNode] {
+    var virtualObjects = [(scn:"Cube.scn", count: 0), (scn: "Sphere.scn", count: 0)]
+    
+    
+    public var virtualObjectCountArray: [(name: String, count: Int)] {
         get {
-            return createNodes(from: virtualObjects)
+            var resultArray: [(name: String, count: Int)] = []
+            for object in virtualObjects {
+                if virtualObjects.count != 0 {
+                    let result = (name: virtualObjectsNames(from: object.scn), count: object.count)
+                    resultArray.append(result)
+                }
+            }
+            return resultArray
         }
     }
     
+    
+    private func virtualObjectsNames(from scnName: String) -> String {
+        return scnName.replacingOccurrences(of: ".scn", with: "")
+    }
+    
     // Private method to create nodes from .scn objects
-    private func createNodes(from objects: [String]) -> [SCNNode] {
-        
-        var objectNodes = [SCNNode]()
-        
-        for object in virtualObjects {
-            let wrapperNode = SCNNode()
-            if let virtualScene = SCNScene(named: object, inDirectory: "Assets.scnassets") {
-                for child in virtualScene.rootNode.childNodes {
-                    wrapperNode.addChildNode(child)
-                }
+    func createNodes(from object: String) -> SCNNode {
+    
+        let wrapperNode = SCNNode()
+        if let virtualScene = SCNScene(named: object + ".scn", inDirectory: "Assets.scnassets") {
+            for child in virtualScene.rootNode.childNodes {
+                wrapperNode.addChildNode(child)
             }
-            objectNodes.append(wrapperNode)
         }
-        return objectNodes
-        
+        return wrapperNode
     }
     
 }

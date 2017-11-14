@@ -10,13 +10,25 @@ import UIKit
 import SceneKit
 
 class VirtualObjectTableViewController: UITableViewController {
-
-    private var virtualObjectCollection = ["Cube", "Sphere", "Custom", "Happy"]
     
-    var virtualObjectSelected = ""
+    private let virtualObjectInstance = VirtualObjects()
+    
+    var virtualObjectSelectedIndexPath: Int?
+
     
     @IBAction func cancel(_ sender: UIBarButtonItem) {
         presentingViewController?.dismiss(animated: true)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let popoverPresentationController = navigationController?.popoverPresentationController {
+            if popoverPresentationController.arrowDirection != .unknown {
+                navigationItem.leftBarButtonItem = nil
+            }
+        }
+        let size = tableView.minimumSize(forSection: 0)
+        preferredContentSize = size
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -24,14 +36,14 @@ class VirtualObjectTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return virtualObjectCollection.count
+        return virtualObjectInstance.virtualObjectCountArray.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let data = virtualObjectCollection[indexPath.row]
+        let data = virtualObjectInstance.virtualObjectCountArray
         let dequeued = tableView.dequeueReusableCell(withIdentifier: "Virtual Objects", for: indexPath)
-        dequeued.textLabel?.text = data
-        dequeued.detailTextLabel?.text = "Click to add"
+        dequeued.textLabel?.text = data[indexPath.row].name
+        dequeued.detailTextLabel?.text = "Click to add a \(data[indexPath.row].name)"
         
         return dequeued
     }
@@ -51,8 +63,7 @@ class VirtualObjectTableViewController: UITableViewController {
             // Remove the visual selection indication.
             self.tableView.cellForRow(at: selectedIndex)?.accessoryType = .none
         }
-        
-        virtualObjectSelected = virtualObjectCollection[indexPath.row]
+        virtualObjectSelectedIndexPath = indexPath.row
         
         return indexPath
     }

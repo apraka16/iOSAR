@@ -19,9 +19,6 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
         
         // Create a SceneKit plane to visualize the plane anchor using its position and extent.
-        //        let plane = SCNPlane(width: CGFloat(planeAnchor.extent.x), height: CGFloat(planeAnchor.extent.z))
-        //        let planeNode = SCNNode(geometry: plane)
-        //        planeNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
         
         guard let virtualObject = SCNScene(named: "Floor.scn", inDirectory: "Assets.scnassets") else { return }
         let wrapperNode = SCNNode()
@@ -31,26 +28,6 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         
         wrapperNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
         wrapperNode.eulerAngles.x = -.pi / 2
-        /*
-         `SCNPlane` is vertically oriented in its local coordinate space, so
-         rotate the plane to match the horizontal orientation of `ARPlaneAnchor`.
-         */
-        //        planeNode.eulerAngles.x = -.pi / 2
-        
-        // Make the plane visualization semitransparent to clearly show real-world placement.
-        //        planeNode.opacity = 0.25
-        
-        /*
-         Add the plane visualization to the ARKit-managed node so that it tracks
-         changes in the plane anchor as plane estimation continues.
-         */
-        
-        // MARK: @TODO: Streamline FocusSquare and remove floorNode
-        //        let focusSquare = FocusSquare()
-        //        let focusSquareObject = focusSquare.createFocusSquare()
-        //        focusSquareObject.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
-        //        focusSquareObject.eulerAngles.x = -.pi / 2
-        //        node.addChildNode(focusSquareObject)
         
         node.addChildNode(wrapperNode)
     }
@@ -76,12 +53,14 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         plane.height = CGFloat(planeAnchor.extent.z)
     }
     
+    
     // MARK: - ARSessionDelegate
     
     func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
         guard let frame = session.currentFrame else { return }
         updateSessionInfoLabel(for: frame, trackingState: frame.camera.trackingState)
     }
+    
     
     func session(_ session: ARSession, didRemove anchors: [ARAnchor]) {
         guard let frame = session.currentFrame else { return }
@@ -144,7 +123,7 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         sessionInfoView.isHidden = message.isEmpty
     }
     
-    private func resetTracking() {
+    func resetTracking() {
         let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = .horizontal
         sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
