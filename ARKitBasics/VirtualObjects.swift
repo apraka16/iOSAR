@@ -4,7 +4,7 @@
 //
 //  Created by Abhinav Prakash on 25/10/17.
 //  Copyright © 2017 Apple. All rights reserved.
-//
+
 
 /** Class created to change .scn objects to node and add those into an array **/
 
@@ -14,7 +14,6 @@ import SceneKit
 struct VirtualObjects {
     
     // Stored Property for .scn objects
-    
     var virtualObjects = [(scn:"Cube.scn", count: 0), (scn: "Sphere.scn", count: 0)]
     
     
@@ -36,7 +35,8 @@ struct VirtualObjects {
         return scnName.replacingOccurrences(of: ".scn", with: "")
     }
     
-    // Private method to create nodes from .scn objects
+    //  Create nodes from Object name - e.g. "Cube"
+    // @TODO: Think of better way to create nodes, than via using string concatenation
     func createNodes(from object: String, with color: UIColor) -> SCNNode {
     
         let wrapperNode = SCNNode()

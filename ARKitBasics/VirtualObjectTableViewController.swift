@@ -4,7 +4,7 @@
 //
 //  Created by Abhinav Prakash on 09/11/17.
 //  Copyright © 2017 Apple. All rights reserved.
-//
+
 
 import UIKit
 import SceneKit
@@ -43,26 +43,26 @@ class VirtualObjectTableViewController: UITableViewController, ColorObjectToVCDe
         let data = virtualObjectInstance.virtualObjectCountArray
         tableView.rowHeight = 117.0
         let dequeued = tableView.dequeueReusableCell(withIdentifier: "Virtual Objects", for: indexPath)
-        
         let cell = dequeued as? VirtualObjectTableViewCell
+        
         cell?.objectTitle.text = data[indexPath.row].name
         cell?.objectView.scene = SCNScene()
-    
+
         let node = virtualObjectInstance.createNodes(from: data[indexPath.row].name, with: UIColorFromRGB(rgbValue: 0x013243))
-        
+
         // create and add a camera to the scene
         let cameraNode = SCNNode(); cameraNode.camera = SCNCamera()
         cell?.objectView.scene?.rootNode.addChildNode(cameraNode)
-        
+
         // place the camera
         cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
-        
+
         // create and add a light to the scene
         let lightNode = SCNNode(); lightNode.light = SCNLight(); lightNode.light!.type = .omni
         lightNode.position = SCNVector3(x: 10, y: 0, z: 10)
         cell?.objectView.scene?.rootNode.addChildNode(lightNode)
-        
-        
+
+
         cell?.objectView.scene?.rootNode.addChildNode(node)
         node.scale = SCNVector3(x: 90, y: 90, z: 90)
         node.eulerAngles.x = .pi/3
@@ -91,7 +91,6 @@ class VirtualObjectTableViewController: UITableViewController, ColorObjectToVCDe
         } else {
             return UIColor.yellow
         }
-        
     }
     
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
@@ -109,14 +108,4 @@ class VirtualObjectTableViewController: UITableViewController, ColorObjectToVCDe
     }
 }
 
-// Extension to change color from Hex to UIColor
-extension UITableViewController {
-    func UIColorFromRGB(rgbValue: UInt) -> UIColor {
-        return UIColor(
-            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
-            alpha: CGFloat(1.0)
-        )
-    }
-}
+

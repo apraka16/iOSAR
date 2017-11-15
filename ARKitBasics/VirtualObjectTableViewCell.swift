@@ -4,7 +4,7 @@
 //
 //  Created by Abhinav Prakash on 14/11/17.
 //  Copyright © 2017 Apple. All rights reserved.
-//
+
 
 import UIKit
 import SceneKit
@@ -23,9 +23,6 @@ class VirtualObjectTableViewCell: UITableViewCell {
             material.emission.contents = colorChoice
         }
     }
-    
-    
-//    private let colorChoices = [UIColor.blue, UIColor.green, UIColor.red]
     
     private var colorChoices: [UIColor] {
         get {

@@ -9,37 +9,147 @@ import UIKit
 import SceneKit
 import ARKit
 
-protocol ColorObjectToVCDelegate {
-    func objectColor() -> UIColor
-}
 
 class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationControllerDelegate {
     
-    // MARK: - Debug Purposes
+    // MARK: - Instance Variables
+    
+    // Delegate variable used for Protocol above
     var delegate: ColorObjectToVCDelegate?
-    private var scale: CGFloat = 1.0
+    
     private var objectOnPathToBeAdded: Int?
     private var virtualObjectInstance = VirtualObjects()
     private var tappedNode: SCNNode?
     private var virtualObjectColor: UIColor?
+    private var pickedColor: UIColor?
+    private var material: SCNMaterial?
+    
+    private var toggleState = 1
+    private let imgPlay = UIImage(named: "play")
+    private let imgStop = UIImage(named: "stop")
+    
+    // Method to hide/ unhide set of buttons/ object depending on play mode or else
+    private func inStateOfPlay(playing: Bool) {
+        if playing {
+            addObject.isHidden = true
+            startPlayGuide.isHidden = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                self.startPlayGuide.isHidden = true
+            }
+        } else {
+            addObject.isHidden = false
+            startPlayGuide.isHidden = true
+        }
+    }
+    
+    /* Implementation of ContainerTableView delegate function:
+     Check ContainerTableViewController for protocol implementation */
+    func passVirtualObject() -> [(name: String, count: Int)] {
+        return virtualObjectInstance.virtualObjectCountArray
+    }
+    
+    // MARK: - IBOutlets
     
     /* Segue Button at bottom right corner opens tableView (Container...) to keep score of
      swiped down objects from main view */
     // Outlet for changing background image of button depending on the object which is swiped down
     @IBOutlet weak var segueButton: UIButton!
     
-    // Reset button - top right corner reset AR
+    // UILabel to ask use to Swipe down in play mode
+    @IBOutlet weak var startPlayGuide: UILabel!
+    
+    // View with Color picker buttons - hidden/ visible on selection of underlying buttons
+    @IBOutlet weak var colorPicker: UIStackView!
+    
+    // Button for changing mode to Playing - toggling image underlying the button
+    @IBOutlet weak var playButton: UIButton!
+    
+    // Button to add 3D objects - hidden/ visible dependent on play mode or else
+    @IBOutlet weak var addObject: UIButton!
+    
+    // Info label and view
+    // @TODO: Hide label when play mode is operational
+    @IBOutlet weak var sessionInfoView: UIView!
+    @IBOutlet weak var sessionInfoLabel: UILabel!
+    
+    // Main AR Scene View for rendering content
+    @IBOutlet weak var sceneView: ARSCNView! {
+        didSet {
+            let swipeDownGesture =
+                UISwipeGestureRecognizer(target: self, action: #selector(collectObjectInContainer(_:)))
+            swipeDownGesture.direction = .down
+            sceneView.addGestureRecognizer(swipeDownGesture)
+            
+            let swipeLeftGesture =
+                UISwipeGestureRecognizer(target: self, action: #selector(rotateObjectToLeft(_:)))
+            swipeLeftGesture.direction = .left
+            sceneView.addGestureRecognizer(swipeLeftGesture)
+            
+            let swipeRightGesture =
+                UISwipeGestureRecognizer(target: self, action: #selector(rotateObjectToRight(_:)))
+            swipeRightGesture.direction = .right
+            sceneView.addGestureRecognizer(swipeRightGesture)
+            
+            let pinchGesture =
+                UIPinchGestureRecognizer(target: self, action: #selector(changeScale(_:)))
+            sceneView.addGestureRecognizer(pinchGesture)
+            
+            let longPressGesture =
+                UILongPressGestureRecognizer(target: self, action: #selector(changeColorOfObject(_:)))
+            sceneView.addGestureRecognizer(longPressGesture)
+        }
+    }
+    
+    // MARK: - IBActions
+    
+    // Reset button - top right corner resets AR rendering
     @IBAction func reset(_ sender: UIButton) {
         sender.showsTouchWhenHighlighted = true
         resetTracking()
     }
     
-	// MARK: - IBOutlets
+    /* Color picker buttons - present when object is long pressed */
+    
+    @IBAction func pickRedColor(_ sender: UIButton) {
+        material?.emission.contents = UIColorFromRGB(rgbValue: 0xF03434)
+        colorPicker.isHidden = true
+    }
+    
+    @IBAction func pickGreenColor(_ sender: UIButton) {
+        material?.emission.contents = UIColorFromRGB(rgbValue: 0x019875)
+        colorPicker.isHidden = true
+    }
+    
+    @IBAction func pickBlueColor(_ sender: UIButton) {
+        material?.emission.contents = UIColorFromRGB(rgbValue: 0x013243)
+        colorPicker.isHidden = true
+    }
+    
+    /* Button to select play mode. Under play mode:
+     - Info and add buttons are hidden
+     - Image underlying the button toggle play/ stop images (imgPlay and imgStop - declared in vars)*/
+    @IBAction func play(_ sender: UIButton) {
+        if toggleState == 1 {
+            toggleState = 2
+            playButton.setBackgroundImage(imgStop, for: .normal)
+            inStateOfPlay(playing: true)
+            
+        } else {
+            toggleState = 1
+            playButton.setBackgroundImage(imgPlay, for: .normal)
+            inStateOfPlay(playing: false)
+        }
+        
+    }
+    
     // User tap on floor node to add 3D object
     @IBAction func userTap(_ sender: UITapGestureRecognizer) {
                 
         if objectOnPathToBeAdded != nil {
-            let objectToBeAdded = virtualObjectInstance.createNodes(from: virtualObjectInstance.virtualObjectCountArray[objectOnPathToBeAdded!].name, with: delegate?.objectColor() ?? UIColor.yellow)
+            let objectToBeAdded = virtualObjectInstance.createNodes(
+                from: virtualObjectInstance.virtualObjectCountArray[
+                    objectOnPathToBeAdded!].name,
+                with: delegate?.objectColor() ?? UIColor.yellow)
             
             let touchLocation = sender.location(in: view)
             let hits = sceneView.hitTest(touchLocation, options: nil)
@@ -57,10 +167,12 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         performSegue(withIdentifier: "ARSCNToTabView", sender: nil)
     }
     
+    // Other Segue preparations
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         var destinationViewController = segue.destination
         if let navigationController = destinationViewController as? UINavigationController {
-            destinationViewController = navigationController.visibleViewController ?? destinationViewController
+            destinationViewController = navigationController.visibleViewController
+                ?? destinationViewController
         }
         if let TableViewController = destinationViewController as? ContainerTableViewController {
             TableViewController.delegate = self
@@ -76,7 +188,9 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         }
     }
     
-    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+    // Function so that popover doesn't adapt to cover full screen on iphones
+    func adaptivePresentationStyle(for controller: UIPresentationController,
+                                   traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         if traitCollection.verticalSizeClass == .compact {
             return .none
         } else {
@@ -84,35 +198,9 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         }
     }
     
-    func passVirtualObject() -> [(name: String, count: Int)] {
-        return virtualObjectInstance.virtualObjectCountArray
-    }
-    
-    @IBOutlet weak var sessionInfoView: UIView!
-	@IBOutlet weak var sessionInfoLabel: UILabel!
-    @IBOutlet weak var sceneView: ARSCNView! {
-        didSet {
-            let swipeDownGesture = UISwipeGestureRecognizer(target: self, action: #selector(highlightObject(_:)))
-            swipeDownGesture.direction = .down
-            sceneView.addGestureRecognizer(swipeDownGesture)
-            
-            let swipeUpGesture = UISwipeGestureRecognizer(target: self, action: #selector(rotateObjectUp(_:)))
-            swipeUpGesture.direction = .up
-            sceneView.addGestureRecognizer(swipeUpGesture)
-            
-            let swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(rotateObjectToLeft(_:)))
-            swipeLeftGesture.direction = .left
-            sceneView.addGestureRecognizer(swipeLeftGesture)
-            
-            let swipeRightGesture = UISwipeGestureRecognizer(target: self, action: #selector(rotateObjectToRight(_:)))
-            swipeRightGesture.direction = .right
-            sceneView.addGestureRecognizer(swipeRightGesture)
-            
-            let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(changeScale(_:)))
-            sceneView.addGestureRecognizer(pinchGesture)
-        }
-    }
-    
+    /* Unwind Segue for "Done" bar button on Navigation Controller.
+     Allows capture of index of Selected 3D object, which determines the object that
+     will be added to the AR Scene */
     @IBAction func chooseVirtualObject(from segue: UIStoryboardSegue) {
         if let virtualObjectChosen = segue.source as? VirtualObjectTableViewController {
             if let path = virtualObjectChosen.virtualObjectSelectedIndexPath {
@@ -126,6 +214,8 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         segueButton.isHidden = true
+        colorPicker.isHidden = true
+        startPlayGuide.isHidden = true
     }
 	
     /// - Tag: StartARSession
@@ -141,7 +231,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
                 can't be triggered in a production scenario.)
                 In apps where AR is an additive feature, use `isSupported` to
                 determine whether to show UI for launching AR experiences.
-            """) // For details, see https://developer.apple.com/documentation/arkit
+            """)
         }
 
         /*
@@ -164,7 +254,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         // Show debug UI to view performance metrics (e.g. frames per second).
         sceneView.showsStatistics = true
         
-//        sceneView.automaticallyUpdatesLighting = false
+        // sceneView.automaticallyUpdatesLighting = false
     }
 
 	override func viewWillDisappear(_ animated: Bool) {
@@ -196,18 +286,8 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             result.node.runAction(SCNAction.rotateBy(x: 0, y: 0, z: 1, duration: 0.25))
         }
     }
-    // Rotate an object upwards on Swiping Left in Y plane
-    @objc
-    func rotateObjectUp(_ gestureRecognize: UIGestureRecognizer) {
-        let p = gestureRecognize.location(in: sceneView)
-        let hitResults = sceneView.hitTest(p, options: [:])
-        if hitResults.count > 0 {
-            let result = hitResults[0]
-            result.node.runAction(SCNAction.rotateBy(x: 0, y: 1, z: 0, duration: 0.25))
-        }
-    }
     
-    // Change the size of object on pinch
+    // Scale the Object on pinch
     @objc
     func changeScale(_ gestureRecognize: UIPinchGestureRecognizer) {
         let p = gestureRecognize.location(in: sceneView)
@@ -222,51 +302,82 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             }
         }
     }
+    
+    // Pop-up options for color change of the object on longpress
+    @objc
+    func changeColorOfObject(_ gestureRecognize: UILongPressGestureRecognizer) {
+        colorPicker.isHidden = false
+
+        let p = gestureRecognize.location(in: sceneView)
+        let hitResults = sceneView.hitTest(p, options: [:])
+        if hitResults.count > 0 {
+            let result = hitResults[0]
+            
+            material = result.node.geometry!.firstMaterial!
+        }
+        else {
+            colorPicker.isHidden = true
+        }
+    }
         
     @objc
-    func highlightObject(_ gestureRecognize: UIGestureRecognizer) {
+    func collectObjectInContainer(_ gestureRecognize: UIGestureRecognizer) {
         segueButton.isHidden = false
         let p = gestureRecognize.location(in: sceneView)
         let hitResults = sceneView.hitTest(p, options: [:])
         if hitResults.count > 0 {
             let result = hitResults[0]
-            let material = result.node.geometry!.firstMaterial!
-            SCNTransaction.begin()
-            SCNTransaction.animationDuration = 0.5
-            SCNTransaction.completionBlock = {
-                SCNTransaction.begin()
-                SCNTransaction.animationDuration = 0.5
-                material.emission.contents = UIColor.black
-                SCNTransaction.commit()
-            }
-            material.emission.contents = UIColor.red
-            SCNTransaction.commit()
-            
-            if objectOnPathToBeAdded != nil {
-                if virtualObjectInstance.virtualObjectCountArray[objectOnPathToBeAdded!].name == "Cube" {
-                    virtualObjectInstance.virtualObjects[objectOnPathToBeAdded!].count += 1
-                } else if virtualObjectInstance.virtualObjectCountArray[objectOnPathToBeAdded!].name == "Sphere" {
-                    virtualObjectInstance.virtualObjects[objectOnPathToBeAdded!].count += 1
-                }
-            }
-            
             if (result.node.parent?.name) != nil {
                 let nodeToBeRemoved = (result.node.parent?.name)!
                 switch nodeToBeRemoved {
                 case "cube" :
                     segueButton.setBackgroundImage(UIImage(named: "cube"), for: .normal)
+                    virtualObjectInstance.virtualObjects[0].count += 1
                     result.node.parent?.removeFromParentNode()
                 case "sphere" :
                     segueButton.setBackgroundImage(UIImage(named: "sphere"), for: .normal)
+                    virtualObjectInstance.virtualObjects[1].count += 1
                     result.node.parent?.removeFromParentNode()
                 default:
                     break
                 }
             }
-        
-            // result.node.parent?.removeFromParentNode()
             tappedNode?.isHidden = false
         }
     }
 }
+
+/* Protocol added so that TableViewController can communicate when color of an object is chosen
+ For implementation of protocol, check VirtualObjectTableViewController */
+protocol ColorObjectToVCDelegate {
+    func objectColor() -> UIColor
+}
+
+// Extension to change color from Hex to UIColor.Also used in VirtualObjectTableViewCell.
+extension UIViewController {
+    func UIColorFromRGB(rgbValue: UInt) -> UIColor {
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
+    }
+}
+
+
+
+/// - Tag: Animation code - not useful, since object is removed before animation can take effect
+// let material = result.node.geometry!.firstMaterial!
+// SCNTransaction.begin()
+// SCNTransaction.animationDuration = 0.5
+// SCNTransaction.completionBlock = {
+//    SCNTransaction.begin()
+//    SCNTransaction.animationDuration = 0.5
+//    material.emission.contents = UIColor.black
+//    SCNTransaction.commit()
+// }
+// material.emission.contents = UIColor.red
+// SCNTransaction.commit()
+
 

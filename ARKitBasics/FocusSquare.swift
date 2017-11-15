@@ -4,7 +4,7 @@
 //
 //  Created by Abhinav Prakash on 27/10/17.
 //  Copyright © 2017 Apple. All rights reserved.
-//
+
 
 /* The intention is to create a square which will be used for creating targets
  for placing objects in AR view.
