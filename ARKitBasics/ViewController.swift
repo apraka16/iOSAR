@@ -263,7 +263,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
 		
-		// Pause the view's AR session.
+		// Pause the view's AR session. // 
 		sceneView.session.pause()
 	}
 }
