@@ -14,7 +14,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     
     // MARK: - Instance Variables
     
-    // Delegate variable used for Protocol above
+    // Delegate variable used for Protocol
     var delegate: ColorObjectToVCDelegate?
     
     private var objectOnPathToBeAdded: Int?
@@ -27,6 +27,8 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     private var toggleState = 1
     private let imgPlay = UIImage(named: "play")
     private let imgStop = UIImage(named: "stop")
+    
+    private var colorOfObjects = ColorOfObjects()
     
     // Method to hide/ unhide set of buttons/ object depending on play mode or else
     private func inStateOfPlay(playing: Bool) {
@@ -76,17 +78,17 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     @IBOutlet weak var sceneView: ARSCNView! {
         didSet {
             let swipeDownGesture =
-                UISwipeGestureRecognizer(target: self, action: #selector(collectObjectInContainer(_:)))
+                UISwipeGestureRecognizer(target: self, action: #selector(rotateObject(_:)))
             swipeDownGesture.direction = .down
             sceneView.addGestureRecognizer(swipeDownGesture)
             
             let swipeLeftGesture =
-                UISwipeGestureRecognizer(target: self, action: #selector(rotateObjectToLeft(_:)))
+                UISwipeGestureRecognizer(target: self, action: #selector(rotateObject(_:)))
             swipeLeftGesture.direction = .left
             sceneView.addGestureRecognizer(swipeLeftGesture)
-            
+
             let swipeRightGesture =
-                UISwipeGestureRecognizer(target: self, action: #selector(rotateObjectToRight(_:)))
+                UISwipeGestureRecognizer(target: self, action: #selector(rotateObject(_:)))
             swipeRightGesture.direction = .right
             sceneView.addGestureRecognizer(swipeRightGesture)
             
@@ -111,17 +113,17 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     /* Color picker buttons - present when object is long pressed */
     
     @IBAction func pickRedColor(_ sender: UIButton) {
-        material?.emission.contents = UIColorFromRGB(rgbValue: 0xF03434)
+        material?.emission.contents = colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.redColor)
         colorPicker.isHidden = true
     }
     
     @IBAction func pickGreenColor(_ sender: UIButton) {
-        material?.emission.contents = UIColorFromRGB(rgbValue: 0x019875)
+        material?.emission.contents = colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.greenColor)
         colorPicker.isHidden = true
     }
     
     @IBAction func pickBlueColor(_ sender: UIButton) {
-        material?.emission.contents = UIColorFromRGB(rgbValue: 0x013243)
+        material?.emission.contents = colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.blueColor)
         colorPicker.isHidden = true
     }
     
@@ -266,26 +268,42 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
 	
     // MARK: - Gesture Methods
     
-    // Rotate an object clockwise on Swiping Left in Z plane
     @objc
-    func rotateObjectToLeft(_ gestureRecognize: UIGestureRecognizer) {
+    func rotateObject(_ gestureRecognize: UISwipeGestureRecognizer) {
         let p = gestureRecognize.location(in: sceneView)
         let hitResults = sceneView.hitTest(p, options: [:])
         if hitResults.count > 0 {
             let result = hitResults[0]
-            result.node.runAction(SCNAction.rotateBy(x: 0, y: 0, z: -1, duration: 0.25))
+            switch gestureRecognize.direction {
+            case .left:
+                result.node.runAction(SCNAction.rotateBy(x: 0, y: 0, z: -1, duration: 0.25))
+            case .right:
+                result.node.runAction(SCNAction.rotateBy(x: 0, y: 0, z: 1, duration: 0.25))
+            case .down:
+                // Down to remove object and show as collected in Segue button - bottom right
+                segueButton.isHidden = false
+                if (result.node.parent?.name) != nil {
+                    let nodeToBeRemoved = (result.node.parent?.name)!
+                    switch nodeToBeRemoved {
+                    case "cube" :
+                        segueButton.setBackgroundImage(UIImage(named: "cube"), for: .normal)
+                        virtualObjectInstance.virtualObjects[0].count += 1
+                        result.node.parent?.removeFromParentNode()
+                    case "sphere" :
+                        segueButton.setBackgroundImage(UIImage(named: "sphere"), for: .normal)
+                        virtualObjectInstance.virtualObjects[1].count += 1
+                        result.node.parent?.removeFromParentNode()
+                    default:
+                        break
+                    }
+                }
+                tappedNode?.isHidden = false
+            default:
+                break
+            }
         }
     }
-    // Rotate an object anticlockwise on Swiping Left in Z plane
-    @objc
-    func rotateObjectToRight(_ gestureRecognize: UIGestureRecognizer) {
-        let p = gestureRecognize.location(in: sceneView)
-        let hitResults = sceneView.hitTest(p, options: [:])
-        if hitResults.count > 0 {
-            let result = hitResults[0]
-            result.node.runAction(SCNAction.rotateBy(x: 0, y: 0, z: 1, duration: 0.25))
-        }
-    }
+    
     
     // Scale the Object on pinch
     @objc
@@ -319,32 +337,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             colorPicker.isHidden = true
         }
     }
-        
-    @objc
-    func collectObjectInContainer(_ gestureRecognize: UIGestureRecognizer) {
-        segueButton.isHidden = false
-        let p = gestureRecognize.location(in: sceneView)
-        let hitResults = sceneView.hitTest(p, options: [:])
-        if hitResults.count > 0 {
-            let result = hitResults[0]
-            if (result.node.parent?.name) != nil {
-                let nodeToBeRemoved = (result.node.parent?.name)!
-                switch nodeToBeRemoved {
-                case "cube" :
-                    segueButton.setBackgroundImage(UIImage(named: "cube"), for: .normal)
-                    virtualObjectInstance.virtualObjects[0].count += 1
-                    result.node.parent?.removeFromParentNode()
-                case "sphere" :
-                    segueButton.setBackgroundImage(UIImage(named: "sphere"), for: .normal)
-                    virtualObjectInstance.virtualObjects[1].count += 1
-                    result.node.parent?.removeFromParentNode()
-                default:
-                    break
-                }
-            }
-            tappedNode?.isHidden = false
-        }
-    }
 }
 
 /* Protocol added so that TableViewController can communicate when color of an object is chosen
@@ -352,19 +344,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
 protocol ColorObjectToVCDelegate {
     func objectColor() -> UIColor
 }
-
-// Extension to change color from Hex to UIColor.Also used in VirtualObjectTableViewCell.
-extension UIViewController {
-    func UIColorFromRGB(rgbValue: UInt) -> UIColor {
-        return UIColor(
-            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
-            alpha: CGFloat(1.0)
-        )
-    }
-}
-
 
 
 /// - Tag: Animation code - not useful, since object is removed before animation can take effect

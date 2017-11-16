@@ -16,6 +16,8 @@ class VirtualObjectTableViewController: UITableViewController, ColorObjectToVCDe
     var virtualObjectSelectedIndexPath: Int?
     var colorChoice: UIColor?
     
+    private var colorOfObjects = ColorOfObjects()
+    
     @IBAction func cancel(_ sender: UIBarButtonItem) {
         presentingViewController?.dismiss(animated: true)
     }
@@ -48,7 +50,7 @@ class VirtualObjectTableViewController: UITableViewController, ColorObjectToVCDe
         cell?.objectTitle.text = data[indexPath.row].name
         cell?.objectView.scene = SCNScene()
 
-        let node = virtualObjectInstance.createNodes(from: data[indexPath.row].name, with: UIColorFromRGB(rgbValue: 0x013243))
+        let node = virtualObjectInstance.createNodes(from: data[indexPath.row].name, with: colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.blueColor))
 
         // create and add a camera to the scene
         let cameraNode = SCNNode(); cameraNode.camera = SCNCamera()

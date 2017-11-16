@@ -15,6 +15,7 @@ class VirtualObjectTableViewCell: UITableViewCell {
     @IBOutlet weak var objectColorControl: UISegmentedControl!
     
     private var virtualObjects = VirtualObjects()
+    private var colorOfObjects = ColorOfObjects()
 
 
     @IBOutlet weak var objectView: VirtualObjectDisplay!
@@ -27,10 +28,10 @@ class VirtualObjectTableViewCell: UITableViewCell {
     private var colorChoices: [UIColor] {
         get {
             var result: [UIColor] = []
-            result.append(UIColorFromRGB(rgbValue: 0x013243))
-            result.append(UIColorFromRGB(rgbValue: 0x019875))
-            result.append(UIColorFromRGB(rgbValue: 0xF03434))
-            
+            result.append(colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.blueColor))
+            result.append(colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.greenColor))
+            result.append(colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.redColor))
+    
             return result
         }
     }
@@ -40,14 +41,3 @@ class VirtualObjectTableViewCell: UITableViewCell {
     }
 }
 
-// Extension to change color from Hex to UIColor
-extension UITableViewCell {
-    func UIColorFromRGB(rgbValue: UInt) -> UIColor {
-        return UIColor(
-            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
-            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
-            alpha: CGFloat(1.0)
-        )
-    }
-}
