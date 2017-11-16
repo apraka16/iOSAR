@@ -17,13 +17,14 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // Delegate variable used for Protocol
     var delegate: ColorObjectToVCDelegate?
     
+    // Non private to allow Extension to use
+    var virtualObjectInstance = VirtualObjects()
+    var tappedNode: SCNNode?
+    var material: SCNMaterial?
+    
     private var objectOnPathToBeAdded: Int?
-    private var virtualObjectInstance = VirtualObjects()
-    private var tappedNode: SCNNode?
     private var virtualObjectColor: UIColor?
     private var pickedColor: UIColor?
-    private var material: SCNMaterial?
-    
     private var toggleState = 1
     private let imgPlay = UIImage(named: "play")
     private let imgStop = UIImage(named: "stop")
@@ -183,8 +184,8 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             }
         } else if destinationViewController is VirtualObjectTableViewController {
             if let popoverPresentationController = segue.destination.popoverPresentationController {
-                popoverPresentationController.sourceView = sender as! UIButton
-                popoverPresentationController.sourceRect = (sender as! UIButton).bounds
+                popoverPresentationController.sourceView = sender as! UIButton // For arrowhead in the middle
+                popoverPresentationController.sourceRect = (sender as! UIButton).bounds // For arrowhead in the middle
                 popoverPresentationController.delegate = self
             }
         }
@@ -265,78 +266,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
 		// Pause the view's AR session.
 		sceneView.session.pause()
 	}
-	
-    // MARK: - Gesture Methods
-    
-    @objc
-    func rotateObject(_ gestureRecognize: UISwipeGestureRecognizer) {
-        let p = gestureRecognize.location(in: sceneView)
-        let hitResults = sceneView.hitTest(p, options: [:])
-        if hitResults.count > 0 {
-            let result = hitResults[0]
-            switch gestureRecognize.direction {
-            case .left:
-                result.node.runAction(SCNAction.rotateBy(x: 0, y: 0, z: -1, duration: 0.25))
-            case .right:
-                result.node.runAction(SCNAction.rotateBy(x: 0, y: 0, z: 1, duration: 0.25))
-            case .down:
-                // Down to remove object and show as collected in Segue button - bottom right
-                segueButton.isHidden = false
-                if (result.node.parent?.name) != nil {
-                    let nodeToBeRemoved = (result.node.parent?.name)!
-                    switch nodeToBeRemoved {
-                    case "cube" :
-                        segueButton.setBackgroundImage(UIImage(named: "cube"), for: .normal)
-                        virtualObjectInstance.virtualObjects[0].count += 1
-                        result.node.parent?.removeFromParentNode()
-                    case "sphere" :
-                        segueButton.setBackgroundImage(UIImage(named: "sphere"), for: .normal)
-                        virtualObjectInstance.virtualObjects[1].count += 1
-                        result.node.parent?.removeFromParentNode()
-                    default:
-                        break
-                    }
-                }
-                tappedNode?.isHidden = false
-            default:
-                break
-            }
-        }
-    }
-    
-    
-    // Scale the Object on pinch
-    @objc
-    func changeScale(_ gestureRecognize: UIPinchGestureRecognizer) {
-        let p = gestureRecognize.location(in: sceneView)
-        let hitResults = sceneView.hitTest(p, options: [:])
-        if hitResults.count > 0 {
-            let result = hitResults[0]
-            switch gestureRecognize.state {
-            case .changed, .ended:
-                result.node.scale = SCNVector3(gestureRecognize.scale, gestureRecognize.scale, gestureRecognize.scale)
-            default:
-                break
-            }
-        }
-    }
-    
-    // Pop-up options for color change of the object on longpress
-    @objc
-    func changeColorOfObject(_ gestureRecognize: UILongPressGestureRecognizer) {
-        colorPicker.isHidden = false
-
-        let p = gestureRecognize.location(in: sceneView)
-        let hitResults = sceneView.hitTest(p, options: [:])
-        if hitResults.count > 0 {
-            let result = hitResults[0]
-            
-            material = result.node.geometry!.firstMaterial!
-        }
-        else {
-            colorPicker.isHidden = true
-        }
-    }
 }
 
 /* Protocol added so that TableViewController can communicate when color of an object is chosen

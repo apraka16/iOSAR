@@ -14,15 +14,12 @@
 		842316EC1F2030C300D189D1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 842316EA1F2030C300D189D1 /* LaunchScreen.storyboard */; };
 		84ABEA0A1F3D15E70052D547 /* Assets.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 84ABEA091F3D15E70052D547 /* Assets.scnassets */; };
 		C304CADE1FBC98B500982C82 /* ColorOfObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = C304CADD1FBC98B500982C82 /* ColorOfObjects.swift */; };
-		C31966B71FA0C44A00CA6059 /* Floor.scn in Resources */ = {isa = PBXBuildFile; fileRef = C31966B61FA0C44A00CA6059 /* Floor.scn */; };
-		C31966B91FA0D7B400CA6059 /* Cube.scn in Resources */ = {isa = PBXBuildFile; fileRef = C31966B81FA0D7B400CA6059 /* Cube.scn */; };
+		C304CAE21FBD74E300982C82 /* ViewController+Gestures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C304CAE11FBD74E300982C82 /* ViewController+Gestures.swift */; };
 		C31966BD1FA0E03F00CA6059 /* VirtualObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31966BC1FA0E03F00CA6059 /* VirtualObjects.swift */; };
-		C31966BF1FA0E6C100CA6059 /* Sphere.scn in Resources */ = {isa = PBXBuildFile; fileRef = C31966BE1FA0E6C100CA6059 /* Sphere.scn */; };
 		C327F1921FB466EB00CB9750 /* VirtualObjectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C327F1911FB466EB00CB9750 /* VirtualObjectTableViewController.swift */; };
 		C32D60661FBAD4750012F6CC /* VirtualObjectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32D60651FBAD4750012F6CC /* VirtualObjectTableViewCell.swift */; };
 		C32D606A1FBB1B4C0012F6CC /* VirtualObjectDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32D60691FBB1B4C0012F6CC /* VirtualObjectDisplay.swift */; };
 		C37535401FB5A757003AC18F /* ContainerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C375353F1FB5A757003AC18F /* ContainerTableViewController.swift */; };
-		C3B6CF751FA31F570031DDA0 /* OpenSquare.scn in Resources */ = {isa = PBXBuildFile; fileRef = C3B6CF741FA31F570031DDA0 /* OpenSquare.scn */; };
 		C3BC38A01FB48323002E6844 /* ViewController+ARSCNView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BC389F1FB48323002E6844 /* ViewController+ARSCNView.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,15 +34,12 @@
 		842316ED1F2030C300D189D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84ABEA091F3D15E70052D547 /* Assets.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = Assets.scnassets; sourceTree = "<group>"; };
 		C304CADD1FBC98B500982C82 /* ColorOfObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorOfObjects.swift; sourceTree = "<group>"; };
-		C31966B61FA0C44A00CA6059 /* Floor.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = Floor.scn; path = ARKitBasics/Assets.scnassets/Floor.scn; sourceTree = "<group>"; };
-		C31966B81FA0D7B400CA6059 /* Cube.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = Cube.scn; path = ARKitBasics/Assets.scnassets/Cube.scn; sourceTree = "<group>"; };
+		C304CAE11FBD74E300982C82 /* ViewController+Gestures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Gestures.swift"; sourceTree = "<group>"; };
 		C31966BC1FA0E03F00CA6059 /* VirtualObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualObjects.swift; sourceTree = "<group>"; };
-		C31966BE1FA0E6C100CA6059 /* Sphere.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = Sphere.scn; path = ARKitBasics/Assets.scnassets/Sphere.scn; sourceTree = "<group>"; };
 		C327F1911FB466EB00CB9750 /* VirtualObjectTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualObjectTableViewController.swift; sourceTree = "<group>"; };
 		C32D60651FBAD4750012F6CC /* VirtualObjectTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualObjectTableViewCell.swift; sourceTree = "<group>"; };
 		C32D60691FBB1B4C0012F6CC /* VirtualObjectDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualObjectDisplay.swift; sourceTree = "<group>"; };
 		C375353F1FB5A757003AC18F /* ContainerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerTableViewController.swift; sourceTree = "<group>"; };
-		C3B6CF741FA31F570031DDA0 /* OpenSquare.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = OpenSquare.scn; path = ARKitBasics/Assets.scnassets/OpenSquare.scn; sourceTree = "<group>"; };
 		C3BC389F1FB48323002E6844 /* ViewController+ARSCNView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+ARSCNView.swift"; sourceTree = "<group>"; };
 		C85709121F34FC2200BB957F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E992F9D8F8B95C1D0CEEB4BF /* SampleCode.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = SampleCode.xcconfig; path = Configuration/SampleCode.xcconfig; sourceTree = "<group>"; };
@@ -81,10 +75,6 @@
 		842316D31F2030C300D189D1 = {
 			isa = PBXGroup;
 			children = (
-				C3B6CF741FA31F570031DDA0 /* OpenSquare.scn */,
-				C31966BE1FA0E6C100CA6059 /* Sphere.scn */,
-				C31966B81FA0D7B400CA6059 /* Cube.scn */,
-				C31966B61FA0C44A00CA6059 /* Floor.scn */,
 				C85709121F34FC2200BB957F /* README.md */,
 				842316DE1F2030C300D189D1 /* ARKitBasics */,
 				842316DD1F2030C300D189D1 /* Products */,
@@ -106,6 +96,7 @@
 			children = (
 				842316DF1F2030C300D189D1 /* AppDelegate.swift */,
 				842316E31F2030C300D189D1 /* ViewController.swift */,
+				C304CAE11FBD74E300982C82 /* ViewController+Gestures.swift */,
 				C3BC389F1FB48323002E6844 /* ViewController+ARSCNView.swift */,
 				C31966BC1FA0E03F00CA6059 /* VirtualObjects.swift */,
 				C304CADD1FBC98B500982C82 /* ColorOfObjects.swift */,
@@ -181,11 +172,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				84ABEA0A1F3D15E70052D547 /* Assets.scnassets in Resources */,
-				C31966B71FA0C44A00CA6059 /* Floor.scn in Resources */,
-				C31966BF1FA0E6C100CA6059 /* Sphere.scn in Resources */,
-				C3B6CF751FA31F570031DDA0 /* OpenSquare.scn in Resources */,
 				842316EC1F2030C300D189D1 /* LaunchScreen.storyboard in Resources */,
-				C31966B91FA0D7B400CA6059 /* Cube.scn in Resources */,
 				112FE5671F4F95A200BF85EA /* Assets.xcassets in Resources */,
 				842316E71F2030C300D189D1 /* Main.storyboard in Resources */,
 			);
@@ -207,6 +194,7 @@
 				C32D606A1FBB1B4C0012F6CC /* VirtualObjectDisplay.swift in Sources */,
 				C37535401FB5A757003AC18F /* ContainerTableViewController.swift in Sources */,
 				C304CADE1FBC98B500982C82 /* ColorOfObjects.swift in Sources */,
+				C304CAE21FBD74E300982C82 /* ViewController+Gestures.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
