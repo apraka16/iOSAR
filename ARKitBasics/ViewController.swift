@@ -9,6 +9,11 @@ import UIKit
 import SceneKit
 import ARKit
 
+/* Protocol added so that TableViewController can communicate when color of an object is chosen
+ For implementation of protocol, check VirtualObjectTableViewController */
+protocol ColorObjectToVCDelegate {
+    func objectColor() -> UIColor
+}
 
 class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationControllerDelegate {
     
@@ -16,6 +21,9 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     
     // Delegate variable used for Protocol
     var delegate: ColorObjectToVCDelegate?
+    
+    // Sound effect
+    var sound = Sounds()
     
     // Non private to allow Extension to use
     var virtualObjectInstance = VirtualObjects()
@@ -25,6 +33,8 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     private var objectOnPathToBeAdded: Int?
     private var virtualObjectColor: UIColor?
     private var pickedColor: UIColor?
+    
+    // Varibles for button image changes
     private var toggleState = 1
     private let imgPlay = UIImage(named: "play")
     private let imgStop = UIImage(named: "stop")
@@ -57,7 +67,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
      swiped down objects from main view */
     // Outlet for changing background image of button depending on the object which is swiped down
     @IBOutlet weak var segueButton: UIButton!
-    
+        
     // UILabel to ask use to Swipe down in play mode
     @IBOutlet weak var startPlayGuide: UILabel!
     
@@ -135,6 +145,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         if toggleState == 1 {
             toggleState = 2
             playButton.setBackgroundImage(imgStop, for: .normal)
+            
             inStateOfPlay(playing: true)
             
         } else {
@@ -147,19 +158,27 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     
     // User tap on floor node to add 3D object
     @IBAction func userTap(_ sender: UITapGestureRecognizer) {
-                
+        sound.playSound(named: "thud")
+        let objectToBeAdded: SCNNode?
         if objectOnPathToBeAdded != nil {
-            let objectToBeAdded = virtualObjectInstance.createNodes(
+            objectToBeAdded = virtualObjectInstance.createNodes(
                 from: virtualObjectInstance.virtualObjectCountArray[
                     objectOnPathToBeAdded!].name,
                 with: delegate?.objectColor() ?? UIColor.yellow)
-            
-            let touchLocation = sender.location(in: view)
-            let hits = sceneView.hitTest(touchLocation, options: nil)
-            if hits.first?.node != nil {
+            } else {
+            objectToBeAdded =
+                virtualObjectInstance.createNodes(from: virtualObjectInstance.virtualObjectCountArray[0].name,
+                                                  with: colorOfObjects.UIColorFromRGB(
+                                                    rgbValue: colorOfObjects.blueColor
+                ))
+        }
+        let touchLocation = sender.location(in: view)
+        let hits = sceneView.hitTest(touchLocation, options: nil)
+        if hits.first?.node != nil {
+            if hits.first?.node.name == "plane" {
                 tappedNode = hits.first?.node
-                objectToBeAdded.position.z = (tappedNode?.position.z)! + 0.05
-                tappedNode?.parent?.addChildNode(objectToBeAdded)
+                objectToBeAdded?.position.z = (tappedNode?.position.z)! + 0.05
+                tappedNode?.parent?.addChildNode(objectToBeAdded!)
                 tappedNode?.isHidden = true
             }
         }
@@ -259,19 +278,13 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         
         // sceneView.automaticallyUpdatesLighting = false
     }
-
+    
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
 		
-		// Pause the view's AR session. // 
+		// Pause the view's AR session. //
 		sceneView.session.pause()
 	}
-}
-
-/* Protocol added so that TableViewController can communicate when color of an object is chosen
- For implementation of protocol, check VirtualObjectTableViewController */
-protocol ColorObjectToVCDelegate {
-    func objectColor() -> UIColor
 }
 
 

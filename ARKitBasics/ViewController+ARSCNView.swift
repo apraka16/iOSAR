@@ -32,6 +32,7 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         node.addChildNode(wrapperNode)
     }
     
+    
     /// - Tag: UpdateARContent
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         // Update content only for plane anchors and nodes matching the setup created in `renderer(_:didAdd:for:)`.

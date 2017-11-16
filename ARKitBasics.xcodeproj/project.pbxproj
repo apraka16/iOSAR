@@ -15,6 +15,11 @@
 		84ABEA0A1F3D15E70052D547 /* Assets.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 84ABEA091F3D15E70052D547 /* Assets.scnassets */; };
 		C304CADE1FBC98B500982C82 /* ColorOfObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = C304CADD1FBC98B500982C82 /* ColorOfObjects.swift */; };
 		C304CAE21FBD74E300982C82 /* ViewController+Gestures.swift in Sources */ = {isa = PBXBuildFile; fileRef = C304CAE11FBD74E300982C82 /* ViewController+Gestures.swift */; };
+		C304CAE71FBDA0EC00982C82 /* Sounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = C304CAE61FBDA0EC00982C82 /* Sounds.swift */; };
+		C304CAE91FBDA2ED00982C82 /* swoosh.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C304CAE81FBDA2EC00982C82 /* swoosh.mp3 */; };
+		C304CAEB1FBDA32500982C82 /* thud.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C304CAEA1FBDA32400982C82 /* thud.mp3 */; };
+		C304CAED1FBDA4F400982C82 /* zip.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C304CAEC1FBDA4F400982C82 /* zip.mp3 */; };
+		C304CAF31FBDE6A200982C82 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C304CAF21FBDE6A200982C82 /* SettingsViewController.swift */; };
 		C31966BD1FA0E03F00CA6059 /* VirtualObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31966BC1FA0E03F00CA6059 /* VirtualObjects.swift */; };
 		C327F1921FB466EB00CB9750 /* VirtualObjectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C327F1911FB466EB00CB9750 /* VirtualObjectTableViewController.swift */; };
 		C32D60661FBAD4750012F6CC /* VirtualObjectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32D60651FBAD4750012F6CC /* VirtualObjectTableViewCell.swift */; };
@@ -35,6 +40,11 @@
 		84ABEA091F3D15E70052D547 /* Assets.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = Assets.scnassets; sourceTree = "<group>"; };
 		C304CADD1FBC98B500982C82 /* ColorOfObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorOfObjects.swift; sourceTree = "<group>"; };
 		C304CAE11FBD74E300982C82 /* ViewController+Gestures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Gestures.swift"; sourceTree = "<group>"; };
+		C304CAE61FBDA0EC00982C82 /* Sounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sounds.swift; sourceTree = "<group>"; };
+		C304CAE81FBDA2EC00982C82 /* swoosh.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = swoosh.mp3; sourceTree = "<group>"; };
+		C304CAEA1FBDA32400982C82 /* thud.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = thud.mp3; sourceTree = "<group>"; };
+		C304CAEC1FBDA4F400982C82 /* zip.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = zip.mp3; sourceTree = "<group>"; };
+		C304CAF21FBDE6A200982C82 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		C31966BC1FA0E03F00CA6059 /* VirtualObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualObjects.swift; sourceTree = "<group>"; };
 		C327F1911FB466EB00CB9750 /* VirtualObjectTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualObjectTableViewController.swift; sourceTree = "<group>"; };
 		C32D60651FBAD4750012F6CC /* VirtualObjectTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualObjectTableViewCell.swift; sourceTree = "<group>"; };
@@ -104,13 +114,26 @@
 				C32D60651FBAD4750012F6CC /* VirtualObjectTableViewCell.swift */,
 				C375353F1FB5A757003AC18F /* ContainerTableViewController.swift */,
 				C32D60691FBB1B4C0012F6CC /* VirtualObjectDisplay.swift */,
+				C304CAE61FBDA0EC00982C82 /* Sounds.swift */,
+				C304CAF21FBDE6A200982C82 /* SettingsViewController.swift */,
 				842316E51F2030C300D189D1 /* Main.storyboard */,
 				842316EA1F2030C300D189D1 /* LaunchScreen.storyboard */,
 				842316ED1F2030C300D189D1 /* Info.plist */,
 				84ABEA091F3D15E70052D547 /* Assets.scnassets */,
 				112FE5661F4F95A200BF85EA /* Assets.xcassets */,
+				C304CAE31FBD9E9200982C82 /* Resources */,
 			);
 			path = ARKitBasics;
+			sourceTree = "<group>";
+		};
+		C304CAE31FBD9E9200982C82 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C304CAE81FBDA2EC00982C82 /* swoosh.mp3 */,
+				C304CAEA1FBDA32400982C82 /* thud.mp3 */,
+				C304CAEC1FBDA4F400982C82 /* zip.mp3 */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -172,7 +195,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				84ABEA0A1F3D15E70052D547 /* Assets.scnassets in Resources */,
+				C304CAEB1FBDA32500982C82 /* thud.mp3 in Resources */,
+				C304CAED1FBDA4F400982C82 /* zip.mp3 in Resources */,
 				842316EC1F2030C300D189D1 /* LaunchScreen.storyboard in Resources */,
+				C304CAE91FBDA2ED00982C82 /* swoosh.mp3 in Resources */,
 				112FE5671F4F95A200BF85EA /* Assets.xcassets in Resources */,
 				842316E71F2030C300D189D1 /* Main.storyboard in Resources */,
 			);
@@ -190,9 +216,11 @@
 				842316E41F2030C300D189D1 /* ViewController.swift in Sources */,
 				C3BC38A01FB48323002E6844 /* ViewController+ARSCNView.swift in Sources */,
 				C32D60661FBAD4750012F6CC /* VirtualObjectTableViewCell.swift in Sources */,
+				C304CAE71FBDA0EC00982C82 /* Sounds.swift in Sources */,
 				842316E01F2030C300D189D1 /* AppDelegate.swift in Sources */,
 				C32D606A1FBB1B4C0012F6CC /* VirtualObjectDisplay.swift in Sources */,
 				C37535401FB5A757003AC18F /* ContainerTableViewController.swift in Sources */,
+				C304CAF31FBDE6A200982C82 /* SettingsViewController.swift in Sources */,
 				C304CADE1FBC98B500982C82 /* ColorOfObjects.swift in Sources */,
 				C304CAE21FBD74E300982C82 /* ViewController+Gestures.swift in Sources */,
 			);

@@ -20,7 +20,7 @@ class VirtualObjectTableViewCell: UITableViewCell {
 
     @IBOutlet weak var objectView: VirtualObjectDisplay!
     @IBAction func updateColor(_ sender: Any) {
-        if let material = objectView.scene?.rootNode.childNodes[2].childNodes[0].childNodes[1].geometry?.firstMaterial {
+        if let material = objectView.scene?.rootNode.childNodes.last?.childNodes.first?.childNodes.last?.geometry?.firstMaterial {
             material.emission.contents = colorChoice
         }
     }
