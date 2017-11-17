@@ -110,6 +110,9 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             let longPressGesture =
                 UILongPressGestureRecognizer(target: self, action: #selector(changeColorOfObject(_:)))
             sceneView.addGestureRecognizer(longPressGesture)
+            
+            let rotateGesture = UIRotationGestureRecognizer(target: self, action: #selector(rotateObjects(_:)))
+            sceneView.addGestureRecognizer(rotateGesture)
         }
     }
     

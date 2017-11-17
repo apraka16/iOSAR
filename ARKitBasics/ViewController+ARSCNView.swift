@@ -54,6 +54,11 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         plane.height = CGFloat(planeAnchor.extent.z)
     }
     
+//    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+//        let point = CGPoint(x: sceneView.bounds.midX, y: sceneView.bounds.midY)
+//        print(sceneView.hitTest(point, types: .estimatedHorizontalPlane))
+//    }
+    
     
     // MARK: - ARSessionDelegate
     

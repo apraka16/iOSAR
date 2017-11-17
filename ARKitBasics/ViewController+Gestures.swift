@@ -91,4 +91,14 @@ extension ViewController: UIGestureRecognizerDelegate {
         }
     }
     
+    @objc
+    func rotateObjects(_ gestureRecognize: UIRotationGestureRecognizer) {
+        let p = gestureRecognize.location(in: sceneView)
+        let hitResults = sceneView.hitTest(p, options: [:])
+        if hitResults.count > 0 {
+            let result = hitResults[0]
+            result.node.eulerAngles.z -= Float(gestureRecognize.rotation)
+        }
+    }
+    
 }
