@@ -29,6 +29,10 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     var virtualObjectInstance = VirtualObjects()
     var tappedNode: SCNNode?
     var material: SCNMaterial?
+    var screenCenter: CGPoint {
+        let bounds = sceneView.bounds
+        return CGPoint(x: bounds.midX, y: bounds.midY)
+    }
     
     private var objectOnPathToBeAdded: Int?
     private var virtualObjectColor: UIColor?
@@ -40,6 +44,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     private let imgStop = UIImage(named: "stop")
     
     private var colorOfObjects = ColorOfObjects()
+    
     
     // Method to hide/ unhide set of buttons/ object depending on play mode or else
     private func inStateOfPlay(playing: Bool) {
@@ -93,15 +98,8 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             swipeDownGesture.direction = .down
             sceneView.addGestureRecognizer(swipeDownGesture)
             
-            let swipeLeftGesture =
-                UISwipeGestureRecognizer(target: self, action: #selector(rotateObject(_:)))
-            swipeLeftGesture.direction = .left
-            sceneView.addGestureRecognizer(swipeLeftGesture)
-
-            let swipeRightGesture =
-                UISwipeGestureRecognizer(target: self, action: #selector(rotateObject(_:)))
-            swipeRightGesture.direction = .right
-            sceneView.addGestureRecognizer(swipeRightGesture)
+            let rotationGesture = UIRotationGestureRecognizer(target: self, action: #selector(rotateObjects(_:)))
+            sceneView.addGestureRecognizer(rotationGesture)
             
             let pinchGesture =
                 UIPinchGestureRecognizer(target: self, action: #selector(changeScale(_:)))
@@ -111,8 +109,11 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
                 UILongPressGestureRecognizer(target: self, action: #selector(changeColorOfObject(_:)))
             sceneView.addGestureRecognizer(longPressGesture)
             
-            let rotateGesture = UIRotationGestureRecognizer(target: self, action: #selector(rotateObjects(_:)))
-            sceneView.addGestureRecognizer(rotateGesture)
+            let panGesture = UIPanGestureRecognizer(target: self, action: #selector(translateObject(_:)))
+            panGesture.minimumNumberOfTouches = 1
+            panGesture.maximumNumberOfTouches = 1
+            sceneView.addGestureRecognizer(panGesture)
+        
         }
     }
     
@@ -156,12 +157,18 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             playButton.setBackgroundImage(imgPlay, for: .normal)
             inStateOfPlay(playing: false)
         }
-        
     }
+    
     
     // User tap on floor node to add 3D object
     @IBAction func userTap(_ sender: UITapGestureRecognizer) {
-        sound.playSound(named: "thud")
+        // Hide Color Picker buttons in case it is not hidden and user taps screen to remove it w/o changing color
+        if !colorPicker.isHidden {
+            colorPicker.isHidden = true
+        }
+        
+        sound.playSound(named: "thud")                          // How to move sound play to other thread?
+        
         let objectToBeAdded: SCNNode?
         if objectOnPathToBeAdded != nil {
             objectToBeAdded = virtualObjectInstance.createNodes(
@@ -278,6 +285,12 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         
         // Show debug UI to view performance metrics (e.g. frames per second).
         sceneView.showsStatistics = true
+        
+        // Debug options - for showing feature points (yellow dots) and world origin axes
+//        sceneView.debugOptions = [
+//            ARSCNDebugOptions.showFeaturePoints,
+//            ARSCNDebugOptions.showWorldOrigin
+//        ]
         
         // sceneView.automaticallyUpdatesLighting = false
     }

@@ -58,16 +58,32 @@ extension ViewController: UIGestureRecognizerDelegate {
         }
     }
     
+    // Rotate object using two finger rotation - more intuitive than swipe rotation
+    @objc
+    func rotateObjects(_ gestureRecognize: UIRotationGestureRecognizer) {
+        let p = gestureRecognize.location(in: sceneView)
+        let hitResults = sceneView.hitTest(p, options: [:])
+        if hitResults.count > 0 && hitResults.first?.node.name != "plane" {
+            let result = hitResults.first!
+            result.node.eulerAngles.z -= Float(gestureRecognize.rotation)
+            gestureRecognize.rotation = 0.0
+        }
+    }
+    
     // Scale the Object on pinch
     @objc
     func changeScale(_ gestureRecognize: UIPinchGestureRecognizer) {
         let p = gestureRecognize.location(in: sceneView)
         let hitResults = sceneView.hitTest(p, options: [:])
-        if hitResults.count > 0 {
+        if hitResults.count > 0 && hitResults.first?.node.name != "plane" {
             let result = hitResults[0]
             switch gestureRecognize.state {
             case .changed, .ended:
-                result.node.scale = SCNVector3(gestureRecognize.scale, gestureRecognize.scale, gestureRecognize.scale)
+//                result.node.scale = SCNVector3(gestureRecognize.scale, gestureRecognize.scale, gestureRecognize.scale)
+                result.node.scale.x *= Float(gestureRecognize.scale)
+                result.node.scale.y *= Float(gestureRecognize.scale)
+                result.node.scale.z *= Float(gestureRecognize.scale)
+                gestureRecognize.scale = 1
             default:
                 break
             }
@@ -81,9 +97,8 @@ extension ViewController: UIGestureRecognizerDelegate {
         
         let p = gestureRecognize.location(in: sceneView)
         let hitResults = sceneView.hitTest(p, options: [:])
-        if hitResults.count > 0 {
+        if hitResults.count > 0 && hitResults.first?.node.name != "plane" {
             let result = hitResults[0]
-            
             material = result.node.geometry!.firstMaterial!
         }
         else {
@@ -91,14 +106,36 @@ extension ViewController: UIGestureRecognizerDelegate {
         }
     }
     
+    // Pan Gesture - to allow object to pan around
+    // @TODO:- Do Not allow object to go beyond anchor's extent
     @objc
-    func rotateObjects(_ gestureRecognize: UIRotationGestureRecognizer) {
+    func translateObject(_ gestureRecognize: UIPanGestureRecognizer) {
+        
         let p = gestureRecognize.location(in: sceneView)
         let hitResults = sceneView.hitTest(p, options: [:])
-        if hitResults.count > 0 {
+        if hitResults.count > 0 && hitResults.first?.node.name != "plane" {
             let result = hitResults[0]
-            result.node.eulerAngles.z -= Float(gestureRecognize.rotation)
+            
+            let anchor = sceneView.anchor(for: result.node)
+            guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
+            let anchorWidth = planeAnchor.extent.x
+            let anchorHeight = planeAnchor.extent.z
+            
+            let translation = gestureRecognize.translation(in: sceneView)
+            
+            if gestureRecognize.state != .cancelled {
+                result.node.position.x += Float(translation.x) * anchorWidth / Float(sceneView.bounds.height)
+                result.node.position.y -= Float(translation.y) * anchorHeight / Float(sceneView.bounds.width)
+                gestureRecognize.setTranslation(CGPoint.zero, in: sceneView)
+
+            }
         }
+        
     }
-    
 }
+
+
+
+
+
+

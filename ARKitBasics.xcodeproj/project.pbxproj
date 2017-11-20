@@ -24,6 +24,9 @@
 		C327F1921FB466EB00CB9750 /* VirtualObjectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C327F1911FB466EB00CB9750 /* VirtualObjectTableViewController.swift */; };
 		C32D60661FBAD4750012F6CC /* VirtualObjectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32D60651FBAD4750012F6CC /* VirtualObjectTableViewCell.swift */; };
 		C32D606A1FBB1B4C0012F6CC /* VirtualObjectDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32D60691FBB1B4C0012F6CC /* VirtualObjectDisplay.swift */; };
+		C33AE5C11FC29CA100F78E84 /* FocusSquareSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C33AE5BF1FC29CA100F78E84 /* FocusSquareSegment.swift */; };
+		C33AE5C21FC29CA100F78E84 /* FocusSquare.swift in Sources */ = {isa = PBXBuildFile; fileRef = C33AE5C01FC29CA100F78E84 /* FocusSquare.swift */; };
+		C33AE5C51FC29CDD00F78E84 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C33AE5C41FC29CDC00F78E84 /* Utilities.swift */; };
 		C37535401FB5A757003AC18F /* ContainerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C375353F1FB5A757003AC18F /* ContainerTableViewController.swift */; };
 		C3BC38A01FB48323002E6844 /* ViewController+ARSCNView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BC389F1FB48323002E6844 /* ViewController+ARSCNView.swift */; };
 /* End PBXBuildFile section */
@@ -49,6 +52,9 @@
 		C327F1911FB466EB00CB9750 /* VirtualObjectTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualObjectTableViewController.swift; sourceTree = "<group>"; };
 		C32D60651FBAD4750012F6CC /* VirtualObjectTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualObjectTableViewCell.swift; sourceTree = "<group>"; };
 		C32D60691FBB1B4C0012F6CC /* VirtualObjectDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualObjectDisplay.swift; sourceTree = "<group>"; };
+		C33AE5BF1FC29CA100F78E84 /* FocusSquareSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusSquareSegment.swift; sourceTree = "<group>"; };
+		C33AE5C01FC29CA100F78E84 /* FocusSquare.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusSquare.swift; sourceTree = "<group>"; };
+		C33AE5C41FC29CDC00F78E84 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		C375353F1FB5A757003AC18F /* ContainerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerTableViewController.swift; sourceTree = "<group>"; };
 		C3BC389F1FB48323002E6844 /* ViewController+ARSCNView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+ARSCNView.swift"; sourceTree = "<group>"; };
 		C85709121F34FC2200BB957F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -116,6 +122,8 @@
 				C32D60691FBB1B4C0012F6CC /* VirtualObjectDisplay.swift */,
 				C304CAE61FBDA0EC00982C82 /* Sounds.swift */,
 				C304CAF21FBDE6A200982C82 /* SettingsViewController.swift */,
+				C33AE5BE1FC29C7100F78E84 /* Focus Square */,
+				C33AE5C31FC29CC600F78E84 /* Utilities */,
 				842316E51F2030C300D189D1 /* Main.storyboard */,
 				842316EA1F2030C300D189D1 /* LaunchScreen.storyboard */,
 				842316ED1F2030C300D189D1 /* Info.plist */,
@@ -134,6 +142,23 @@
 				C304CAEC1FBDA4F400982C82 /* zip.mp3 */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		C33AE5BE1FC29C7100F78E84 /* Focus Square */ = {
+			isa = PBXGroup;
+			children = (
+				C33AE5C01FC29CA100F78E84 /* FocusSquare.swift */,
+				C33AE5BF1FC29CA100F78E84 /* FocusSquareSegment.swift */,
+			);
+			path = "Focus Square";
+			sourceTree = "<group>";
+		};
+		C33AE5C31FC29CC600F78E84 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				C33AE5C41FC29CDC00F78E84 /* Utilities.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -212,7 +237,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C327F1921FB466EB00CB9750 /* VirtualObjectTableViewController.swift in Sources */,
+				C33AE5C21FC29CA100F78E84 /* FocusSquare.swift in Sources */,
 				C31966BD1FA0E03F00CA6059 /* VirtualObjects.swift in Sources */,
+				C33AE5C51FC29CDD00F78E84 /* Utilities.swift in Sources */,
+				C33AE5C11FC29CA100F78E84 /* FocusSquareSegment.swift in Sources */,
 				842316E41F2030C300D189D1 /* ViewController.swift in Sources */,
 				C3BC38A01FB48323002E6844 /* ViewController+ARSCNView.swift in Sources */,
 				C32D60661FBAD4750012F6CC /* VirtualObjectTableViewCell.swift in Sources */,
