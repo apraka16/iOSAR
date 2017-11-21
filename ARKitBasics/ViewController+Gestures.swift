@@ -27,7 +27,10 @@ extension ViewController: UIGestureRecognizerDelegate {
                 sound.playSound(named: "zip")
                 result.node.runAction(SCNAction.rotateBy(x: 0, y: 0, z: 1, duration: 0.25))
             case .down:
-                sound.playSound(named: "swoosh")
+                // Dipatching sounds to global queue (non-main) for no impact on UI
+                DispatchQueue.global(qos: .userInteractive).async {
+                    self.sound.playSound(named: "swoosh")
+                }
                 
                 // Down to remove object and show as collected in Segue button - bottom right
                 segueButton.isHidden = false

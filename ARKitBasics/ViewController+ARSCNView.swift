@@ -26,21 +26,21 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
             wrapperNode.addChildNode(child)
         }
         
-//        let plane = SCNPlane()
-//        plane.width = CGFloat(planeAnchor.extent.x)
-//        plane.height = CGFloat(planeAnchor.extent.z)
-//        print(plane.materials)
-//
-//        let planeNode = SCNNode(geometry: plane)
-//
-//        planeNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
-//        planeNode.eulerAngles.x = -.pi / 2
-//        node.addChildNode(planeNode)
-        
         wrapperNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
         wrapperNode.eulerAngles.x = -.pi / 2
 
         node.addChildNode(wrapperNode)
+        
+        if Settings.sharedInstance.autoPlay {
+            DispatchQueue.global(qos: .userInteractive).async {
+                let cubeNode = self.virtualObjectInstance.createNodes(from: "Cube",
+                                                                      with: self.colorOfObject.UIColorFromRGB(rgbValue: self.colorOfObject.blueColor))
+                wrapperNode.parent?.addChildNode(cubeNode)
+                cubeNode.position.y = wrapperNode.position.y + 0.05
+                wrapperNode.isHidden = true
+            }
+        }
+        
     }
     
     
@@ -64,42 +64,7 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         plane.width = CGFloat(planeAnchor.extent.x)
         plane.height = CGFloat(planeAnchor.extent.z)
     }
-    
-    
-    
-//    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-//        
-//        var countExistingPlanes = 0
-//
-//        DispatchQueue.main.async {
-//            let existingPlanesHitTestResults = self.sceneView.hitTest(self.sceneView.center, types: .existingPlaneUsingExtent)
-//            countExistingPlanes = existingPlanesHitTestResults.count
-//            print("Existing Planed: \(existingPlanesHitTestResults), with Count: \(countExistingPlanes)")
-//            if countExistingPlanes == 0 {
-//                let estimatedPlanesHitTestResults = self.sceneView.hitTest(self.sceneView.center, types: .estimatedHorizontalPlane)
-//                print("Estimated Planes: \(estimatedPlanesHitTestResults), with Count: \(estimatedPlanesHitTestResults.count)")
-//
-//                if estimatedPlanesHitTestResults.count > 0 {
-//                    for i in 0..<estimatedPlanesHitTestResults.count {
-//                        let plane = SCNPlane(); plane.width = 0.1; plane.height = 0.1
-//                        let planeNode = SCNNode(geometry: plane)
-//                        planeNode.simdPosition = float3(estimatedPlanesHitTestResults[i].worldTransform.translation.x,
-//                                                        Float(estimatedPlanesHitTestResults[i].distance), estimatedPlanesHitTestResults[i].worldTransform.translation.z)
-//                        planeNode.eulerAngles.x = -.pi / 2
-//                        self.sceneView.scene.rootNode.addChildNode(planeNode)
-////                        if self.sceneView.scene.rootNode.childNodes.count > 0 {
-////                            self.sceneView.scene.rootNode.childNodes[0].removeFromParentNode()
-////                            self.sceneView.scene.rootNode.addChildNode(planeNode)
-////                        }
-//                    }
-//                }
-//            }
-//        }
-//        let hitTestResult = sceneView.hitTest(<#T##point: CGPoint##CGPoint#>, types: <#T##ARHitTestResult.ResultType#>)
-//        let point = CGPoint(x: sceneView.bounds.midX, y: sceneView.bounds.midY)
-//        print(sceneView.hitTest(point, types: .estimatedHorizontalPlane))
-//    }
-    
+
     
     // MARK: - ARSessionDelegate
     
@@ -175,5 +140,4 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         configuration.planeDetection = .horizontal
         sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
     }
-    
 }

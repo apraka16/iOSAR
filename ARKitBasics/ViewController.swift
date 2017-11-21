@@ -18,6 +18,7 @@ protocol ColorObjectToVCDelegate {
 class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationControllerDelegate {
     
     // MARK: - Instance Variables
+    let colorOfObject = ColorOfObjects()
     
     // Delegate variable used for Protocol
     var delegate: ColorObjectToVCDelegate?
@@ -40,8 +41,8 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     
     // Varibles for button image changes
     private var toggleState = 1
-    private let imgPlay = UIImage(named: "play")
-    private let imgStop = UIImage(named: "stop")
+    private let imgPlay = UIImage(named: "playBtn")
+    private let imgStop = UIImage(named: "stopBtn")
     
     private var colorOfObjects = ColorOfObjects()
     
@@ -51,6 +52,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         if playing {
             addObject.isHidden = true
             startPlayGuide.isHidden = false
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                 self.startPlayGuide.isHidden = true
             }
@@ -93,6 +95,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // Main AR Scene View for rendering content
     @IBOutlet weak var sceneView: ARSCNView! {
         didSet {
+            
             let swipeDownGesture =
                 UISwipeGestureRecognizer(target: self, action: #selector(rotateObject(_:)))
             swipeDownGesture.direction = .down
@@ -110,8 +113,8 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             sceneView.addGestureRecognizer(longPressGesture)
             
             let panGesture = UIPanGestureRecognizer(target: self, action: #selector(translateObject(_:)))
-            panGesture.minimumNumberOfTouches = 1
-            panGesture.maximumNumberOfTouches = 1
+            panGesture.minimumNumberOfTouches = 2
+            panGesture.maximumNumberOfTouches = 2
             sceneView.addGestureRecognizer(panGesture)
         
         }
@@ -149,7 +152,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         if toggleState == 1 {
             toggleState = 2
             playButton.setBackgroundImage(imgStop, for: .normal)
-            
             inStateOfPlay(playing: true)
             
         } else {
@@ -162,12 +164,17 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     
     // User tap on floor node to add 3D object
     @IBAction func userTap(_ sender: UITapGestureRecognizer) {
+        
         // Hide Color Picker buttons in case it is not hidden and user taps screen to remove it w/o changing color
         if !colorPicker.isHidden {
             colorPicker.isHidden = true
         }
         
-        sound.playSound(named: "thud")                          // How to move sound play to other thread?
+        // Dipatching sounds to global queue (non-main) for no impact on UI
+        DispatchQueue.global(qos: .userInteractive).async {
+            self.sound.playSound(named: "thud")
+        }
+        
         
         let objectToBeAdded: SCNNode?
         if objectOnPathToBeAdded != nil {
@@ -217,7 +224,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
                 popoverPresentationController.sourceRect = (sender as! UIButton).bounds // For arrowhead in the middle
                 popoverPresentationController.delegate = self
             }
-        }
+        }        
     }
     
     // Function so that popover doesn't adapt to cover full screen on iphones
@@ -249,7 +256,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         colorPicker.isHidden = true
         startPlayGuide.isHidden = true
     }
-	
+    
     /// - Tag: StartARSession
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -292,7 +299,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
 //            ARSCNDebugOptions.showWorldOrigin
 //        ]
         
-        // sceneView.automaticallyUpdatesLighting = false
+         sceneView.automaticallyUpdatesLighting = true
     }
     
 	override func viewWillDisappear(_ animated: Bool) {

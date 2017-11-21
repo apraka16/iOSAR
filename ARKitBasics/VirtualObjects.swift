@@ -16,6 +16,8 @@ struct VirtualObjects {
     // Stored Property for .scn objects
     var virtualObjects = [(scn:"Cube.scn", count: 0), (scn: "Sphere.scn", count: 0)]
     
+    let colorOfObject = ColorOfObjects()
+    
     
     public var virtualObjectCountArray: [(name: String, count: Int)] {
         get {

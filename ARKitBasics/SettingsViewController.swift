@@ -10,9 +10,16 @@ import UIKit
 
 class SettingsViewController: UITableViewController {
     
+    
+    @IBOutlet weak var autoset: UISwitch!
+    
+    @IBAction func setAutoMode(_ sender: UISwitch) {
+        Settings.sharedInstance.autoPlay = autoset.isOn
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
