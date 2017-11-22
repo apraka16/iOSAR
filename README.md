@@ -8,10 +8,10 @@ Proposed 3D modeling tool to be used to create advanced shapes is Blender. From 
 
 ## 3D objects which can be places in the View, using "add" button located bottom-center:
 
-Shapes | 
------------- | -------------
-Cube |
-Sphere |
+Shapes
+------------
+Cube
+Sphere
 
 ## Basic user interaction have been enabled for 3D objects placed in :
 
