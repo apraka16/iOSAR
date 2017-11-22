@@ -20,12 +20,6 @@ extension ViewController: UIGestureRecognizerDelegate {
         if hitResults.count > 0 && hitResults.first?.node.name != "plane" {
             let result = hitResults.first!
             switch gestureRecognize.direction {
-            case .left:
-                sound.playSound(named: "zip")
-                result.node.runAction(SCNAction.rotateBy(x: 0, y: 0, z: -1, duration: 0.25))
-            case .right:
-                sound.playSound(named: "zip")
-                result.node.runAction(SCNAction.rotateBy(x: 0, y: 0, z: 1, duration: 0.25))
             case .down:
                 // Dipatching sounds to global queue (non-main) for no impact on UI
                 DispatchQueue.global(qos: .userInteractive).async {

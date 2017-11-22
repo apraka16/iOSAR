@@ -52,5 +52,29 @@ struct VirtualObjects {
         return wrapperNode
     }
     
+    // Random Node Generator
+    
+    private let objectNames = ["Cube", "Sphere"]
+    private var objectColors: [UIColor] {
+        get {
+            return [
+                colorOfObject.UIColorFromRGB(rgbValue: colorOfObject.blueColor),
+                colorOfObject.UIColorFromRGB(rgbValue: colorOfObject.greenColor),
+                colorOfObject.UIColorFromRGB(rgbValue: colorOfObject.redColor)
+            ]
+        }
+    }
+    
+    private func randRange (lower: Int, upper: Int) -> Int {
+        return Int(UInt32(lower) + arc4random_uniform(UInt32(upper) - UInt32(lower) + 1))
+    }
+    
+    func createRandomNodes() -> SCNNode {
+        
+        let randomObjectName = objectNames[randRange(lower: 0, upper: 1)]
+        let randomObjectColor = objectColors[randRange(lower: 0, upper: 2)]
+        
+        return createNodes(from: randomObjectName, with: randomObjectColor)
+    }
 }
 

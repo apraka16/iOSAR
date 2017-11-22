@@ -118,13 +118,12 @@
 				C3BC389F1FB48323002E6844 /* ViewController+ARSCNView.swift */,
 				C31966BC1FA0E03F00CA6059 /* VirtualObjects.swift */,
 				C304CADD1FBC98B500982C82 /* ColorOfObjects.swift */,
-				C327F1911FB466EB00CB9750 /* VirtualObjectTableViewController.swift */,
-				C32D60651FBAD4750012F6CC /* VirtualObjectTableViewCell.swift */,
 				C375353F1FB5A757003AC18F /* ContainerTableViewController.swift */,
 				C32D60691FBB1B4C0012F6CC /* VirtualObjectDisplay.swift */,
 				C304CAE61FBDA0EC00982C82 /* Sounds.swift */,
 				C304CAF21FBDE6A200982C82 /* SettingsViewController.swift */,
 				C36602961FC4437E004878BC /* Settings.swift */,
+				C36602981FC499ED004878BC /* Virtual Object Table */,
 				C33AE5BE1FC29C7100F78E84 /* Focus Square */,
 				C33AE5C31FC29CC600F78E84 /* Utilities */,
 				842316E51F2030C300D189D1 /* Main.storyboard */,
@@ -162,6 +161,15 @@
 				C33AE5C41FC29CDC00F78E84 /* Utilities.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		C36602981FC499ED004878BC /* Virtual Object Table */ = {
+			isa = PBXGroup;
+			children = (
+				C327F1911FB466EB00CB9750 /* VirtualObjectTableViewController.swift */,
+				C32D60651FBAD4750012F6CC /* VirtualObjectTableViewCell.swift */,
+			);
+			path = "Virtual Object Table";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

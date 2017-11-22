@@ -33,11 +33,11 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         
         if Settings.sharedInstance.autoPlay {
             DispatchQueue.global(qos: .userInteractive).async {
-                let cubeNode = self.virtualObjectInstance.createNodes(from: "Cube",
-                                                                      with: self.colorOfObject.UIColorFromRGB(rgbValue: self.colorOfObject.blueColor))
-                wrapperNode.parent?.addChildNode(cubeNode)
-                cubeNode.position.y = wrapperNode.position.y + 0.05
-                wrapperNode.isHidden = true
+                let randomObjectNode = self.virtualObjectInstance.createRandomNodes()
+                wrapperNode.parent?.addChildNode(randomObjectNode)
+                randomObjectNode.position.y = wrapperNode.position.y + 0.05
+                wrapperNode.childNodes[1].isHidden = true
+            
             }
         }
         
