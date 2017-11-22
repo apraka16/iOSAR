@@ -31,18 +31,20 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
 
         node.addChildNode(wrapperNode)
         
+        sceneView.pointOfView?.childNodes.first?.isHidden = true
+        
+        /* In case user chose to allow auto-play (default) - random objects will be added
+         as and when anchors are added to the scene */
+        // Scheduling object addition to global queue @TODO: Is it a good way to schedule this activity?
         if Settings.sharedInstance.autoPlay {
             DispatchQueue.global(qos: .userInteractive).async {
                 let randomObjectNode = self.virtualObjectInstance.createRandomNodes()
                 wrapperNode.parent?.addChildNode(randomObjectNode)
                 randomObjectNode.position.y = wrapperNode.position.y + 0.05
                 wrapperNode.childNodes[1].isHidden = true
-            
             }
         }
-        
     }
-    
     
     /// - Tag: UpdateARContent
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
@@ -64,8 +66,16 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         plane.width = CGFloat(planeAnchor.extent.x)
         plane.height = CGFloat(planeAnchor.extent.z)
     }
-
     
+    // Testing: @TODO: - Smoothening of object placement and change in focussquare orientation on camera movement
+    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        
+        DispatchQueue.main.async {
+            let hitTestResult = self.sceneView.hitTest(self.sceneView.center, types: .featurePoint)
+            print(self.sceneView.session.currentFrame?.camera.transform)
+            }
+        }
+
     // MARK: - ARSessionDelegate
     
     func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {

@@ -163,7 +163,7 @@
                                 </subviews>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Swipe Down to Collect" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q5A-i4-fuK">
-                                <rect key="frame" x="0.0" y="222" width="375" height="223"/>
+                                <rect key="frame" x="0.0" y="222" width="375" height="119.5"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="50"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -195,11 +195,12 @@
                             <constraint firstItem="aHd-Is-VYB" firstAttribute="centerX" secondItem="G0c-Jb-6fg" secondAttribute="centerX" id="MoE-Na-hic"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="71x-2l-AWw" secondAttribute="leading" id="QIa-Ri-qJo"/>
                             <constraint firstItem="bIU-sv-Nyk" firstAttribute="leading" secondItem="loo-cG-myf" secondAttribute="leadingMargin" id="W1t-I5-UcG"/>
-                            <constraint firstAttribute="bottom" secondItem="Q5A-i4-fuK" secondAttribute="bottom" constant="222" id="Wqm-dD-i8W"/>
                             <constraint firstItem="71x-2l-AWw" firstAttribute="trailing" secondItem="OMb-B6-59U" secondAttribute="trailing" constant="16" id="ZTb-Cd-GD9"/>
                             <constraint firstItem="71x-2l-AWw" firstAttribute="trailing" secondItem="BrB-h1-WRS" secondAttribute="trailing" id="a3B-9u-pb1"/>
                             <constraint firstItem="71x-2l-AWw" firstAttribute="bottom" secondItem="OMb-B6-59U" secondAttribute="bottom" constant="20" id="cZt-ux-MOJ"/>
-                            <constraint firstItem="Q5A-i4-fuK" firstAttribute="top" secondItem="loo-cG-myf" secondAttribute="top" constant="222" id="i7G-8F-4Z6"/>
+                            <constraint firstItem="Q5A-i4-fuK" firstAttribute="top" secondItem="loo-cG-myf" secondAttribute="top" constant="222" id="i7G-8F-4Z6">
+                                <variation key="heightClass=compact-widthClass=compact" constant="150"/>
+                            </constraint>
                             <constraint firstItem="G0c-Jb-6fg" firstAttribute="centerX" secondItem="BrB-h1-WRS" secondAttribute="centerX" id="knH-la-VM4"/>
                             <constraint firstItem="37h-bD-Iyn" firstAttribute="leading" secondItem="71x-2l-AWw" secondAttribute="leading" constant="15" id="lLK-x7-VyJ"/>
                             <constraint firstItem="Q5A-i4-fuK" firstAttribute="trailing" secondItem="71x-2l-AWw" secondAttribute="trailing" id="nk9-y1-aHJ"/>
@@ -608,7 +609,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wjc-NB-CDb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="457" y="810"/>
+            <point key="canvasLocation" x="457" y="820"/>
         </scene>
     </scenes>
     <resources>

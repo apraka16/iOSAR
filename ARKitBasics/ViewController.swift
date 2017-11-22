@@ -20,6 +20,8 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // MARK: - Instance Variables
     let colorOfObject = ColorOfObjects()
     
+    var focusSquare = FocusSquare()
+    
     // Delegate variable used for Protocol
     var delegate: ColorObjectToVCDelegate?
     
@@ -227,6 +229,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         }        
     }
     
+    
     // Function so that popover doesn't adapt to cover full screen on iphones
     func adaptivePresentationStyle(for controller: UIPresentationController,
                                    traitCollection: UITraitCollection) -> UIModalPresentationStyle {
@@ -249,6 +252,12 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     }
     
     // MARK: - View Life Cycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        focusSquare.state = .initializing
+        sceneView.pointOfView?.addChildNode(focusSquare)
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -294,10 +303,10 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         sceneView.showsStatistics = true
         
         // Debug options - for showing feature points (yellow dots) and world origin axes
-//        sceneView.debugOptions = [
-//            ARSCNDebugOptions.showFeaturePoints,
-//            ARSCNDebugOptions.showWorldOrigin
-//        ]
+        sceneView.debugOptions = [
+            ARSCNDebugOptions.showFeaturePoints,
+            ARSCNDebugOptions.showWorldOrigin
+        ]
         
          sceneView.automaticallyUpdatesLighting = true
     }
@@ -308,6 +317,10 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
 		// Pause the view's AR session. //
 		sceneView.session.pause()
 	}
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+    }
 }
 
 
