@@ -21,26 +21,31 @@ extension ViewController: UIGestureRecognizerDelegate {
             let result = hitResults.first!
             switch gestureRecognize.direction {
             case .down:
-                // Dipatching sounds to global queue (non-main) for no impact on UI
-                DispatchQueue.global(qos: .userInteractive).async {
-                    self.sound.playSound(named: "swoosh")
-                }
                 
                 // Down to remove object and show as collected in Segue button - bottom right
                 segueButton.isHidden = false
                 
                 if (result.node.parent?.name) != nil {
-                    if result.node.parent?.parent?.parent?.childNodes[1].name == "plane" {
-                        result.node.parent?.parent?.parent?.childNodes[1].isHidden = false
+                    if let anchorNode = result.node.parent?.parent?.parent?.childNode(withName: "anchorNode", recursively: true) {
+                        anchorNode.isHidden = false
                     }
+
                     
                     let nodeToBeRemoved = (result.node.parent?.name)!
                     switch nodeToBeRemoved {
                     case "cube" :
+                        // Dipatching sounds to global queue (non-main) for no impact on UI
+                        DispatchQueue.global(qos: .userInteractive).async {
+                            self.sound.playSound(named: "swoosh")
+                        }
                         segueButton.setBackgroundImage(UIImage(named: "cube"), for: .normal)
                         virtualObjectInstance.virtualObjects[0].count += 1
                         result.node.parent?.removeFromParentNode()
                     case "sphere" :
+                        // Dipatching sounds to global queue (non-main) for no impact on UI
+                        DispatchQueue.global(qos: .userInteractive).async {
+                            self.sound.playSound(named: "swoosh")
+                        }
                         segueButton.setBackgroundImage(UIImage(named: "sphere"), for: .normal)
                         virtualObjectInstance.virtualObjects[1].count += 1
                         result.node.parent?.removeFromParentNode()
@@ -104,12 +109,13 @@ extension ViewController: UIGestureRecognizerDelegate {
     }
     
     // Pan Gesture - to allow object to pan around
-    // @TODO:- Do Not allow object to go beyond anchor's extent
+    // @TODO:- Do Not allow object to go beyond anchor's extent - TOO JITTERY
     @objc
     func translateObject(_ gestureRecognize: UIPanGestureRecognizer) {
         
         let p = gestureRecognize.location(in: sceneView)
         let hitResults = sceneView.hitTest(p, options: [:])
+        print(hitResults)
         if hitResults.count > 0 && hitResults.first?.node.name != "plane" {
             let result = hitResults[0]
             

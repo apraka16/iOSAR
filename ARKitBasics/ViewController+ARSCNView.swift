@@ -20,31 +20,64 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         
         // Create a SceneKit plane to visualize the plane anchor using its position and extent.
         
-        guard let virtualObject = SCNScene(named: "Floor.scn", inDirectory: "Assets.scnassets") else { return }
-        let wrapperNode = SCNNode()
-        for child in virtualObject.rootNode.childNodes {
-            wrapperNode.addChildNode(child)
-        }
+        /* TAG:- Experimental: closed and open square - */
+        let anchorPlane = AnchorPlane()
+        anchorPlane.displayAsFilled()
         
-        wrapperNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
-        wrapperNode.eulerAngles.x = -.pi / 2
-
-        node.addChildNode(wrapperNode)
+//        guard let virtualObject = SCNScene(named: "Floor.scn", inDirectory: "Assets.scnassets") else { return }
+//        let wrapperNode = SCNNode()
+//        for child in virtualObject.rootNode.childNodes {
+//            wrapperNode.addChildNode(child)
+//        }
         
-        sceneView.pointOfView?.childNodes.first?.isHidden = true
+        /* TAG:- Experimental: closed and open square - */
+        anchorPlane.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
+        anchorPlane.eulerAngles.x = -.pi / 2
+        node.addChildNode(anchorPlane)
+        
+//        wrapperNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
+//        wrapperNode.eulerAngles.x = -.pi / 2
+//
+//        node.addChildNode(wrapperNode)
         
         /* In case user chose to allow auto-play (default) - random objects will be added
          as and when anchors are added to the scene */
         // Scheduling object addition to global queue @TODO: Is it a good way to schedule this activity?
-        if Settings.sharedInstance.autoPlay {
-            DispatchQueue.global(qos: .userInteractive).async {
-                let randomObjectNode = self.virtualObjectInstance.createRandomNodes()
-                wrapperNode.parent?.addChildNode(randomObjectNode)
-                randomObjectNode.position.y = wrapperNode.position.y + 0.05
-                wrapperNode.childNodes[1].isHidden = true
-            }
-        }
+//        if Settings.sharedInstance.autoPlay {
+//            DispatchQueue.global(qos: .userInteractive).async {
+//                if self.sceneView.session.currentFrame?.anchors.count == 1 {
+//                    let randomObjectNode = self.virtualObjectInstance.createRandomNodes()
+//                    wrapperNode.parent?.addChildNode(randomObjectNode)
+//                    randomObjectNode.position.y = wrapperNode.position.y + 0.05
+//                    wrapperNode.childNodes[1].isHidden = true
+//                }
+//
+//            }
+//        }
     }
+
+    
+    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        
+            DispatchQueue.main.async {
+                let featurePointArray = self.sceneView.hitTest(self.screenCenter, types: .featurePoint)
+                
+//                print(self.sceneView.pointOfView?.childNodes)
+                
+//                print(self.sceneView.nodesInsideFrustum(of: self.sceneView.pointOfView!))
+                
+                if let distanceFromCamera = featurePointArray.first?.distance {
+                    self.arrayFeaturePointDistance.append(distanceFromCamera)
+                    self.arrayFeaturePointDistance = Array(self.arrayFeaturePointDistance.suffix(10))
+                    let average = self.arrayFeaturePointDistance.reduce(CGFloat(0), { $0 + $1 }) / CGFloat(self.arrayFeaturePointDistance.count)
+                    self.sceneView.pointOfView?.childNodes[1].position.z = min(-0.6, Float(-average))
+                    self.sceneView.pointOfView?.childNodes[1].eulerAngles.x = (self.sceneView.session.currentFrame?.camera.eulerAngles.x)!
+                    
+                }
+                
+            }
+    }
+    
     
     /// - Tag: UpdateARContent
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
@@ -68,13 +101,6 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
     }
     
     // Testing: @TODO: - Smoothening of object placement and change in focussquare orientation on camera movement
-    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-        
-        DispatchQueue.main.async {
-            let hitTestResult = self.sceneView.hitTest(self.sceneView.center, types: .featurePoint)
-            print(self.sceneView.session.currentFrame?.camera.transform)
-            }
-        }
 
     // MARK: - ARSessionDelegate
     

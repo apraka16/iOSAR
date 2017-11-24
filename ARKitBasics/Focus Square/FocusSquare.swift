@@ -17,8 +17,6 @@ class FocusSquare: SCNNode {
     
     enum State {
         case initializing
-        case featuresDetected(anchorPosition: float3, camera: ARCamera?)
-        case planeDetected(anchorPosition: float3, planeAnchor: ARPlaneAnchor, camera: ARCamera?)
     }
     
     // MARK: - Configuration Properties
@@ -49,8 +47,6 @@ class FocusSquare: SCNNode {
     var lastPosition: float3? {
         switch state {
         case .initializing: return nil
-        case .featuresDetected(let anchorPosition, _): return anchorPosition
-        case .planeDetected(let anchorPosition, _, _): return anchorPosition
         }
     }
     
@@ -61,12 +57,6 @@ class FocusSquare: SCNNode {
             switch state {
             case .initializing:
                 displayAsBillboard()
-                
-            case .featuresDetected(let anchorPosition, let camera):
-                displayAsOpen(at: anchorPosition, camera: camera)
-                
-            case .planeDetected(let anchorPosition, let planeAnchor, let camera):
-                displayAsClosed(at: anchorPosition, planeAnchor: planeAnchor, camera: camera)
             }
         }
     }
@@ -418,16 +408,6 @@ extension FocusSquare.State: Equatable {
         switch (lhs, rhs) {
         case (.initializing, .initializing):
             return true
-            
-        case (.featuresDetected(let lhsPosition, let lhsCamera),
-              .featuresDetected(let rhsPosition, let rhsCamera)):
-            return lhsPosition == rhsPosition && lhsCamera == rhsCamera
-            
-        case (.planeDetected(let lhsPosition, let lhsPlaneAnchor, let lhsCamera),
-              .planeDetected(let rhsPosition, let rhsPlaneAnchor, let rhsCamera)):
-            return lhsPosition == rhsPosition
-                && lhsPlaneAnchor == rhsPlaneAnchor
-                && lhsCamera == rhsCamera
             
         default:
             return false

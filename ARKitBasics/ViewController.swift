@@ -20,6 +20,8 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // MARK: - Instance Variables
     let colorOfObject = ColorOfObjects()
     
+    var arrayFeaturePointDistance: [CGFloat] = []
+    
     var focusSquare = FocusSquare()
     
     // Delegate variable used for Protocol
@@ -33,8 +35,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     var tappedNode: SCNNode?
     var material: SCNMaterial?
     var screenCenter: CGPoint {
-        let bounds = sceneView.bounds
-        return CGPoint(x: bounds.midX, y: bounds.midY)
+        return sceneView.center
     }
     
     private var objectOnPathToBeAdded: Int?
@@ -193,13 +194,17 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         }
         let touchLocation = sender.location(in: view)
         let hits = sceneView.hitTest(touchLocation, options: nil)
+        
         if hits.first?.node != nil {
-            if hits.first?.node.name == "plane" {
-                tappedNode = hits.first?.node
-                objectToBeAdded?.position.z = (tappedNode?.position.z)! + 0.05
-                tappedNode?.parent?.addChildNode(objectToBeAdded!)
-                tappedNode?.isHidden = true
+            if let parentNode = hits.first?.node.parent {
+                if parentNode.name == "anchorNode" {
+                    tappedNode = parentNode
+                    objectToBeAdded?.position.z = (tappedNode?.position.z)! + 0.05
+                    tappedNode?.parent?.addChildNode(objectToBeAdded!)
+                    tappedNode?.isHidden = true
+                }
             }
+
         }
     }
     
@@ -255,8 +260,21 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        focusSquare.state = .initializing
-        sceneView.pointOfView?.addChildNode(focusSquare)
+        
+        let crosshair = Crosshairs()
+            
+        crosshair.displayAsBillboard()
+                
+        // Light Node to illuminate crosshair node. @TODO: Implemented it in the class itself, if feasible
+        let omniLightNode = SCNNode()
+        omniLightNode.light = SCNLight()
+        omniLightNode.light?.type = .omni
+        omniLightNode.light?.color = UIColor.white
+        omniLightNode.position = SCNVector3Make(0, 5, 5)
+        sceneView.pointOfView?.addChildNode(omniLightNode)
+        
+        sceneView.pointOfView?.addChildNode(crosshair)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -303,12 +321,12 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         sceneView.showsStatistics = true
         
         // Debug options - for showing feature points (yellow dots) and world origin axes
-        sceneView.debugOptions = [
-            ARSCNDebugOptions.showFeaturePoints,
-            ARSCNDebugOptions.showWorldOrigin
-        ]
-        
-         sceneView.automaticallyUpdatesLighting = true
+//        sceneView.debugOptions = [
+//            ARSCNDebugOptions.showFeaturePoints,
+//            ARSCNDebugOptions.showWorldOrigin
+//        ]
+        sceneView.autoenablesDefaultLighting = true
+        sceneView.automaticallyUpdatesLighting = true
     }
     
 	override func viewWillDisappear(_ animated: Bool) {
