@@ -30,7 +30,7 @@ class Crosshairs: SCNNode {
      
     */
     
-    private let nameOfNode = "crosshair"
+    private var nameOfNode = "crosshair"
     
     // Node to attach all segments nodes to
     private let crosshairNode = SCNNode()
@@ -99,7 +99,7 @@ class Crosshairs: SCNNode {
 
         addChildNode(crosshairNode)
     }
-    
+
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("\(#function) has not been implemented")
