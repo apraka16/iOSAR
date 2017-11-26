@@ -408,7 +408,6 @@ extension FocusSquare.State: Equatable {
         switch (lhs, rhs) {
         case (.initializing, .initializing):
             return true
-            
         default:
             return false
         }

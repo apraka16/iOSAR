@@ -11,6 +11,12 @@ import ARKit
 
 extension ViewController: UIGestureRecognizerDelegate {
     
+    /// Experimental -
+    @objc
+    func insertObject(_ newObject: SCNNode) {
+        // Do nothing
+    }
+        
     // MARK: - Gesture Methods
     
     @objc
@@ -39,6 +45,10 @@ extension ViewController: UIGestureRecognizerDelegate {
                             self.sound.playSound(named: "swoosh")
                         }
                         segueButton.setBackgroundImage(UIImage(named: "cube"), for: .normal)
+                        
+                        /// Experimental function - testing database
+                        insertObject(result.node.parent!)
+                        
                         virtualObjectInstance.virtualObjects[0].count += 1
                         result.node.parent?.removeFromParentNode()
                     case "sphere" :
@@ -47,7 +57,12 @@ extension ViewController: UIGestureRecognizerDelegate {
                             self.sound.playSound(named: "swoosh")
                         }
                         segueButton.setBackgroundImage(UIImage(named: "sphere"), for: .normal)
+                        
+                        /// Experimental function - testing database
+                        insertObject(result.node.parent!)
+                        
                         virtualObjectInstance.virtualObjects[1].count += 1
+                        
                         result.node.parent?.removeFromParentNode()
                     default:
                         break

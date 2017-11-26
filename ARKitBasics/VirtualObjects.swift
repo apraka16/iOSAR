@@ -18,7 +18,6 @@ struct VirtualObjects {
     
     let colorOfObject = ColorOfObjects()
     
-    
     public var virtualObjectCountArray: [(name: String, count: Int)] {
         get {
             var resultArray: [(name: String, count: Int)] = []

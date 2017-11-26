@@ -30,7 +30,9 @@
 		C36602971FC4437E004878BC /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36602961FC4437E004878BC /* Settings.swift */; };
 		C36739C51FC8158F00149459 /* AnchorPlane.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36739C41FC8158F00149459 /* AnchorPlane.swift */; };
 		C36739C71FC820CD00149459 /* VirtualObjectDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36739C61FC820CC00149459 /* VirtualObjectDisplay.swift */; };
-		C3673A291FC87C9900149459 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C3673A271FC87C9900149459 /* Model.xcdatamodeld */; };
+		C3698B531FCB024400E2249D /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C3698B511FCB024400E2249D /* Model.xcdatamodeld */; };
+		C3698B551FCB07CB00E2249D /* Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3698B541FCB07CB00E2249D /* Object.swift */; };
+		C3698B571FCB07F300E2249D /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3698B561FCB07F300E2249D /* Session.swift */; };
 		C37535401FB5A757003AC18F /* ContainerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C375353F1FB5A757003AC18F /* ContainerTableViewController.swift */; };
 		C3BC38A01FB48323002E6844 /* ViewController+ARSCNView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BC389F1FB48323002E6844 /* ViewController+ARSCNView.swift */; };
 /* End PBXBuildFile section */
@@ -62,7 +64,9 @@
 		C36602961FC4437E004878BC /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		C36739C41FC8158F00149459 /* AnchorPlane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorPlane.swift; sourceTree = "<group>"; };
 		C36739C61FC820CC00149459 /* VirtualObjectDisplay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualObjectDisplay.swift; sourceTree = "<group>"; };
-		C3673A281FC87C9900149459 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		C3698B521FCB024400E2249D /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		C3698B541FCB07CB00E2249D /* Object.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Object.swift; sourceTree = "<group>"; };
+		C3698B561FCB07F300E2249D /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		C375353F1FB5A757003AC18F /* ContainerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerTableViewController.swift; sourceTree = "<group>"; };
 		C3BC389F1FB48323002E6844 /* ViewController+ARSCNView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+ARSCNView.swift"; sourceTree = "<group>"; };
 		C85709121F34FC2200BB957F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -118,8 +122,10 @@
 		842316DE1F2030C300D189D1 /* ARKitBasics */ = {
 			isa = PBXGroup;
 			children = (
-				842316DF1F2030C300D189D1 /* AppDelegate.swift */,
-				C3673A271FC87C9900149459 /* Model.xcdatamodeld */,
+				842316E51F2030C300D189D1 /* Main.storyboard */,
+				C3698B511FCB024400E2249D /* Model.xcdatamodeld */,
+				C3698B541FCB07CB00E2249D /* Object.swift */,
+				C3698B561FCB07F300E2249D /* Session.swift */,
 				842316E31F2030C300D189D1 /* ViewController.swift */,
 				C36739C61FC820CC00149459 /* VirtualObjectDisplay.swift */,
 				C304CAE11FBD74E300982C82 /* ViewController+Gestures.swift */,
@@ -131,11 +137,11 @@
 				C304CAF21FBDE6A200982C82 /* SettingsViewController.swift */,
 				C36602961FC4437E004878BC /* Settings.swift */,
 				C36739C41FC8158F00149459 /* AnchorPlane.swift */,
+				842316DF1F2030C300D189D1 /* AppDelegate.swift */,
 				C36602981FC499ED004878BC /* Virtual Object Table */,
 				C36739C31FC74A6500149459 /* Crosshairs */,
 				C33AE5BE1FC29C7100F78E84 /* Focus Square */,
 				C33AE5C31FC29CC600F78E84 /* Utilities */,
-				842316E51F2030C300D189D1 /* Main.storyboard */,
 				842316EA1F2030C300D189D1 /* LaunchScreen.storyboard */,
 				842316ED1F2030C300D189D1 /* Info.plist */,
 				84ABEA091F3D15E70052D547 /* Assets.scnassets */,
@@ -274,14 +280,16 @@
 				C33AE5C11FC29CA100F78E84 /* FocusSquareSegment.swift in Sources */,
 				C36739C51FC8158F00149459 /* AnchorPlane.swift in Sources */,
 				842316E41F2030C300D189D1 /* ViewController.swift in Sources */,
+				C3698B551FCB07CB00E2249D /* Object.swift in Sources */,
 				C3BC38A01FB48323002E6844 /* ViewController+ARSCNView.swift in Sources */,
 				C32D60661FBAD4750012F6CC /* VirtualObjectTableViewCell.swift in Sources */,
 				C304CAE71FBDA0EC00982C82 /* Sounds.swift in Sources */,
+				C3698B571FCB07F300E2249D /* Session.swift in Sources */,
 				842316E01F2030C300D189D1 /* AppDelegate.swift in Sources */,
 				C37535401FB5A757003AC18F /* ContainerTableViewController.swift in Sources */,
+				C3698B531FCB024400E2249D /* Model.xcdatamodeld in Sources */,
 				C304CAF31FBDE6A200982C82 /* SettingsViewController.swift in Sources */,
 				C304CADE1FBC98B500982C82 /* ColorOfObjects.swift in Sources */,
-				C3673A291FC87C9900149459 /* Model.xcdatamodeld in Sources */,
 				C304CAE21FBD74E300982C82 /* ViewController+Gestures.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -473,12 +481,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		C3673A271FC87C9900149459 /* Model.xcdatamodeld */ = {
+		C3698B511FCB024400E2249D /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				C3673A281FC87C9900149459 /* Model.xcdatamodel */,
+				C3698B521FCB024400E2249D /* Model.xcdatamodel */,
 			);
-			currentVersion = C3673A281FC87C9900149459 /* Model.xcdatamodel */;
+			currentVersion = C3698B521FCB024400E2249D /* Model.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

@@ -8,6 +8,7 @@ Main view controller for the AR experience.
 import UIKit
 import SceneKit
 import ARKit
+import CoreData
 
 /* Protocol added so that TableViewController can communicate when color of an object is chosen
  For implementation of protocol, check VirtualObjectTableViewController */
@@ -266,12 +267,11 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         crosshair.displayAsBillboard()
                 
         // Light Node to illuminate crosshair node. @TODO: Implemented it in the class itself, if feasible
-        let omniLightNode = SCNNode()
-        omniLightNode.light = SCNLight()
-        omniLightNode.light?.type = .omni
-        omniLightNode.light?.color = UIColor.white
-        omniLightNode.position = SCNVector3Make(0, 5, 5)
-        sceneView.pointOfView?.addChildNode(omniLightNode)
+        let ambientLightNode = SCNNode()
+        ambientLightNode.light = SCNLight()
+        ambientLightNode.light?.type = .ambient
+        ambientLightNode.light?.color = UIColor.white
+        sceneView.pointOfView?.addChildNode(ambientLightNode)
         
         sceneView.pointOfView?.addChildNode(crosshair)
         
