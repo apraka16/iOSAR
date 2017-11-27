@@ -221,6 +221,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             destinationViewController = navigationController.visibleViewController
                 ?? destinationViewController
         }
+        
         if let TableViewController = destinationViewController as? ContainerTableViewController {
             TableViewController.delegate = self
             if let popoverPresentationController = segue.destination.popoverPresentationController {

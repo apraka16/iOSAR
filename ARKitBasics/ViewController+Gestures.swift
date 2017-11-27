@@ -8,14 +8,16 @@
 
 import UIKit
 import ARKit
+import CoreData
 
 extension ViewController: UIGestureRecognizerDelegate {
     
     /// Experimental -
     @objc
     func insertObject(_ newObject: SCNNode) {
-        // Do nothing
+//        updateDatabase(with: newObject)
     }
+
         
     // MARK: - Gesture Methods
     

@@ -30,11 +30,15 @@
 		C36602971FC4437E004878BC /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36602961FC4437E004878BC /* Settings.swift */; };
 		C36739C51FC8158F00149459 /* AnchorPlane.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36739C41FC8158F00149459 /* AnchorPlane.swift */; };
 		C36739C71FC820CD00149459 /* VirtualObjectDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36739C61FC820CC00149459 /* VirtualObjectDisplay.swift */; };
-		C3698B531FCB024400E2249D /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C3698B511FCB024400E2249D /* Model.xcdatamodeld */; };
-		C3698B551FCB07CB00E2249D /* Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3698B541FCB07CB00E2249D /* Object.swift */; };
-		C3698B571FCB07F300E2249D /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3698B561FCB07F300E2249D /* Session.swift */; };
 		C37535401FB5A757003AC18F /* ContainerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C375353F1FB5A757003AC18F /* ContainerTableViewController.swift */; };
 		C3BC38A01FB48323002E6844 /* ViewController+ARSCNView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BC389F1FB48323002E6844 /* ViewController+ARSCNView.swift */; };
+		C3BD93851FCC4EBC0028C5BE /* Objects.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C3BD93831FCC4EBC0028C5BE /* Objects.xcdatamodeld */; };
+		C3BD93871FCC4F770028C5BE /* Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD93861FCC4F770028C5BE /* Object.swift */; };
+		C3BD93891FCC4F820028C5BE /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD93881FCC4F820028C5BE /* Session.swift */; };
+		C3BD938B1FCC782F0028C5BE /* DbViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD938A1FCC782F0028C5BE /* DbViewController.swift */; };
+		C3BD938D1FCC7BA50028C5BE /* TestTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD938C1FCC7BA50028C5BE /* TestTableViewController.swift */; };
+		C3BD938F1FCC7F9D0028C5BE /* FetchedResultsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD938E1FCC7F9D0028C5BE /* FetchedResultsTableViewController.swift */; };
+		C3BD93911FCC81DC0028C5BE /* TestTableViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD93901FCC81DC0028C5BE /* TestTableViewController+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,11 +68,15 @@
 		C36602961FC4437E004878BC /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		C36739C41FC8158F00149459 /* AnchorPlane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorPlane.swift; sourceTree = "<group>"; };
 		C36739C61FC820CC00149459 /* VirtualObjectDisplay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualObjectDisplay.swift; sourceTree = "<group>"; };
-		C3698B521FCB024400E2249D /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
-		C3698B541FCB07CB00E2249D /* Object.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Object.swift; sourceTree = "<group>"; };
-		C3698B561FCB07F300E2249D /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		C375353F1FB5A757003AC18F /* ContainerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerTableViewController.swift; sourceTree = "<group>"; };
 		C3BC389F1FB48323002E6844 /* ViewController+ARSCNView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+ARSCNView.swift"; sourceTree = "<group>"; };
+		C3BD93841FCC4EBC0028C5BE /* Objects.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Objects.xcdatamodel; sourceTree = "<group>"; };
+		C3BD93861FCC4F770028C5BE /* Object.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Object.swift; sourceTree = "<group>"; };
+		C3BD93881FCC4F820028C5BE /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		C3BD938A1FCC782F0028C5BE /* DbViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DbViewController.swift; sourceTree = "<group>"; };
+		C3BD938C1FCC7BA50028C5BE /* TestTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTableViewController.swift; sourceTree = "<group>"; };
+		C3BD938E1FCC7F9D0028C5BE /* FetchedResultsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchedResultsTableViewController.swift; sourceTree = "<group>"; };
+		C3BD93901FCC81DC0028C5BE /* TestTableViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TestTableViewController+Extension.swift"; sourceTree = "<group>"; };
 		C85709121F34FC2200BB957F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E992F9D8F8B95C1D0CEEB4BF /* SampleCode.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = SampleCode.xcconfig; path = Configuration/SampleCode.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -123,14 +131,18 @@
 			isa = PBXGroup;
 			children = (
 				842316E51F2030C300D189D1 /* Main.storyboard */,
-				C3698B511FCB024400E2249D /* Model.xcdatamodeld */,
-				C3698B541FCB07CB00E2249D /* Object.swift */,
-				C3698B561FCB07F300E2249D /* Session.swift */,
+				C3BD93831FCC4EBC0028C5BE /* Objects.xcdatamodeld */,
 				842316E31F2030C300D189D1 /* ViewController.swift */,
-				C36739C61FC820CC00149459 /* VirtualObjectDisplay.swift */,
 				C304CAE11FBD74E300982C82 /* ViewController+Gestures.swift */,
 				C3BC389F1FB48323002E6844 /* ViewController+ARSCNView.swift */,
+				C3BD93861FCC4F770028C5BE /* Object.swift */,
+				C3BD93881FCC4F820028C5BE /* Session.swift */,
+				C3BD938A1FCC782F0028C5BE /* DbViewController.swift */,
+				C3BD938C1FCC7BA50028C5BE /* TestTableViewController.swift */,
+				C3BD93901FCC81DC0028C5BE /* TestTableViewController+Extension.swift */,
+				C3BD938E1FCC7F9D0028C5BE /* FetchedResultsTableViewController.swift */,
 				C31966BC1FA0E03F00CA6059 /* VirtualObjects.swift */,
+				C36739C61FC820CC00149459 /* VirtualObjectDisplay.swift */,
 				C304CADD1FBC98B500982C82 /* ColorOfObjects.swift */,
 				C375353F1FB5A757003AC18F /* ContainerTableViewController.swift */,
 				C304CAE61FBDA0EC00982C82 /* Sounds.swift */,
@@ -276,21 +288,25 @@
 				C36602971FC4437E004878BC /* Settings.swift in Sources */,
 				C314EB541FC6AEFD00E92B64 /* Crosshairs.swift in Sources */,
 				C36739C71FC820CD00149459 /* VirtualObjectDisplay.swift in Sources */,
+				C3BD938D1FCC7BA50028C5BE /* TestTableViewController.swift in Sources */,
+				C3BD938B1FCC782F0028C5BE /* DbViewController.swift in Sources */,
 				C33AE5C51FC29CDD00F78E84 /* Utilities.swift in Sources */,
 				C33AE5C11FC29CA100F78E84 /* FocusSquareSegment.swift in Sources */,
 				C36739C51FC8158F00149459 /* AnchorPlane.swift in Sources */,
 				842316E41F2030C300D189D1 /* ViewController.swift in Sources */,
-				C3698B551FCB07CB00E2249D /* Object.swift in Sources */,
+				C3BD93871FCC4F770028C5BE /* Object.swift in Sources */,
 				C3BC38A01FB48323002E6844 /* ViewController+ARSCNView.swift in Sources */,
 				C32D60661FBAD4750012F6CC /* VirtualObjectTableViewCell.swift in Sources */,
+				C3BD93851FCC4EBC0028C5BE /* Objects.xcdatamodeld in Sources */,
+				C3BD93891FCC4F820028C5BE /* Session.swift in Sources */,
 				C304CAE71FBDA0EC00982C82 /* Sounds.swift in Sources */,
-				C3698B571FCB07F300E2249D /* Session.swift in Sources */,
 				842316E01F2030C300D189D1 /* AppDelegate.swift in Sources */,
 				C37535401FB5A757003AC18F /* ContainerTableViewController.swift in Sources */,
-				C3698B531FCB024400E2249D /* Model.xcdatamodeld in Sources */,
 				C304CAF31FBDE6A200982C82 /* SettingsViewController.swift in Sources */,
 				C304CADE1FBC98B500982C82 /* ColorOfObjects.swift in Sources */,
+				C3BD938F1FCC7F9D0028C5BE /* FetchedResultsTableViewController.swift in Sources */,
 				C304CAE21FBD74E300982C82 /* ViewController+Gestures.swift in Sources */,
+				C3BD93911FCC81DC0028C5BE /* TestTableViewController+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -481,13 +497,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		C3698B511FCB024400E2249D /* Model.xcdatamodeld */ = {
+		C3BD93831FCC4EBC0028C5BE /* Objects.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				C3698B521FCB024400E2249D /* Model.xcdatamodel */,
+				C3BD93841FCC4EBC0028C5BE /* Objects.xcdatamodel */,
 			);
-			currentVersion = C3698B521FCB024400E2249D /* Model.xcdatamodel */;
-			path = Model.xcdatamodeld;
+			currentVersion = C3BD93841FCC4EBC0028C5BE /* Objects.xcdatamodel */;
+			path = Objects.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

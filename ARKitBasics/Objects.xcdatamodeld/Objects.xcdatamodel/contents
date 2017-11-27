@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13533" systemVersion="17B48" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Object" representedClassName=".Object" syncable="YES" codeGenerationType="category">
+        <attribute name="collectedAt" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="color" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="sessions" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Session" inverseName="objects" inverseEntity="Session" syncable="YES"/>
+    </entity>
+    <entity name="Session" representedClassName=".Session" syncable="YES" codeGenerationType="category">
+        <attribute name="sessionId" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="objects" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Object" inverseName="sessions" inverseEntity="Object" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Session" positionX="232" positionY="108" width="128" height="73"/>
+        <element name="Object" positionX="18" positionY="72" width="128" height="118"/>
+    </elements>
+</model>

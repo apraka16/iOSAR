@@ -11,15 +11,17 @@
 import Foundation
 import SceneKit
 
-struct VirtualObjects {
+class VirtualObjects {
     
     // Stored Property for .scn objects
-    var virtualObjects = [(scn:"Cube.scn", count: 0), (scn: "Sphere.scn", count: 0)]
-    
+    var virtualObjects = [(scn:"Cube.scn", count: 0),
+                          (scn: "Sphere.scn", count: 0)]
+        
     let colorOfObject = ColorOfObjects()
     
     public var virtualObjectCountArray: [(name: String, count: Int)] {
         get {
+//            insertVirtualObjects()
             var resultArray: [(name: String, count: Int)] = []
             for object in virtualObjects {
                 if virtualObjects.count != 0 {
@@ -69,10 +71,8 @@ struct VirtualObjects {
     }
     
     func createRandomNodes() -> SCNNode {
-        
         let randomObjectName = objectNames[randRange(lower: 0, upper: 1)]
         let randomObjectColor = objectColors[randRange(lower: 0, upper: 2)]
-        
         return createNodes(from: randomObjectName, with: randomObjectColor)
     }
 }
