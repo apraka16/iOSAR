@@ -23,8 +23,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     
     var arrayFeaturePointDistance: [CGFloat] = []
     
-    var focusSquare = FocusSquare()
-    
     // Delegate variable used for Protocol
     var delegate: ColorObjectToVCDelegate?
     
@@ -50,26 +48,34 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     
     private var colorOfObjects = ColorOfObjects()
     
+    var randomCombination = (name: "", color: "")
     
     // Method to hide/ unhide set of buttons/ object depending on play mode or else
     private func inStateOfPlay(playing: Bool) {
         if playing {
             addObject.isHidden = true
-            startPlayGuide.isHidden = false
+            randomCombination = virtualObjectInstance.randomCombination
+            startPlayGuideImage.image = UIImage(named: "\(randomCombination.name)-\(randomCombination.color)")
+            startPlayGuideLabel.isHidden = false
+            startPlayGuideImage.isHidden = false
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                self.startPlayGuide.isHidden = true
-            }
+            Timer.scheduledTimer(timeInterval: 3,
+                                 target: self,
+                                 selector: #selector(hideGuides),
+                                 userInfo: nil,
+                                 repeats: false)
+            
         } else {
+            startPlayGuideLabel.isHidden = true
+            startPlayGuideImage.isHidden = true
             addObject.isHidden = false
-            startPlayGuide.isHidden = true
         }
     }
     
     /* Implementation of ContainerTableView delegate function:
      Check ContainerTableViewController for protocol implementation */
-    func passVirtualObject() -> [(name: String, count: Int)] {
-        return virtualObjectInstance.virtualObjectCountArray
+    func passVirtualObject() -> [(name: String, scn: String, count: Int)] {
+        return virtualObjectInstance.virtualObjectsNames
     }
     
     // MARK: - IBOutlets
@@ -78,9 +84,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
      swiped down objects from main view */
     // Outlet for changing background image of button depending on the object which is swiped down
     @IBOutlet weak var segueButton: UIButton!
-        
-    // UILabel to ask use to Swipe down in play mode
-    @IBOutlet weak var startPlayGuide: UILabel!
     
     // View with Color picker buttons - hidden/ visible on selection of underlying buttons
     @IBOutlet weak var colorPicker: UIStackView!
@@ -96,10 +99,14 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     @IBOutlet weak var sessionInfoView: UIView!
     @IBOutlet weak var sessionInfoLabel: UILabel!
     
+    
+    @IBOutlet weak var startPlayGuideLabel: UILabel!
+    
+    @IBOutlet weak var startPlayGuideImage: UIImageView!
+    
     // Main AR Scene View for rendering content
     @IBOutlet weak var sceneView: ARSCNView! {
         didSet {
-            
             let swipeDownGesture =
                 UISwipeGestureRecognizer(target: self, action: #selector(rotateObject(_:)))
             swipeDownGesture.direction = .down
@@ -135,19 +142,23 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     /* Color picker buttons - present when object is long pressed */
     
     @IBAction func pickRedColor(_ sender: UIButton) {
-        material?.emission.contents = colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.redColor)
+        material?.diffuse.contents = virtualObjectInstance.virtualObjectsColors["red"]
+//        material?.emission.contents = colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.redColor)
         colorPicker.isHidden = true
     }
     
     @IBAction func pickGreenColor(_ sender: UIButton) {
-        material?.emission.contents = colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.greenColor)
+        material?.diffuse.contents = virtualObjectInstance.virtualObjectsColors["green"]
+//        material?.emission.contents = colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.greenColor)
         colorPicker.isHidden = true
     }
     
     @IBAction func pickBlueColor(_ sender: UIButton) {
-        material?.emission.contents = colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.blueColor)
+        material?.diffuse.contents = virtualObjectInstance.virtualObjectsColors["blue"]
         colorPicker.isHidden = true
     }
+    
+    var inStateOfPlayForGestureControl = false // Unsure whether this is the swifty way
     
     /* Button to select play mode. Under play mode:
      - Info and add buttons are hidden
@@ -156,11 +167,13 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         if toggleState == 1 {
             toggleState = 2
             playButton.setBackgroundImage(imgStop, for: .normal)
+            inStateOfPlayForGestureControl = true // Unsure whether this is the swifty way
             inStateOfPlay(playing: true)
             
         } else {
             toggleState = 1
             playButton.setBackgroundImage(imgPlay, for: .normal)
+            inStateOfPlayForGestureControl = false // Unsure whether this is the swifty way
             inStateOfPlay(playing: false)
         }
     }
@@ -183,15 +196,13 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         let objectToBeAdded: SCNNode?
         if objectOnPathToBeAdded != nil {
             objectToBeAdded = virtualObjectInstance.createNodes(
-                from: virtualObjectInstance.virtualObjectCountArray[
+                from: virtualObjectInstance.virtualObjectsNames[
                     objectOnPathToBeAdded!].name,
                 with: delegate?.objectColor() ?? UIColor.yellow)
             } else {
             objectToBeAdded =
-                virtualObjectInstance.createNodes(from: virtualObjectInstance.virtualObjectCountArray[0].name,
-                                                  with: colorOfObjects.UIColorFromRGB(
-                                                    rgbValue: colorOfObjects.blueColor
-                ))
+                virtualObjectInstance.createNodes(from: virtualObjectInstance.virtualObjectsNames[0].name,
+                                                  with: virtualObjectInstance.virtualObjectsColors["blue"]!)
         }
         let touchLocation = sender.location(in: view)
         let hits = sceneView.hitTest(touchLocation, options: nil)
@@ -205,7 +216,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
                     tappedNode?.isHidden = true
                 }
             }
-
         }
     }
     
@@ -282,7 +292,8 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         super.viewWillAppear(animated)
         segueButton.isHidden = true
         colorPicker.isHidden = true
-        startPlayGuide.isHidden = true
+        startPlayGuideImage.isHidden = true
+        startPlayGuideLabel.isHidden = true
     }
     
     /// - Tag: StartARSession
@@ -327,7 +338,14 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
 //            ARSCNDebugOptions.showWorldOrigin
 //        ]
         sceneView.autoenablesDefaultLighting = true
+        
         sceneView.automaticallyUpdatesLighting = true
+        
+        // Taken from iOS codebase by Apple - significance?
+//        if let environmentMap = UIImage(named: "Assets.scnassets/SharedImages/environment_blur.exr") {
+//            print(environmentMap)
+//            sceneView.scene.lightingEnvironment.contents = environmentMap
+//        }
     }
     
 	override func viewWillDisappear(_ animated: Bool) {

@@ -13,26 +13,63 @@ import SceneKit
 
 class VirtualObjects {
     
-    // Stored Property for .scn objects
-    var virtualObjects = [(scn:"Cube.scn", count: 0),
-                          (scn: "Sphere.scn", count: 0)]
-        
-    let colorOfObject = ColorOfObjects()
+    private var colorOfObjects = ColorOfObjects()
     
-    public var virtualObjectCountArray: [(name: String, count: Int)] {
+    // Colors
+    private let redColor: UInt = 0xF03434
+    private let greenColor: UInt = 0x019875
+    private let blueColor: UInt = 0x013243
+    
+    var virtualObjectsNames = [(name: "cube", scn: "Cube.scn", count: 0),
+                               (name: "sphere", scn: "Sphere.scn", count: 0)]
+    
+    var virtualObjectsColors: [String: UIColor] {
         get {
-//            insertVirtualObjects()
-            var resultArray: [(name: String, count: Int)] = []
-            for object in virtualObjects {
-                if virtualObjects.count != 0 {
-                    let result = (name: virtualObjectsNames(from: object.scn), count: object.count)
-                    resultArray.append(result)
-                }
-            }
-            return resultArray
+            var result = [String: UIColor]()
+            result["red"] = colorOfObjects.UIColorFromRGB(rgbValue: redColor)
+            result["blue"] = colorOfObjects.UIColorFromRGB(rgbValue: blueColor)
+            result["green"] = colorOfObjects.UIColorFromRGB(rgbValue: greenColor)
+            return result
         }
     }
     
+    var virtualObjectCount: [(name: String, count: Int)] {
+        get {
+            var result: [(name: String, count: Int)] = []
+            for object in virtualObjectsNames {
+                if virtualObjectsNames.count != 0 {
+                    result.append((name: object.name, count: object.count))
+                }
+            }
+            return result
+        }
+    }
+
+    
+    // Helper function to find name of the color when nodes are hit test.
+    func findColor(of node: SCNNode) -> String {
+        var color = ""
+        switch node.geometry?.firstMaterial?.diffuse.contents as! UIColor {
+        case colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.blueColor):
+            color = "blue"
+        case colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.greenColor):
+            color = "green"
+        case colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.redColor):
+            color = "red"
+        default:
+            break
+        }
+        return color
+    }
+    
+    // To generate problems for the child randomly
+    var randomCombination: (name: String, color: String) {
+        get {
+            let names = ["cube", "sphere"]
+            let colors = ["red", "blue", "green"]
+            return (name: names[randRange(lower: 0, upper: 1)], color: colors[randRange(lower: 0, upper: 2)])
+        }
+    }
     
     private func virtualObjectsNames(from scnName: String) -> String {
         return scnName.replacingOccurrences(of: ".scn", with: "")
@@ -43,25 +80,25 @@ class VirtualObjects {
     func createNodes(from object: String, with color: UIColor) -> SCNNode {
     
         let wrapperNode = SCNNode()
-        if let virtualScene = SCNScene(named: object + ".scn", inDirectory: "Assets.scnassets") {
+        if let virtualScene = SCNScene(named: object.capitalized + ".scn", inDirectory: "Assets.scnassets") {
             for child in virtualScene.rootNode.childNodes {
                 wrapperNode.addChildNode(child)
             }
         }
         let material = wrapperNode.childNodes[0].childNodes[1].geometry?.firstMaterial!
-        material?.emission.contents = color
+        material?.diffuse.contents = color
         return wrapperNode
     }
     
-    // Random Node Generator
+    // Random Node Generator -- unused Code //
     
     private let objectNames = ["Cube", "Sphere"]
     private var objectColors: [UIColor] {
         get {
             return [
-                colorOfObject.UIColorFromRGB(rgbValue: colorOfObject.blueColor),
-                colorOfObject.UIColorFromRGB(rgbValue: colorOfObject.greenColor),
-                colorOfObject.UIColorFromRGB(rgbValue: colorOfObject.redColor)
+                colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.blueColor),
+                colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.greenColor),
+                colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.redColor)
             ]
         }
     }

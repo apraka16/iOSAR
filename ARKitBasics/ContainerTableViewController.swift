@@ -7,16 +7,17 @@
 
 
 import UIKit
+import SceneKit
 
 protocol VCFinalDelegate {
-    func passVirtualObject() -> [(name: String, count: Int)]
+    func passVirtualObject() -> [(name: String, scn: String, count: Int)]
 }
 
 class ContainerTableViewController: UITableViewController {
     
     var delegate: VCFinalDelegate?
     
-    private let virtualObjects = VirtualObjects()
+//    private let virtualObjects = VirtualObjects()
     
     @IBAction func cancel(_ sender: UIBarButtonItem) {
         presentingViewController?.dismiss(animated: true)

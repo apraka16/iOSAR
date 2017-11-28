@@ -34,66 +34,48 @@ class VirtualObjectTableViewController: UITableViewController, ColorObjectToVCDe
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return virtualObjectInstance.virtualObjectCountArray.count
+        return virtualObjectInstance.virtualObjectsNames.count
     }
     
-    // This is NOT working
-    private func addNodesRepr(to scene: SCNScene, at indexPath: IndexPath) {
-        let data = virtualObjectInstance.virtualObjectCountArray
-        let node = virtualObjectInstance.createNodes(from: data[indexPath.row].name, with: colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.blueColor))
-        
-        // create and add a camera to the scene
-        let cameraNode = SCNNode(); cameraNode.camera = SCNCamera()
-        scene.rootNode.addChildNode(cameraNode)
-        
-        // place the camera
-        cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
-        
-        // create and add a light to the scene
-        let lightNode = SCNNode(); lightNode.light = SCNLight(); lightNode.light!.type = .omni
-        lightNode.position = SCNVector3(x: 10, y: 0, z: 10)
-        scene.rootNode.addChildNode(lightNode)
-        
-        scene.rootNode.addChildNode(node)
-        node.scale = SCNVector3(x: 90, y: 90, z: 90)
-        node.eulerAngles.x = .pi/3
-        node.eulerAngles.y = -.pi/4
-        node.eulerAngles.z = -.pi/4
-        
-    }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let data = virtualObjectInstance.virtualObjectCountArray
+        let data = virtualObjectInstance.virtualObjectCount
         tableView.rowHeight = 117.0
         let dequeued = tableView.dequeueReusableCell(withIdentifier: "Virtual Objects", for: indexPath)
         let cell = dequeued as? VirtualObjectTableViewCell
         
         cell?.objectTitle.text = data[indexPath.row].name
         
-        // This is NOT working
-//        addNodesRepr(to: cell?.objectView.scene, at: indexPath)
+        // * //
+        // The following code should be made modular and node addition should be shifted elsewhere
+        cell?.objectView.scene = SCNScene()
+
+        let node = virtualObjectInstance.createNodes(from: data[indexPath.row].name, with: colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.blueColor))
         
-//        cell?.objectView.scene = SCNScene()
+        // Create and add a camera to the scene
+        let cameraNode = SCNNode(); cameraNode.camera = SCNCamera()
+        cell?.objectView.scene?.rootNode.addChildNode(cameraNode)
 
-//        let node = virtualObjectInstance.createNodes(from: data[indexPath.row].name, with: colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.blueColor))
+        // Place the camera
+        cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
+        
+        // Create and add ambient to the scene
+        let ambientLight = SCNNode(); ambientLight.light = SCNLight(); ambientLight.light?.type = .ambient
+//        ambientLight.position = SCNVector3(x: 0, y: 0, z: 0)
+        cell?.objectView.scene?.rootNode.addChildNode(ambientLight)
+        
+        // Create and add a light to the scene
+        let omniLight = SCNNode(); omniLight.light = SCNLight(); omniLight.light!.type = .omni
+        omniLight.position = SCNVector3(x: 10, y: 0, z: 10)
+        cell?.objectView.scene?.rootNode.addChildNode(omniLight)
 
-        // create and add a camera to the scene
-//        let cameraNode = SCNNode(); cameraNode.camera = SCNCamera()
-//        cell?.objectView.scene?.rootNode.addChildNode(cameraNode)
-
-        // place the camera
-//        cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
-
-        // create and add a light to the scene
-//        let lightNode = SCNNode(); lightNode.light = SCNLight(); lightNode.light!.type = .omni
-//        lightNode.position = SCNVector3(x: 10, y: 0, z: 10)
-//        cell?.objectView.scene?.rootNode.addChildNode(lightNode)
-
-//        cell?.objectView.scene?.rootNode.addChildNode(node)
-//        node.scale = SCNVector3(x: 90, y: 90, z: 90)
-//        node.eulerAngles.x = .pi/3
-//        node.eulerAngles.y = -.pi/4
-//        node.eulerAngles.z = -.pi/4
+        cell?.objectView.scene?.rootNode.addChildNode(node)
+        node.scale = SCNVector3(x: 90, y: 90, z: 90)
+        node.eulerAngles.x = .pi/3
+        node.eulerAngles.y = -.pi/4
+        node.eulerAngles.z = -.pi/4
+        
+        // ** //
         
         return cell!
     }
