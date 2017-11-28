@@ -35,7 +35,7 @@ class Object: NSManagedObject {
         let request: NSFetchRequest<Object> = Object.fetchRequest()
         if let objects = (try? context.fetch(request)) {
             for object in objects {
-                print("Name: \(object.name), Color: \(object.color), Type: \(object.type), Collected At: \(object.collectedAt), Sessions: \(object.sessions)")
+                print("Name: \(object.name!), Color: \(object.color!), Type: \(object.type!), Collected At: \(object.collectedAt!), Sessions: \(object.sessions!)")
             }
         }
     }

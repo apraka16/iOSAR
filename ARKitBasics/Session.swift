@@ -30,7 +30,7 @@ class Session: NSManagedObject {
         let request: NSFetchRequest<Session> = Session.fetchRequest()
         if let sessions = (try? context.fetch(request)) {
             for session in sessions {
-                print("\(session.sessionId) - session")
+                print("\(session.sessionId!) - session")
             }
         }
     }

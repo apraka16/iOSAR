@@ -32,10 +32,12 @@ class DbViewController: ViewController {
     private func printDatabaseStatistics() {
         if let context = container?.viewContext {
             context.perform {
+//                Object.deleteAllObjects(in: context)
+//                Session.deleteAllSessions(in: context)
                 Object.fetchObjectCount(in: context)
-                Object.fetchAllObjects(in: context)
+//                Object.fetchAllObjects(in: context)
                 Session.fetchSessionCount(in: context)
-                Session.fetchAllSessions(in: context)
+//                Session.fetchAllSessions(in: context)
             }
         }
     }
@@ -48,10 +50,12 @@ class DbViewController: ViewController {
                     TestVC.container = container
                 }
             }
-//            if let TestVC = segue.destination as? TestTableViewController {
-//                TestVC.container = container
-//            }
         }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+//        printDatabaseStatistics()
     }
     
 }
