@@ -10,6 +10,7 @@ import SceneKit
 import ARKit
 import CoreData
 
+// test
 /* Protocol added so that TableViewController can communicate when color of an object is chosen
  For implementation of protocol, check VirtualObjectTableViewController */
 protocol ColorObjectToVCDelegate {
