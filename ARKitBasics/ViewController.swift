@@ -65,13 +65,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
                 self.speech.say(text: self.speech.welcomeText)
                 self.speech.sayFind(color: self.randomCombination.color, shape: self.randomCombination.name)
             }
-            
-            Timer.scheduledTimer(timeInterval: 3,
-                                 target: self,
-                                 selector: #selector(hideGuides),
-                                 userInfo: nil,
-                                 repeats: false)
-            
         } else {
             addObject.isHidden = false
         }
