@@ -29,22 +29,18 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         anchorPlane.eulerAngles.x = -.pi / 2
         node.addChildNode(anchorPlane)
         
-        /* In case user chose to allow auto-play (default) - random objects will be added
-         as and when anchors are added to the scene */
-        // Scheduling object addition to global queue @TODO: Is it a good way to schedule this activity?
-//        if Settings.sharedInstance.autoPlay {
-//            DispatchQueue.global(qos: .userInteractive).async {
-//                if self.sceneView.session.currentFrame?.anchors.count == 1 {
-//                    let randomObjectNode = self.virtualObjectInstance.createRandomNodes()
-//                    wrapperNode.parent?.addChildNode(randomObjectNode)
-//                    randomObjectNode.position.y = wrapperNode.position.y + 0.05
-//                    wrapperNode.childNodes[1].isHidden = true
-//                }
-//
-//            }
-//        }
-    }
+        let objectNode = virtualObjectInstance.createNodes(
+            from: virtualObjectInstance.randomCombination.name,
+            with: virtualObjectInstance.virtualObjectsColors[virtualObjectInstance.randomCombination.color]!)
+        
+        objectNode.position.y = anchorPlane.position.y + 0.05
+        objectNode.position.x = anchorPlane.position.x
+        objectNode.position.z = anchorPlane.position.z
+        
+        node.addChildNode(objectNode)
 
+    }
+    
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
             DispatchQueue.main.async {

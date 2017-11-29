@@ -75,8 +75,7 @@ class VirtualObjects {
         return scnName.replacingOccurrences(of: ".scn", with: "")
     }
     
-    //  Create nodes from Object name - e.g. "Cube"
-    // @TODO: Think of better way to create nodes, than via using string concatenation
+    //  Create nodes from Object name - e.g. "cube"
     func createNodes(from object: String, with color: UIColor) -> SCNNode {
     
         let wrapperNode = SCNNode()
@@ -90,27 +89,10 @@ class VirtualObjects {
         return wrapperNode
     }
     
-    // Random Node Generator -- unused Code //
-    
-    private let objectNames = ["Cube", "Sphere"]
-    private var objectColors: [UIColor] {
-        get {
-            return [
-                colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.blueColor),
-                colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.greenColor),
-                colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.redColor)
-            ]
-        }
-    }
+    // Private method to generate random Int between two given numbers.
     
     private func randRange (lower: Int, upper: Int) -> Int {
         return Int(UInt32(lower) + arc4random_uniform(UInt32(upper) - UInt32(lower) + 1))
-    }
-    
-    func createRandomNodes() -> SCNNode {
-        let randomObjectName = objectNames[randRange(lower: 0, upper: 1)]
-        let randomObjectColor = objectColors[randRange(lower: 0, upper: 2)]
-        return createNodes(from: randomObjectName, with: randomObjectColor)
     }
 }
 

@@ -35,7 +35,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     
     // Non private to allow Extension to use
     var virtualObjectInstance = VirtualObjects()
-    var tappedNode: SCNNode?
     var material: SCNMaterial?
     var screenCenter: CGPoint {
         return sceneView.center
@@ -100,27 +99,14 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // Main AR Scene View for rendering content
     @IBOutlet weak var sceneView: ARSCNView! {
         didSet {
-            let swipeDownGesture =
-                UISwipeGestureRecognizer(target: self, action: #selector(rotateObject(_:)))
-            swipeDownGesture.direction = .down
-            sceneView.addGestureRecognizer(swipeDownGesture)
-            
-            let rotationGesture = UIRotationGestureRecognizer(target: self, action: #selector(rotateObjects(_:)))
-            sceneView.addGestureRecognizer(rotationGesture)
-            
-            let pinchGesture =
-                UIPinchGestureRecognizer(target: self, action: #selector(changeScale(_:)))
-            sceneView.addGestureRecognizer(pinchGesture)
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(collectObject(_:)))
+            tapGesture.numberOfTapsRequired = 1
+            tapGesture.numberOfTouchesRequired = 1
+            sceneView.addGestureRecognizer(tapGesture)
             
             let longPressGesture =
                 UILongPressGestureRecognizer(target: self, action: #selector(changeColorOfObject(_:)))
-            sceneView.addGestureRecognizer(longPressGesture)
-            
-            let panGesture = UIPanGestureRecognizer(target: self, action: #selector(translateObject(_:)))
-            panGesture.minimumNumberOfTouches = 2
-            panGesture.maximumNumberOfTouches = 2
-            sceneView.addGestureRecognizer(panGesture)
-        
+            sceneView.addGestureRecognizer(longPressGesture)        
         }
     }
     
@@ -171,46 +157,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         }
     }
     
-    
-    // User tap on floor node to add 3D object
-    @IBAction func userTap(_ sender: UITapGestureRecognizer) {
-        
-        // Hide Color Picker buttons in case it is not hidden and user taps screen to remove it w/o changing color
-        if !colorPicker.isHidden {
-            colorPicker.isHidden = true
-        }
-        
-        // Dipatching sounds to global queue (non-main) for no impact on UI
-        DispatchQueue.global(qos: .userInteractive).async {
-            self.sound.playSound(named: "thud")
-        }
-        
-        
-        let objectToBeAdded: SCNNode?
-        if objectOnPathToBeAdded != nil {
-            objectToBeAdded = virtualObjectInstance.createNodes(
-                from: virtualObjectInstance.virtualObjectsNames[
-                    objectOnPathToBeAdded!].name,
-                with: delegate?.objectColor() ?? UIColor.yellow)
-            } else {
-            objectToBeAdded =
-                virtualObjectInstance.createNodes(from: virtualObjectInstance.virtualObjectsNames[0].name,
-                                                  with: virtualObjectInstance.virtualObjectsColors["blue"]!)
-        }
-        let touchLocation = sender.location(in: view)
-        let hits = sceneView.hitTest(touchLocation, options: nil)
-        
-        if hits.first?.node != nil {
-            if let parentNode = hits.first?.node.parent {
-                if parentNode.name == "anchorNode" {
-                    tappedNode = parentNode
-                    objectToBeAdded?.position.z = (tappedNode?.position.z)! + 0.05
-                    tappedNode?.parent?.addChildNode(objectToBeAdded!)
-                    tappedNode?.isHidden = true
-                }
-            }
-        }
-    }
     
     // Segue button to segue to ContainerTableView
     @IBAction func btnPerformSeguePressed(_ sender: UIButton) {

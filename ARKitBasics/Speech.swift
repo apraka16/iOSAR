@@ -13,9 +13,23 @@ class Speech: AVSpeechSynthesizer {
     
     private var voice = AVSpeechSynthesisVoice(identifier: "com.apple.ttsbundle.siri_female_en-US_compact")
     
-    let welcomeText = "Welcome, let's start!"
-    private let accolades = ["Great!", "Perfect!", "Good going!", "Nice job!"]
-    private let negation = ["Oops! that's not it!", "Nope, not this!", "Nope, try again with other object."]
+    let welcomeText = "Welcome, keep moving around to add stuffs. Let's start!"
+    
+    private let accolades = ["Great!",
+                             "Perfect!",
+                             "Good going!",
+                             "Nice job!",
+                             "Excellent!",
+                             "Bravo!",
+                             "Neat!",
+                             "Superb!",
+                             "Keep up the good work"]
+    
+    private let negation = ["Oops! that's not it!",
+                            "Nope, not this!",
+                            "Nope, try again with other object.",
+                            "Oops! missed it!",
+                            "No, check out other things."]
     
     var randomAccolade: String {
         get {

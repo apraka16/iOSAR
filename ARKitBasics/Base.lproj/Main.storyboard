@@ -94,7 +94,6 @@
                                 <gestureRecognizers/>
                                 <connections>
                                     <outlet property="delegate" destination="7dh-A0-qGE" id="6YV-aS-dot"/>
-                                    <outletCollection property="gestureRecognizers" destination="G7e-u0-8OZ" appends="YES" id="PdB-Rg-7jX"/>
                                 </connections>
                             </arscnView>
                             <visualEffectView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="37h-bD-Iyn">
@@ -271,11 +270,6 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hvH-ud-t1P" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <customObject id="dh1-aA-Oau" customClass="SCNScene"/>
-                <tapGestureRecognizer id="G7e-u0-8OZ">
-                    <connections>
-                        <action selector="userTap:" destination="7dh-A0-qGE" id="QTZ-Vy-eUr"/>
-                    </connections>
-                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="456.80000000000001" y="-283.80809595202402"/>
         </scene>

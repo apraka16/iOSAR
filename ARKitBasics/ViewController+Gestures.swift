@@ -13,6 +13,7 @@ import CoreData
 extension ViewController: UIGestureRecognizerDelegate {
     
     /// Experimental -
+    
     @objc
     func insertObject(_ newObject: SCNNode) {
         // Database udpate - overridden in subclass
@@ -24,7 +25,7 @@ extension ViewController: UIGestureRecognizerDelegate {
         switch key {
         case "vanish":
             DispatchQueue.global(qos: .userInteractive).async {
-                self.sound.playSound(named: "swoosh")
+//                self.sound.playSound(named: "swoosh") // Probably not needed since textToSpeech included
                 self.speech.say(text: self.speech.randomAccolade)
             }
             
@@ -38,7 +39,7 @@ extension ViewController: UIGestureRecognizerDelegate {
             }
         case "jump":
             DispatchQueue.global(qos: .userInteractive).async {
-                self.sound.playSound(named: "jump")
+//                self.sound.playSound(named: "jump") // Probably not needed since textToSpeech included
                 self.speech.say(text: self.speech.randomNegation)
             }
             node.parent?.runAction(actionJump)
@@ -53,7 +54,7 @@ extension ViewController: UIGestureRecognizerDelegate {
     // MARK: - Gesture Methods
     
     @objc
-    func rotateObject(_ gestureRecognize: UISwipeGestureRecognizer) {
+    func collectObject(_ gestureRecognize: UITapGestureRecognizer) {
         if !inStateOfPlayForGestureControl {
             return
         }
@@ -61,101 +62,33 @@ extension ViewController: UIGestureRecognizerDelegate {
         let hitResults = sceneView.hitTest(p, options: [:])
         if hitResults.count > 0 && hitResults.first?.node.name != "anchorPlane" {
             let result = hitResults.first!
-            switch gestureRecognize.direction {
-            case .down:
-                // Down to remove object and show as collected in Segue button - bottom right
-                segueButton.isHidden = false
+            
+            segueButton.isHidden = false
+            
+            if (result.node.parent?.name) != nil {
+                if let anchorNode = result.node.parent?.parent?.parent?.childNode(withName: "anchorNode", recursively: true) {
+                    anchorNode.isHidden = false
+                }
                 
-                if (result.node.parent?.name) != nil {
-                    if let anchorNode = result.node.parent?.parent?.parent?.childNode(withName: "anchorNode", recursively: true) {
-                        anchorNode.isHidden = false
-                    }
-                    
-                    let nodeToBeRemoved = result.node.parent!
-                    let nodeWithAttributes = randomCombination
-                    
-                    switch nodeToBeRemoved.name {
-                    case nodeWithAttributes.name? :
-                        switch virtualObjectInstance.findColor(of: nodeToBeRemoved.childNodes.last!) {
-                        case nodeWithAttributes.color:
-                            action(on: nodeToBeRemoved, for: "vanish")
-                        default:
-                            action(on: nodeToBeRemoved, for: "jump")
-                        }
+                let nodeToBeRemoved = result.node.parent!
+                let nodeWithAttributes = randomCombination
+                
+                switch nodeToBeRemoved.name {
+                case nodeWithAttributes.name? :
+                    switch virtualObjectInstance.findColor(of: nodeToBeRemoved.childNodes.last!) {
+                    case nodeWithAttributes.color:
+                        action(on: nodeToBeRemoved, for: "vanish")
                     default:
                         action(on: nodeToBeRemoved, for: "jump")
                     }
-// ****
-//                    switch nodeToBeRemoved {
-//                    case "cube" :
-//                        // Dipatching sounds to global queue (non-main) for no impact on UI
-//                        DispatchQueue.global(qos: .userInteractive).async {
-//                            self.sound.playSound(named: "swoosh")
-//                        }
-//                        segueButton.setBackgroundImage(UIImage(named: "cube"), for: .normal)
-//
-//                        /// Experimental function - testing database
-//                        insertObject(result.node.parent!)
-//
-//                        virtualObjectInstance.virtualObjects[0].count += 1
-//                        result.node.parent?.removeFromParentNode()
-//                    case "sphere" :
-//                        // Dipatching sounds to global queue (non-main) for no impact on UI
-//                        DispatchQueue.global(qos: .userInteractive).async {
-//                            self.sound.playSound(named: "swoosh")
-//                        }
-//                        segueButton.setBackgroundImage(UIImage(named: "sphere"), for: .normal)
-//
-//                        /// Experimental function - testing database
-//                        insertObject(result.node.parent!)
-//
-//                        virtualObjectInstance.virtualObjects[1].count += 1
-//
-//                        result.node.parent?.removeFromParentNode()
-//                    default:
-//                        break
-//                    }
-// *******
-                    
+                default:
+                    action(on: nodeToBeRemoved, for: "jump")
                 }
-//                tappedNode?.isHidden = false
-            default:
-                break
             }
+
         }
     }
     
-    // Rotate object using two finger rotation - more intuitive than swipe rotation
-    @objc
-    func rotateObjects(_ gestureRecognize: UIRotationGestureRecognizer) {
-        let p = gestureRecognize.location(in: sceneView)
-        let hitResults = sceneView.hitTest(p, options: [:])
-        if hitResults.count > 0 && hitResults.first?.node.name != "plane" {
-            let result = hitResults.first!
-            result.node.eulerAngles.z -= Float(gestureRecognize.rotation)
-            gestureRecognize.rotation = 0.0
-        }
-    }
-    
-    // Scale the Object on pinch
-    @objc
-    func changeScale(_ gestureRecognize: UIPinchGestureRecognizer) {
-        let p = gestureRecognize.location(in: sceneView)
-        let hitResults = sceneView.hitTest(p, options: [:])
-        if hitResults.count > 0 && hitResults.first?.node.name != "plane" {
-            let result = hitResults[0]
-            switch gestureRecognize.state {
-            case .changed, .ended:
-//                result.node.scale = SCNVector3(gestureRecognize.scale, gestureRecognize.scale, gestureRecognize.scale)
-                result.node.scale.x *= Float(gestureRecognize.scale)
-                result.node.scale.y *= Float(gestureRecognize.scale)
-                result.node.scale.z *= Float(gestureRecognize.scale)
-                gestureRecognize.scale = 1
-            default:
-                break
-            }
-        }
-    }
     
     // Pop-up options for color change of the object on longpress
     @objc
@@ -164,7 +97,7 @@ extension ViewController: UIGestureRecognizerDelegate {
         
         let p = gestureRecognize.location(in: sceneView)
         let hitResults = sceneView.hitTest(p, options: [:])
-        if hitResults.count > 0 && hitResults.first?.node.name != "plane" {
+        if hitResults.count > 0 && hitResults.first?.node.name != "anchorPlane" {
             let result = hitResults[0]
             material = result.node.geometry!.firstMaterial!
         }
@@ -173,32 +106,6 @@ extension ViewController: UIGestureRecognizerDelegate {
         }
     }
     
-    // Pan Gesture - to allow object to pan around
-    // @TODO:- Do Not allow object to go beyond anchor's extent - TOO JITTERY
-    @objc
-    func translateObject(_ gestureRecognize: UIPanGestureRecognizer) {
-        
-        let p = gestureRecognize.location(in: sceneView)
-        let hitResults = sceneView.hitTest(p, options: [:])
-        if hitResults.count > 0 && hitResults.first?.node.name != "plane" {
-            let result = hitResults[0]
-            
-            let anchor = sceneView.anchor(for: result.node)
-            guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
-            let anchorWidth = planeAnchor.extent.x
-            let anchorHeight = planeAnchor.extent.z
-            
-            let translation = gestureRecognize.translation(in: sceneView)
-            
-            if gestureRecognize.state != .cancelled {
-                result.node.position.x += Float(translation.x) * anchorWidth / Float(sceneView.bounds.height)
-                result.node.position.y -= Float(translation.y) * anchorHeight / Float(sceneView.bounds.width)
-                gestureRecognize.setTranslation(CGPoint.zero, in: sceneView)
-
-            }
-        }
-        
-    }
 }
 
 
