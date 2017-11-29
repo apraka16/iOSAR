@@ -12,13 +12,14 @@ import SceneKit
 class VirtualObjectTableViewCell: UITableViewCell {
         
     @IBOutlet weak var objectTitle: UILabel!
-    @IBOutlet weak var objectColorControl: UISegmentedControl!
+    @IBOutlet weak var objectColorControl: UISegmentedControl! 
     
     private var virtualObjects = VirtualObjects()
     private var colorOfObjects = ColorOfObjects()
 
 
     @IBOutlet weak var objectView: SCNView!
+    
     @IBAction func updateColor(_ sender: Any) {
         if let material = objectView.scene?.rootNode.childNodes.last?.childNodes.first?.childNodes.last?.geometry?.firstMaterial {
             material.diffuse.contents = colorChoice

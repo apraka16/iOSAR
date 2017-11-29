@@ -21,6 +21,9 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // MARK: - Instance Variables
     let colorOfObject = ColorOfObjects()
     
+    // For text to speech
+    let speech = Speech()
+    
     var arrayFeaturePointDistance: [CGFloat] = []
     
     // Delegate variable used for Protocol
@@ -55,9 +58,12 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         if playing {
             addObject.isHidden = true
             randomCombination = virtualObjectInstance.randomCombination
-            startPlayGuideImage.image = UIImage(named: "\(randomCombination.name)-\(randomCombination.color)")
-            startPlayGuideLabel.isHidden = false
-            startPlayGuideImage.isHidden = false
+            
+            // Speech to start play mode
+            DispatchQueue.global(qos: .userInitiated).async {
+                self.speech.say(text: self.speech.welcomeText)
+                self.speech.sayFind(color: self.randomCombination.color, shape: self.randomCombination.name)
+            }
             
             Timer.scheduledTimer(timeInterval: 3,
                                  target: self,
@@ -66,8 +72,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
                                  repeats: false)
             
         } else {
-            startPlayGuideLabel.isHidden = true
-            startPlayGuideImage.isHidden = true
             addObject.isHidden = false
         }
     }
@@ -98,11 +102,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // @TODO: Hide label when play mode is operational
     @IBOutlet weak var sessionInfoView: UIView!
     @IBOutlet weak var sessionInfoLabel: UILabel!
-    
-    
-    @IBOutlet weak var startPlayGuideLabel: UILabel!
-    
-    @IBOutlet weak var startPlayGuideImage: UIImageView!
     
     // Main AR Scene View for rendering content
     @IBOutlet weak var sceneView: ARSCNView! {
@@ -292,8 +291,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         super.viewWillAppear(animated)
         segueButton.isHidden = true
         colorPicker.isHidden = true
-        startPlayGuideImage.isHidden = true
-        startPlayGuideLabel.isHidden = true
     }
     
     /// - Tag: StartARSession

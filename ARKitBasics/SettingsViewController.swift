@@ -10,7 +10,6 @@ import UIKit
 
 class SettingsViewController: UITableViewController {
     
-    
     @IBOutlet weak var autoset: UISwitch!
     
     @IBAction func setAutoMode(_ sender: UISwitch) {

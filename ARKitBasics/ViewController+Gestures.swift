@@ -25,6 +25,7 @@ extension ViewController: UIGestureRecognizerDelegate {
         case "vanish":
             DispatchQueue.global(qos: .userInteractive).async {
                 self.sound.playSound(named: "swoosh")
+                self.speech.say(text: self.speech.randomAccolade)
             }
             
             // Add code for updating count
@@ -38,6 +39,7 @@ extension ViewController: UIGestureRecognizerDelegate {
         case "jump":
             DispatchQueue.global(qos: .userInteractive).async {
                 self.sound.playSound(named: "jump")
+                self.speech.say(text: self.speech.randomNegation)
             }
             node.parent?.runAction(actionJump)
         default: break
@@ -78,13 +80,9 @@ extension ViewController: UIGestureRecognizerDelegate {
                         case nodeWithAttributes.color:
                             action(on: nodeToBeRemoved, for: "vanish")
                         default:
-                            unhideGuides()
-                            Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(hideGuides), userInfo: nil, repeats: false)
                             action(on: nodeToBeRemoved, for: "jump")
                         }
                     default:
-                        unhideGuides()
-                        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(hideGuides), userInfo: nil, repeats: false)
                         action(on: nodeToBeRemoved, for: "jump")
                     }
 // ****
@@ -125,18 +123,6 @@ extension ViewController: UIGestureRecognizerDelegate {
                 break
             }
         }
-    }
-    
-    @objc
-    func unhideGuides() {
-        startPlayGuideImage.isHidden = false
-        startPlayGuideLabel.isHidden = false
-    }
-    
-    @objc
-    func hideGuides() {
-        startPlayGuideImage.isHidden = true
-        startPlayGuideLabel.isHidden = true
     }
     
     // Rotate object using two finger rotation - more intuitive than swipe rotation

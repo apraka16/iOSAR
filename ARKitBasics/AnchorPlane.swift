@@ -13,7 +13,6 @@ import SceneKit
 
 class AnchorPlane: SCNNode {
     
-    
     private let nameOfNode = "anchorNode"
     
     // Node to attach all segments nodes to

@@ -82,7 +82,7 @@ class VirtualObjectTableViewController: UITableViewController, ColorObjectToVCDe
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Add a visual cue to indicate that the cell was selected.
-        self.tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+//        self.tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
         if let cell = self.tableView.cellForRow(at: indexPath) as? VirtualObjectTableViewCell {
             colorChoice = cell.colorChoice
         }
@@ -105,14 +105,13 @@ class VirtualObjectTableViewController: UITableViewController, ColorObjectToVCDe
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         // Invoked so we can prepare for a change in selection.
         // Remove previous selection, if any.
-        if let selectedIndex = self.tableView.indexPathForSelectedRow {
-            // Note: Programmatically deslecting does NOT invoke tableView(:didSelectRowAt:), so no risk of infinite loop.
-            self.tableView.deselectRow(at: selectedIndex, animated: false)
-            // Remove the visual selection indication.
-            self.tableView.cellForRow(at: selectedIndex)?.accessoryType = .none
-        }
+//        if let selectedIndex = self.tableView.indexPathForSelectedRow {
+//            // Note: Programmatically deslecting does NOT invoke tableView(:didSelectRowAt:), so no risk of infinite loop.
+//            self.tableView.deselectRow(at: selectedIndex, animated: false)
+//            // Remove the visual selection indication.
+//            self.tableView.cellForRow(at: selectedIndex)?.accessoryType = .none
+//        }
         virtualObjectSelectedIndexPath = indexPath.row
-        
         return indexPath
     }
 }
