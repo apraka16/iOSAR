@@ -22,8 +22,6 @@
 		C304CAF31FBDE6A200982C82 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C304CAF21FBDE6A200982C82 /* SettingsViewController.swift */; };
 		C314EB541FC6AEFD00E92B64 /* Crosshairs.swift in Sources */ = {isa = PBXBuildFile; fileRef = C314EB531FC6AEFD00E92B64 /* Crosshairs.swift */; };
 		C31966BD1FA0E03F00CA6059 /* VirtualObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31966BC1FA0E03F00CA6059 /* VirtualObjects.swift */; };
-		C327F1921FB466EB00CB9750 /* VirtualObjectTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C327F1911FB466EB00CB9750 /* VirtualObjectTableViewController.swift */; };
-		C32D60661FBAD4750012F6CC /* VirtualObjectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C32D60651FBAD4750012F6CC /* VirtualObjectTableViewCell.swift */; };
 		C36602971FC4437E004878BC /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36602961FC4437E004878BC /* Settings.swift */; };
 		C36739C51FC8158F00149459 /* AnchorPlane.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36739C41FC8158F00149459 /* AnchorPlane.swift */; };
 		C37535401FB5A757003AC18F /* ContainerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C375353F1FB5A757003AC18F /* ContainerTableViewController.swift */; };
@@ -58,8 +56,6 @@
 		C304CAF21FBDE6A200982C82 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		C314EB531FC6AEFD00E92B64 /* Crosshairs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Crosshairs.swift; sourceTree = "<group>"; };
 		C31966BC1FA0E03F00CA6059 /* VirtualObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualObjects.swift; sourceTree = "<group>"; };
-		C327F1911FB466EB00CB9750 /* VirtualObjectTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualObjectTableViewController.swift; sourceTree = "<group>"; };
-		C32D60651FBAD4750012F6CC /* VirtualObjectTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualObjectTableViewCell.swift; sourceTree = "<group>"; };
 		C36602961FC4437E004878BC /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		C36739C41FC8158F00149459 /* AnchorPlane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorPlane.swift; sourceTree = "<group>"; };
 		C375353F1FB5A757003AC18F /* ContainerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerTableViewController.swift; sourceTree = "<group>"; };
@@ -169,8 +165,6 @@
 		C36602981FC499ED004878BC /* Virtual Object Table */ = {
 			isa = PBXGroup;
 			children = (
-				C327F1911FB466EB00CB9750 /* VirtualObjectTableViewController.swift */,
-				C32D60651FBAD4750012F6CC /* VirtualObjectTableViewCell.swift */,
 			);
 			path = "Virtual Object Table";
 			sourceTree = "<group>";
@@ -269,7 +263,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C327F1921FB466EB00CB9750 /* VirtualObjectTableViewController.swift in Sources */,
 				C31966BD1FA0E03F00CA6059 /* VirtualObjects.swift in Sources */,
 				C36602971FC4437E004878BC /* Settings.swift in Sources */,
 				C314EB541FC6AEFD00E92B64 /* Crosshairs.swift in Sources */,
@@ -279,7 +272,6 @@
 				842316E41F2030C300D189D1 /* ViewController.swift in Sources */,
 				C3BD93871FCC4F770028C5BE /* Object.swift in Sources */,
 				C3BC38A01FB48323002E6844 /* ViewController+ARSCNView.swift in Sources */,
-				C32D60661FBAD4750012F6CC /* VirtualObjectTableViewCell.swift in Sources */,
 				C3BD93851FCC4EBC0028C5BE /* Objects.xcdatamodeld in Sources */,
 				C3BD93891FCC4F820028C5BE /* Session.swift in Sources */,
 				C304CAE71FBDA0EC00982C82 /* Sounds.swift in Sources */,

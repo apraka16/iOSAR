@@ -56,7 +56,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // Method to hide/ unhide set of buttons/ object depending on play mode or else
     private func inStateOfPlay(playing: Bool) {
         if playing {
-            addObject.isHidden = true
             randomCombination = virtualObjectInstance.randomCombination
             
             // Speech to start play mode
@@ -64,8 +63,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
                 self.speech.say(text: self.speech.welcomeText)
                 self.speech.sayFind(color: self.randomCombination.color, shape: self.randomCombination.name)
             }
-        } else {
-            addObject.isHidden = false
         }
     }
     
@@ -87,9 +84,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     
     // Button for changing mode to Playing - toggling image underlying the button
     @IBOutlet weak var playButton: UIButton!
-    
-    // Button to add 3D objects - hidden/ visible dependent on play mode or else
-    @IBOutlet weak var addObject: UIButton!
     
     // Info label and view
     // @TODO: Hide label when play mode is operational
@@ -176,13 +170,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             if let popoverPresentationController = segue.destination.popoverPresentationController {
                 popoverPresentationController.delegate = self
             }
-        } else if destinationViewController is VirtualObjectTableViewController {
-            if let popoverPresentationController = segue.destination.popoverPresentationController {
-                popoverPresentationController.sourceView = sender as! UIButton // For arrowhead in the middle
-                popoverPresentationController.sourceRect = (sender as! UIButton).bounds // For arrowhead in the middle
-                popoverPresentationController.delegate = self
-            }
-        }        
+        }      
     }
     
     
