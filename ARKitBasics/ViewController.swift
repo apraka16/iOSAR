@@ -10,7 +10,6 @@ import SceneKit
 import ARKit
 import CoreData
 
-// test
 /* Protocol added so that TableViewController can communicate when color of an object is chosen
  For implementation of protocol, check VirtualObjectTableViewController */
 protocol ColorObjectToVCDelegate {
@@ -35,6 +34,8 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     
     // Non private to allow Extension to use
     var virtualObjectInstance = VirtualObjects()
+    var brain = Brain()
+    
     var material: SCNMaterial?
     var screenCenter: CGPoint {
         return sceneView.center
@@ -181,17 +182,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             return .none
         } else {
             return .none
-        }
-    }
-    
-    /* Unwind Segue for "Done" bar button on Navigation Controller.
-     Allows capture of index of Selected 3D object, which determines the object that
-     will be added to the AR Scene */
-    @IBAction func chooseVirtualObject(from segue: UIStoryboardSegue) {
-        if let virtualObjectChosen = segue.source as? VirtualObjectTableViewController {
-            if let path = virtualObjectChosen.virtualObjectSelectedIndexPath {
-                objectOnPathToBeAdded = path
-            }
         }
     }
     
