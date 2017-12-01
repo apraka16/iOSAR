@@ -5,7 +5,6 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
-        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -152,52 +151,6 @@
                                     <action selector="reset:" destination="7dh-A0-qGE" eventType="touchUpInside" id="vyN-1b-w0n"/>
                                 </connections>
                             </button>
-                            <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="aHd-Is-VYB">
-                                <rect key="frame" x="81" y="184" width="212" height="64"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Mj-rj-h8w">
-                                        <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="64" id="Qo7-Pw-z8F"/>
-                                            <constraint firstAttribute="height" constant="64" id="SwA-dX-dln"/>
-                                        </constraints>
-                                        <state key="normal" backgroundImage="red-circle"/>
-                                        <connections>
-                                            <action selector="pickRedColor:" destination="7dh-A0-qGE" eventType="touchUpInside" id="mPL-Jm-Fvb"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CAm-yZ-a15">
-                                        <rect key="frame" x="74" y="0.0" width="64" height="64"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="64" id="LQv-Nx-Zhr"/>
-                                            <constraint firstAttribute="height" constant="64" id="MS4-6d-f9f"/>
-                                        </constraints>
-                                        <state key="normal" backgroundImage="green-circle"/>
-                                        <connections>
-                                            <action selector="pickGreenColor:" destination="7dh-A0-qGE" eventType="touchUpInside" id="iBG-PI-CeL"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xti-RH-DEK">
-                                        <rect key="frame" x="148" y="0.0" width="64" height="64"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="64" id="S8e-Rs-7pR"/>
-                                            <constraint firstAttribute="width" constant="64" id="det-Cd-54D"/>
-                                        </constraints>
-                                        <state key="normal" backgroundImage="blue-circle"/>
-                                        <connections>
-                                            <action selector="pickBlueColor:" destination="7dh-A0-qGE" eventType="touchUpInside" id="FYa-Sn-43i"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="CAm-yZ-a15" firstAttribute="baseline" secondItem="2Mj-rj-h8w" secondAttribute="baseline" id="9x3-xD-Pbb"/>
-                                    <constraint firstItem="2Mj-rj-h8w" firstAttribute="baseline" secondItem="Xti-RH-DEK" secondAttribute="baseline" id="JhT-3S-6Ys"/>
-                                    <constraint firstItem="2Mj-rj-h8w" firstAttribute="firstBaseline" secondItem="CAm-yZ-a15" secondAttribute="firstBaseline" id="UUQ-CM-LOg"/>
-                                    <constraint firstItem="Xti-RH-DEK" firstAttribute="firstBaseline" secondItem="CAm-yZ-a15" secondAttribute="firstBaseline" id="cJQ-fT-Lbz"/>
-                                    <constraint firstItem="Xti-RH-DEK" firstAttribute="baseline" secondItem="CAm-yZ-a15" secondAttribute="baseline" id="dql-50-yg8"/>
-                                    <constraint firstItem="2Mj-rj-h8w" firstAttribute="firstBaseline" secondItem="Xti-RH-DEK" secondAttribute="firstBaseline" id="nng-41-rQ7"/>
-                                </constraints>
-                            </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="bIU-sv-Nyk">
                                 <rect key="frame" x="16" y="534" width="64" height="64"/>
                                 <subviews>
@@ -208,9 +161,6 @@
                                             <constraint firstAttribute="width" constant="64" id="POA-As-lkr"/>
                                         </constraints>
                                         <state key="normal" backgroundImage="playBtn"/>
-                                        <connections>
-                                            <action selector="play:" destination="7dh-A0-qGE" eventType="touchUpInside" id="ILv-5k-Jrg"/>
-                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
@@ -231,14 +181,12 @@
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="37h-bD-Iyn" secondAttribute="top" constant="-20" id="Gvn-CI-bzv"/>
                             <constraint firstItem="bIU-sv-Nyk" firstAttribute="top" secondItem="OMb-B6-59U" secondAttribute="top" id="Hw1-jf-Xtk"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="71x-2l-AWw" secondAttribute="leading" id="QIa-Ri-qJo"/>
-                            <constraint firstItem="aHd-Is-VYB" firstAttribute="centerX" secondItem="BrB-h1-WRS" secondAttribute="centerX" id="UX2-D7-ZIG"/>
                             <constraint firstItem="bIU-sv-Nyk" firstAttribute="leading" secondItem="loo-cG-myf" secondAttribute="leadingMargin" id="W1t-I5-UcG"/>
                             <constraint firstItem="71x-2l-AWw" firstAttribute="trailing" secondItem="OMb-B6-59U" secondAttribute="trailing" constant="16" id="ZTb-Cd-GD9"/>
                             <constraint firstItem="71x-2l-AWw" firstAttribute="trailing" secondItem="BrB-h1-WRS" secondAttribute="trailing" id="a3B-9u-pb1"/>
                             <constraint firstItem="bIU-sv-Nyk" firstAttribute="top" secondItem="0eC-a2-YBy" secondAttribute="bottom" constant="17" id="akV-rc-Ouf"/>
                             <constraint firstItem="71x-2l-AWw" firstAttribute="bottom" secondItem="OMb-B6-59U" secondAttribute="bottom" constant="20" id="cZt-ux-MOJ"/>
                             <constraint firstItem="37h-bD-Iyn" firstAttribute="leading" secondItem="71x-2l-AWw" secondAttribute="leading" constant="15" id="lLK-x7-VyJ"/>
-                            <constraint firstItem="aHd-Is-VYB" firstAttribute="top" secondItem="loo-cG-myf" secondAttribute="top" constant="184" id="s6i-Z1-PvP"/>
                             <constraint firstItem="ggI-af-33C" firstAttribute="trailing" secondItem="OMb-B6-59U" secondAttribute="trailing" id="sco-OH-35P"/>
                             <constraint firstItem="0eC-a2-YBy" firstAttribute="leading" secondItem="37h-bD-Iyn" secondAttribute="leading" id="tVd-IJ-2VS"/>
                             <constraint firstAttribute="top" secondItem="BrB-h1-WRS" secondAttribute="top" id="ulI-xa-35w"/>
@@ -247,7 +195,6 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Main" image="game_controller" landscapeImage="game_controller" largeContentSizeImage="game_controller" selectedImage="game_controller" id="qxM-vS-r9h"/>
                     <connections>
-                        <outlet property="colorPicker" destination="aHd-Is-VYB" id="cPk-cO-EGo"/>
                         <outlet property="playButton" destination="H2O-4a-Dsm" id="j4Q-2I-pLJ"/>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="sgr-g8-kdG"/>
                         <outlet property="segueButton" destination="OMb-B6-59U" id="HE0-9J-PFg"/>
@@ -555,11 +502,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="blue-circle" width="47" height="47"/>
         <image name="game_controller" width="30" height="30"/>
-        <image name="green-circle" width="48" height="48"/>
         <image name="playBtn" width="100" height="100"/>
-        <image name="red-circle" width="48" height="48"/>
         <image name="refreshBtn" width="20" height="20"/>
         <image name="settings" width="30" height="30"/>
     </resources>

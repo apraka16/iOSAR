@@ -13,26 +13,34 @@ import SceneKit
 
 class VirtualObjects {
     
-    private var colorOfObjects = ColorOfObjects()
+    let brain = Brain()
     
-    // Colors
-    private let redColor: UInt = 0xF03434
-    private let greenColor: UInt = 0x019875
-    private let blueColor: UInt = 0x013243
-    
-    var virtualObjectsNames = [(name: "cube", scn: "Cube.scn", count: 0),
-                               (name: "sphere", scn: "Sphere.scn", count: 0)]
-    
-    var virtualObjectsColors: [String: UIColor] {
+    // Name and Count of Objects - @TODO: Count should be increased as the use collects objects
+    var virtualObjectsNames: [(name: String, count: Int)] {
         get {
-            var result = [String: UIColor]()
-            result["red"] = colorOfObjects.UIColorFromRGB(rgbValue: redColor)
-            result["blue"] = colorOfObjects.UIColorFromRGB(rgbValue: blueColor)
-            result["green"] = colorOfObjects.UIColorFromRGB(rgbValue: greenColor)
+            var result: [(name: String, count: Int)] = []
+            for shape in brain.shapes {
+                result.append((name: shape, count: 0))
+            }
             return result
         }
     }
     
+    // Name and UIColor object of Colors
+    var virtualObjectsColors: [String: UIColor] {
+        get {
+            var result = [String: UIColor]()
+            result["red"] = UIColor.red
+            result["blue"] = UIColor.blue
+            result["green"] = UIColor.green
+            result["yellow"] = UIColor.yellow
+            result["black"] = UIColor.black
+            result["white"] = UIColor.white
+            return result
+        }
+    }
+    
+    // What's the use?
     var virtualObjectCount: [(name: String, count: Int)] {
         get {
             var result: [(name: String, count: Int)] = []
@@ -48,18 +56,11 @@ class VirtualObjects {
     
     // Helper function to find name of the color when nodes are hit test.
     func findColor(of node: SCNNode) -> String {
-        var color = ""
-        switch node.geometry?.firstMaterial?.diffuse.contents as! UIColor {
-        case colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.blueColor):
-            color = "blue"
-        case colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.greenColor):
-            color = "green"
-        case colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.redColor):
-            color = "red"
-        default:
-            break
+        if let key = virtualObjectsColors.aKey(forValue: node.geometry?.firstMaterial?.diffuse.contents as! UIColor) {
+            return key
+        } else {
+            return "Not Found"
         }
-        return color
     }
     
     // To generate problems for the child randomly
@@ -70,16 +71,17 @@ class VirtualObjects {
             return (name: names[randRange(lower: 0, upper: 1)], color: colors[randRange(lower: 0, upper: 2)])
         }
     }
-    
-    private func virtualObjectsNames(from scnName: String) -> String {
-        return scnName.replacingOccurrences(of: ".scn", with: "")
+
+    // Get scenarios out of array of scenario of similar difficulty
+    func getScenarios(expectedLevel: Int) -> [(number: Int, shape: String, color: String, score: Int)] {
+        return brain.getScenarios(expectedScore: expectedLevel)
     }
     
     //  Create nodes from Object name - e.g. "cube"
     func createNodes(from object: String, with color: UIColor) -> SCNNode {
     
         let wrapperNode = SCNNode()
-        if let virtualScene = SCNScene(named: object.capitalized + ".scn", inDirectory: "Assets.scnassets") {
+        if let virtualScene = SCNScene(named: object.capitalized + ".scn", inDirectory: "Assets.scnassets/Shapes") {
             for child in virtualScene.rootNode.childNodes {
                 wrapperNode.addChildNode(child)
             }
@@ -90,9 +92,15 @@ class VirtualObjects {
     }
     
     // Private method to generate random Int between two given numbers.
-    
     private func randRange (lower: Int, upper: Int) -> Int {
         return Int(UInt32(lower) + arc4random_uniform(UInt32(upper) - UInt32(lower) + 1))
+    }
+}
+
+// Extension to obtain key to a corresponding value in a Dictionary
+extension Dictionary where Value: Equatable {
+    func aKey(forValue val: Value) -> Key? {
+        return first(where: { $1 == val })?.key
     }
 }
 

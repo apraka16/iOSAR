@@ -10,7 +10,7 @@ import UIKit
 import SceneKit
 
 protocol VCFinalDelegate {
-    func passVirtualObject() -> [(name: String, scn: String, count: Int)]
+    func passVirtualObject() -> [(name: String, count: Int)]
 }
 
 class ContainerTableViewController: UITableViewController {

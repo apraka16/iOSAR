@@ -15,46 +15,87 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
     
     /// - Tag: PlaceARContent
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-        // Place content only for anchors found by plane detection.
-        guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
+        
+        if let numberOfAnchorsInScene = sceneView.session.currentFrame?.anchors.count {
+            if numberOfAnchorsInScene <= 2 {
+                // Place content only for anchors found by plane detection.
+                guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
+                
+                let plane = SCNPlane(width: CGFloat(planeAnchor.extent.x), height: CGFloat(planeAnchor.extent.z))
+                let planeNode = SCNNode(geometry: plane)
+                planeNode.name = "anchorPlane"
+                planeNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
+                
+                
+                
+                DispatchQueue.global(qos: .userInitiated).async {
+                    
+                    let body = SCNPhysicsBody(type: .kinematic,
+                                                  shape: SCNPhysicsShape(geometry: plane, options: nil))
+                    body.restitution = 0.0
+                    body.friction = 1.0
+                    planeNode.physicsBody = body
+                    
+                    switch numberOfAnchorsInScene {
+                    case 1: self.speech.say(text: "That's one. Keep moving around")
+                    case 3: self.speech.say(text: "Three surfaces now")
+                    case 4: self.speech.say(text: "One more surface to go.")
+                    default: break
+                    }
+                }
+                
+                /*
+                 `SCNPlane` is vertically oriented in its local coordinate space, so
+                 rotate the plane to match the horizontal orientation of `ARPlaneAnchor`.
+                 */
+                planeNode.eulerAngles.x = -.pi / 2
+                
+                // Make the plane visualization semitransparent to clearly show real-world placement.
+                planeNode.opacity = 0.2
+                
+                /*
+                 Add the plane visualization to the ARKit-managed node so that it tracks
+                 changes in the plane anchor as plane estimation continues.
+                 */
+                node.addChildNode(planeNode)
+                print(node)
+                nodesAddedInScene[node] = planeAnchor.center
+
+                print(nodesAddedInScene)
+            } else {
+                if !inStateOfPlayForGestureControl {
+                    DispatchQueue.main.async {
+                        self.inStateOfPlay(playing: true)
+                    }
+                }
+            }
+        }
+        
         
         // Create a SceneKit plane to visualize the plane anchor using its position and extent.
         
         /* TAG:- Experimental: closed and open square - */
-        let anchorPlane = AnchorPlane()
-        anchorPlane.displayAsFilled()
+//        let anchorPlane = AnchorPlane()
+//        anchorPlane.displayAsFilled()
         
         /* TAG:- Experimental: closed and open square - */
-        anchorPlane.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
-        anchorPlane.eulerAngles.x = -.pi / 2
-        node.addChildNode(anchorPlane)
+//        anchorPlane.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
+//        anchorPlane.eulerAngles.x = -.pi / 2
+//        node.addChildNode(anchorPlane)
         
-        let objectNode = virtualObjectInstance.createNodes(
-            from: virtualObjectInstance.randomCombination.name,
-            with: virtualObjectInstance.virtualObjectsColors[virtualObjectInstance.randomCombination.color]!)
+//        let objectColor = virtualObjectInstance.virtualObjectsColors[randomScenario.color]
+//        let objectNode = virtualObjectInstance.createNodes(from: randomScenario.shape, with: objectColor!)
+//        objectNode.position.y = anchorPlane.position.y + 0.05
+//        objectNode.position.x = anchorPlane.position.x
+//        objectNode.position.z = anchorPlane.position.z
         
-        objectNode.position.y = anchorPlane.position.y + 0.05
-        objectNode.position.x = anchorPlane.position.x
-        objectNode.position.z = anchorPlane.position.z
+//        node.addChildNode(objectNode)
+//        node.childNodes.first?.removeFromParentNode()
+//        print(node.childNodes)
         
-        node.addChildNode(objectNode)
-
     }
     
-    
-    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-            DispatchQueue.main.async {
-                let featurePointArray = self.sceneView.hitTest(self.screenCenter, types: .featurePoint)
-                
-                if let distanceFromCamera = featurePointArray.first?.distance {
-                    self.arrayFeaturePointDistance.append(distanceFromCamera)
-                    self.arrayFeaturePointDistance = Array(self.arrayFeaturePointDistance.suffix(10))
-                    let average = self.arrayFeaturePointDistance.reduce(CGFloat(0), { $0 + $1 }) / CGFloat(self.arrayFeaturePointDistance.count)
-                    self.sceneView.pointOfView?.childNodes[1].position.z = min(-0.6, Float(-average))
-                    self.sceneView.pointOfView?.childNodes[1].eulerAngles.x = (self.sceneView.session.currentFrame?.camera.eulerAngles.x)!
-                }
-            }
-    }
+    // Note: sceneView.session.currentFrame?.anchors gives an array of all anchors added to the scene.
     
     /// - Tag: UpdateARContent
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
@@ -66,6 +107,7 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         
         // Plane estimation may shift the center of a plane relative to its anchor's transform.
         planeNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
+        nodesAddedInScene[node] = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
         
         /*
          Plane estimation may extend the size of the plane, or combine previously detected
@@ -76,6 +118,21 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         plane.width = CGFloat(planeAnchor.extent.x)
         plane.height = CGFloat(planeAnchor.extent.z)
     }
+    
+    
+    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        DispatchQueue.main.async {
+            let featurePointArray = self.sceneView.hitTest(self.screenCenter, types: .featurePoint)
+            if let distanceFromCamera = featurePointArray.first?.distance {
+                self.arrayFeaturePointDistance.append(distanceFromCamera)
+                self.arrayFeaturePointDistance = Array(self.arrayFeaturePointDistance.suffix(10))
+                let average = self.arrayFeaturePointDistance.reduce(CGFloat(0), { $0 + $1 }) / CGFloat(self.arrayFeaturePointDistance.count)
+                self.sceneView.pointOfView?.childNodes[0].position.z = min(-0.6, Float(-average))
+                self.sceneView.pointOfView?.childNodes[0].eulerAngles.x = (self.sceneView.session.currentFrame?.camera.eulerAngles.x)!
+            }
+        }
+    }
+    
     
     // Testing: @TODO: - Smoothening of object placement and change in focussquare orientation on camera movement
 
@@ -90,6 +147,10 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
     func session(_ session: ARSession, didRemove anchors: [ARAnchor]) {
         guard let frame = session.currentFrame else { return }
         updateSessionInfoLabel(for: frame, trackingState: frame.camera.trackingState)
+    }
+    
+    func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
+
     }
     
     func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
@@ -141,7 +202,7 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
             
         case .limited(.initializing):
             message = "Initializing AR session."
-            
+            speech.say(text: "We will detech a few surfaces before we start. Please move around your device")
         }
         
         sessionInfoLabel.text = message

@@ -18,8 +18,10 @@ protocol ColorObjectToVCDelegate {
 
 class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationControllerDelegate {
     
+    let levelOfPlay = 15
+    var nodesAddedInScene: [SCNNode: vector_float3] = [:]
+    
     // MARK: - Instance Variables
-    let colorOfObject = ColorOfObjects()
     
     // For text to speech
     let speech = Speech()
@@ -32,44 +34,44 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // Sound effect
     var sound = Sounds()
     
-    // Non private to allow Extension to use
+    /* Initialize virtual object and fetch the array of all scenarios dependent
+     on the level of play*/
+    // Instatiate VO
     var virtualObjectInstance = VirtualObjects()
-    var brain = Brain()
+    
+    // Get all scenario of level of play
+    var scenarios: [(number: Int, shape: String, color: String, score: Int)] {
+        get {
+            return virtualObjectInstance.getScenarios(expectedLevel: levelOfPlay)
+        }
+    }
+    
+    // Generate random scenario for adding nodes in ARSCN
+    func generateRandomScenario() -> (number: Int, shape: String, color: String) {
+        let randomScenarios = scenarios[randRange(lower: 0, upper: scenarios.count - 1)]
+        return (number: randomScenarios.number,
+                shape: randomScenarios.shape,
+                color: randomScenarios.color)
+    }
     
     var material: SCNMaterial?
     var screenCenter: CGPoint {
         return sceneView.center
     }
     
-    private var objectOnPathToBeAdded: Int?
-    private var virtualObjectColor: UIColor?
-    private var pickedColor: UIColor?
+    var randomScenario: (number: Int, shape: String, color: String)?
     
     // Varibles for button image changes
     private var toggleState = 1
     private let imgPlay = UIImage(named: "playBtn")
     private let imgStop = UIImage(named: "stopBtn")
     
-    private var colorOfObjects = ColorOfObjects()
-    
-    var randomCombination = (name: "", color: "")
-    
-    // Method to hide/ unhide set of buttons/ object depending on play mode or else
-    private func inStateOfPlay(playing: Bool) {
-        if playing {
-            randomCombination = virtualObjectInstance.randomCombination
-            
-            // Speech to start play mode
-            DispatchQueue.global(qos: .userInitiated).async {
-                self.speech.say(text: self.speech.welcomeText)
-                self.speech.sayFind(color: self.randomCombination.color, shape: self.randomCombination.name)
-            }
-        }
-    }
+    // Controls whether gesture works or not
+    var inStateOfPlayForGestureControl = false // Unsure whether this is the swifty way
     
     /* Implementation of ContainerTableView delegate function:
      Check ContainerTableViewController for protocol implementation */
-    func passVirtualObject() -> [(name: String, scn: String, count: Int)] {
+    func passVirtualObject() -> [(name: String, count: Int)] {
         return virtualObjectInstance.virtualObjectsNames
     }
     
@@ -80,11 +82,98 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // Outlet for changing background image of button depending on the object which is swiped down
     @IBOutlet weak var segueButton: UIButton!
     
-    // View with Color picker buttons - hidden/ visible on selection of underlying buttons
-    @IBOutlet weak var colorPicker: UIStackView!
-    
     // Button for changing mode to Playing - toggling image underlying the button
     @IBOutlet weak var playButton: UIButton!
+    
+    
+    // Method to hide/ unhide set of buttons/ object depending on play mode or else
+    func inStateOfPlay(playing: Bool) {
+        if playing {
+            inStateOfPlayForGestureControl = true
+            playButton.setBackgroundImage(imgStop, for: .normal)
+            randomScenario = generateRandomScenario()
+            // Speech to start play mode
+            DispatchQueue.global(qos: .userInitiated).async {
+                self.speech.say(text: self.speech.welcomeText)
+                self.speech.sayFind(number: (self.randomScenario?.number)!,
+                                    color: (self.randomScenario?.color)!,
+                                    shape: (self.randomScenario?.shape)!)
+            }
+            
+            for nodeInScene in nodesAddedInScene {
+//                nodeInScene.key.childNodes.first?.opacity = 0.0
+//                let cube = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0)
+                
+//                let cubeNode = SCNNode(geometry: cube)
+                
+//                let physicsBody = SCNPhysicsBody(
+//                    type: .dynamic,
+//                    shape: SCNPhysicsShape(node: cubeNode, options: nil))
+//                physicsBody.mass = 1.25
+//                physicsBody.restitution = 0.1
+//                physicsBody.friction = 0.8
+//                physicsBody.rollingFriction = 1.0
+//                physicsBody.damping = 0.8
+//                physicsBody.angularDamping = 0.8
+//                cubeNode.physicsBody = physicsBody
+//
+//                cubeNode.simdPosition = float3(nodeInScene.value.x,
+//                                               nodeInScene.value.y + 1.0,
+//                                               nodeInScene.value.z)
+//                nodeInScene.key.addChildNode(cubeNode)
+                
+//                let when = DispatchTime.now() + 0.5
+                
+                for object in scenarios {
+                    let shape = virtualObjectInstance.createNodes(from: object.shape,
+                                                      with: virtualObjectInstance.virtualObjectsColors[object.color]!)
+                    
+                    let physicsBody = SCNPhysicsBody(
+                        type: .dynamic,
+                        shape: SCNPhysicsShape(node: shape, options: nil))
+                    physicsBody.mass = 1.25
+                    physicsBody.restitution = 0.1
+                    physicsBody.friction = 0.8
+                    physicsBody.rollingFriction = 1.0
+                    physicsBody.damping = 0.8
+                    physicsBody.angularDamping = 0.8
+                    shape.physicsBody = physicsBody
+                    
+                    nodeInScene.key.addChildNode(shape)
+                    shape.simdPosition = float3(nodeInScene.value.x,
+                                                nodeInScene.value.y + 1.0,
+                                                nodeInScene.value.z)
+                }
+                
+//                for shape in shapes {
+//                    DispatchQueue.main.asyncAfter(deadline: when, execute: {
+//                        nodeInScene.key.addChildNode(shape)
+//                        shape.simdPosition = float3(nodeInScene.value.x,
+//                                                    nodeInScene.value.y + 1.0,
+//                                                    nodeInScene.value.z)
+//                    })
+//                }
+            }
+            
+        } else {
+            inStateOfPlayForGestureControl = false
+            playButton.setBackgroundImage(imgPlay, for: .normal)
+        }
+    }
+    
+    private func addPhysics(to node: SCNNode) -> SCNNode {
+        let physicsBody = SCNPhysicsBody(
+            type: .dynamic,
+            shape: SCNPhysicsShape(node: node, options: nil))
+        physicsBody.mass = 1.25
+        physicsBody.restitution = 0.1
+        physicsBody.friction = 0.8
+        physicsBody.rollingFriction = 1.0
+        physicsBody.damping = 0.8
+        physicsBody.angularDamping = 0.8
+        node.physicsBody = physicsBody
+        return node
+    }
     
     // Info label and view
     // @TODO: Hide label when play mode is operational
@@ -98,10 +187,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             tapGesture.numberOfTapsRequired = 1
             tapGesture.numberOfTouchesRequired = 1
             sceneView.addGestureRecognizer(tapGesture)
-            
-            let longPressGesture =
-                UILongPressGestureRecognizer(target: self, action: #selector(changeColorOfObject(_:)))
-            sceneView.addGestureRecognizer(longPressGesture)        
+                  
         }
     }
     
@@ -113,26 +199,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         resetTracking()
     }
     
-    /* Color picker buttons - present when object is long pressed */
-    
-    @IBAction func pickRedColor(_ sender: UIButton) {
-        material?.diffuse.contents = virtualObjectInstance.virtualObjectsColors["red"]
-//        material?.emission.contents = colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.redColor)
-        colorPicker.isHidden = true
-    }
-    
-    @IBAction func pickGreenColor(_ sender: UIButton) {
-        material?.diffuse.contents = virtualObjectInstance.virtualObjectsColors["green"]
-//        material?.emission.contents = colorOfObjects.UIColorFromRGB(rgbValue: colorOfObjects.greenColor)
-        colorPicker.isHidden = true
-    }
-    
-    @IBAction func pickBlueColor(_ sender: UIButton) {
-        material?.diffuse.contents = virtualObjectInstance.virtualObjectsColors["blue"]
-        colorPicker.isHidden = true
-    }
-    
-    var inStateOfPlayForGestureControl = false // Unsure whether this is the swifty way
     
     /* Button to select play mode. Under play mode:
      - Info and add buttons are hidden
@@ -191,24 +257,15 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         super.viewDidLoad()
         
         let crosshair = Crosshairs()
-            
         crosshair.displayAsBillboard()
-                
-        // Light Node to illuminate crosshair node. @TODO: Implemented it in the class itself, if feasible
-        let ambientLightNode = SCNNode()
-        ambientLightNode.light = SCNLight()
-        ambientLightNode.light?.type = .ambient
-        ambientLightNode.light?.color = UIColor.white
-        sceneView.pointOfView?.addChildNode(ambientLightNode)
         
         sceneView.pointOfView?.addChildNode(crosshair)
-        
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         segueButton.isHidden = true
-        colorPicker.isHidden = true
     }
     
     /// - Tag: StartARSession
@@ -253,14 +310,9 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
 //            ARSCNDebugOptions.showWorldOrigin
 //        ]
         sceneView.autoenablesDefaultLighting = true
-        
         sceneView.automaticallyUpdatesLighting = true
-        
-        // Taken from iOS codebase by Apple - significance?
-//        if let environmentMap = UIImage(named: "Assets.scnassets/SharedImages/environment_blur.exr") {
-//            print(environmentMap)
-//            sceneView.scene.lightingEnvironment.contents = environmentMap
-//        }
+        self.sceneView.antialiasingMode = .multisampling4X
+
     }
     
 	override func viewWillDisappear(_ animated: Bool) {
@@ -273,6 +325,11 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
     }
+    
+    private func randRange (lower: Int, upper: Int) -> Int {
+        return Int(UInt32(lower) + arc4random_uniform(UInt32(upper) - UInt32(lower) + 1))
+    }
+    
 }
 
 

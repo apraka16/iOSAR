@@ -13,7 +13,7 @@ class Speech: AVSpeechSynthesizer {
     
     private var voice = AVSpeechSynthesisVoice(identifier: "com.apple.ttsbundle.siri_female_en-US_compact")
     
-    let welcomeText = "Welcome, keep moving around to add stuffs. Let's start!"
+    let welcomeText = "All right! Let's start!"
     
     private let accolades = ["Great!",
                              "Perfect!",
@@ -30,6 +30,7 @@ class Speech: AVSpeechSynthesizer {
                             "Nope, try again with other object.",
                             "Oops! missed it!",
                             "No, check out other things."]
+    
     
     var randomAccolade: String {
         get {
@@ -49,9 +50,17 @@ class Speech: AVSpeechSynthesizer {
         self.speak(speechUtterance)
     }
     
-    func sayFind(color: String, shape: String) {
-        let speechUtterance = AVSpeechUtterance(string: "Find a \(color) \(shape)")
+    func sayFind(number: Int, color: String, shape: String) {
+        var speechUtterance: AVSpeechUtterance
+        switch number {
+        case 1:
+            speechUtterance = AVSpeechUtterance(string: "Find, \(number), \(color), \(shape)")
+        default:
+            speechUtterance = AVSpeechUtterance(string: "Find, \(number), \(color), \(shape)s")
+        }
+        
         speechUtterance.voice = voice
+        speechUtterance.rate = 0.4
         self.speak(speechUtterance)
     }
     
