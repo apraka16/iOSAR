@@ -54,11 +54,11 @@ class Speech: AVSpeechSynthesizer {
     func sayWithInterruption(text: String) {
         if self.isSpeaking {
             self.stopSpeaking(at: AVSpeechBoundary.immediate)
-            let speechUtterance = AVSpeechUtterance(string: text)
-            speechUtterance.voice = voice
-            speechUtterance.rate = 0.5
-            self.speak(speechUtterance)
         }
+        let speechUtterance = AVSpeechUtterance(string: text)
+        speechUtterance.voice = voice
+        speechUtterance.rate = 0.5
+        self.speak(speechUtterance)
     }
     
     func sayFind(color: String, shape: String) {
