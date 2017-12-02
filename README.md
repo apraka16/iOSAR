@@ -1,7 +1,5 @@
 # App that runs an AR session and uses plane detection to place 3D content using SceneKit.  
 
-[![Join the chat at https://gitter.im/iOSAR/Lobby](https://badges.gitter.im/iOSAR/Lobby.svg)](https://gitter.im/iOSAR/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 ## Basic 3D shapes to start off have been created using iOS SceneKit native codes. 
 
 AR automatic plane detection in order to fix anchors in the scene. Depending on position of anchors, nodes are set in the scene so as to render AR experience. Target crosshairs (viz., focus square) to be used to let user know that AR is detecting planes and then crosshairs should visibly change in order to let the user know that plane has been detected and the scene is ready for the 3D object to be placed.
