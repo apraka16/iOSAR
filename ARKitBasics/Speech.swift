@@ -47,18 +47,12 @@ class Speech: AVSpeechSynthesizer {
     func say(text: String) {
         let speechUtterance = AVSpeechUtterance(string: text)
         speechUtterance.voice = voice
+        speechUtterance.rate = 0.4
         self.speak(speechUtterance)
     }
     
-    func sayFind(number: Int, color: String, shape: String) {
-        var speechUtterance: AVSpeechUtterance
-        switch number {
-        case 1:
-            speechUtterance = AVSpeechUtterance(string: "Find, \(number), \(color), \(shape)")
-        default:
-            speechUtterance = AVSpeechUtterance(string: "Find, \(number), \(color), \(shape)s")
-        }
-        
+    func sayFind(color: String, shape: String) {
+        let speechUtterance = AVSpeechUtterance(string: "Find, a \(color), \(shape)")
         speechUtterance.voice = voice
         speechUtterance.rate = 0.4
         self.speak(speechUtterance)

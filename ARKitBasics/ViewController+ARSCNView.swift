@@ -17,7 +17,7 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         
         if let numberOfAnchorsInScene = sceneView.session.currentFrame?.anchors.count {
-            if numberOfAnchorsInScene <= 2 {
+            if numberOfAnchorsInScene <= 4 {
                 // Place content only for anchors found by plane detection.
                 guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
                 
@@ -26,12 +26,10 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
                 planeNode.name = "anchorPlane"
                 planeNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
                 
-                
-                
                 DispatchQueue.global(qos: .userInitiated).async {
                     
                     let body = SCNPhysicsBody(type: .kinematic,
-                                                  shape: SCNPhysicsShape(geometry: plane, options: nil))
+                                              shape: SCNPhysicsShape(geometry: plane, options: nil))
                     body.restitution = 0.0
                     body.friction = 1.0
                     planeNode.physicsBody = body
@@ -55,13 +53,13 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
                 
                 /*
                  Add the plane visualization to the ARKit-managed node so that it tracks
-                 changes in the plane anchor as plane estimation continues.
+                 changes in the plane anchor as plane estimation continues. Append the added
+                 node to the collection to node - which is used in play mode to place other
+                 objects.
                  */
                 node.addChildNode(planeNode)
-                print(node)
-                nodesAddedInScene[node] = planeAnchor.center
-
-                print(nodesAddedInScene)
+                nodesAddedInScene[node] = [planeAnchor.center, planeAnchor.extent]
+                
             } else {
                 if !inStateOfPlayForGestureControl {
                     DispatchQueue.main.async {
@@ -70,29 +68,6 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
                 }
             }
         }
-        
-        
-        // Create a SceneKit plane to visualize the plane anchor using its position and extent.
-        
-        /* TAG:- Experimental: closed and open square - */
-//        let anchorPlane = AnchorPlane()
-//        anchorPlane.displayAsFilled()
-        
-        /* TAG:- Experimental: closed and open square - */
-//        anchorPlane.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
-//        anchorPlane.eulerAngles.x = -.pi / 2
-//        node.addChildNode(anchorPlane)
-        
-//        let objectColor = virtualObjectInstance.virtualObjectsColors[randomScenario.color]
-//        let objectNode = virtualObjectInstance.createNodes(from: randomScenario.shape, with: objectColor!)
-//        objectNode.position.y = anchorPlane.position.y + 0.05
-//        objectNode.position.x = anchorPlane.position.x
-//        objectNode.position.z = anchorPlane.position.z
-        
-//        node.addChildNode(objectNode)
-//        node.childNodes.first?.removeFromParentNode()
-//        print(node.childNodes)
-        
     }
     
     // Note: sceneView.session.currentFrame?.anchors gives an array of all anchors added to the scene.
@@ -107,7 +82,7 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         
         // Plane estimation may shift the center of a plane relative to its anchor's transform.
         planeNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
-        nodesAddedInScene[node] = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
+        nodesAddedInScene[node] = [planeAnchor.center, planeAnchor.extent]
         
         /*
          Plane estimation may extend the size of the plane, or combine previously detected
@@ -117,6 +92,10 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
          */
         plane.width = CGFloat(planeAnchor.extent.x)
         plane.height = CGFloat(planeAnchor.extent.z)
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
+        nodesAddedInScene.removeValue(forKey: node)
     }
     
     
@@ -202,7 +181,7 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
             
         case .limited(.initializing):
             message = "Initializing AR session."
-            speech.say(text: "We will detech a few surfaces before we start. Please move around your device")
+            speech.say(text: "We will detect a few surfaces before we start. Please move around your device")
         }
         
         sessionInfoLabel.text = message

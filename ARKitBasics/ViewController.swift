@@ -10,43 +10,62 @@ import SceneKit
 import ARKit
 import CoreData
 
-/* Protocol added so that TableViewController can communicate when color of an object is chosen
- For implementation of protocol, check VirtualObjectTableViewController */
+/*
+ Protocol added so that TableViewController can communicate when color of an object is chosen
+ For implementation of protocol, check VirtualObjectTableViewController
+ */
 protocol ColorObjectToVCDelegate {
     func objectColor() -> UIColor
 }
 
 class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationControllerDelegate {
     
-    let levelOfPlay = 15
-    var nodesAddedInScene: [SCNNode: vector_float3] = [:]
+    /* Implementation of ContainerTableView delegate function:
+     Check ContainerTableViewController for protocol implementation */
+    func passVirtualObject() -> [(name: String, count: Int)] {
+        return virtualObjectInstance.virtualObjectsNames
+    }
     
     // MARK: - Instance Variables
     
-    // For text to speech
+    // Configurable complexity of the game
+    let levelOfPlay = 10
+    
+    // This variable stores a dictionary of the root node which is added by auto-plane
+    // detection in ARSCN Delegate and corresponding center of the node and extent, i.e.,
+    // width(x) and height(z) of the PlaneAnchorNode which is added upon the root node.
+    var nodesAddedInScene: [SCNNode: [vector_float3]] = [:]
+    
+
+    // Instantiate Speech Class for text to speech conversion
     let speech = Speech()
     
+    // Instantiate Sound Class for playing short mp3 files
+    var sound = Sounds()
+    
+    // For feature point detection so as to move the crosshair distance away from camera
     var arrayFeaturePointDistance: [CGFloat] = []
     
     // Delegate variable used for Protocol
     var delegate: ColorObjectToVCDelegate?
     
-    // Sound effect
-    var sound = Sounds()
     
-    /* Initialize virtual object and fetch the array of all scenarios dependent
-     on the level of play*/
+    /*
+     Initialize virtual object and fetch the array of all scenarios dependent
+     on the level of play
+     */
     // Instatiate VO
     var virtualObjectInstance = VirtualObjects()
     
-    // Get all scenario of level of play
+    // Fetch all scenarios corresponding to a certain "levelOfPlay"
     var scenarios: [(number: Int, shape: String, color: String, score: Int)] {
         get {
             return virtualObjectInstance.getScenarios(expectedLevel: levelOfPlay)
         }
     }
     
-    // Generate random scenario for adding nodes in ARSCN
+    // Generate random scenario from all scenarios to be used while creating
+    // challenges and scene for the user.
     func generateRandomScenario() -> (number: Int, shape: String, color: String) {
         let randomScenarios = scenarios[randRange(lower: 0, upper: scenarios.count - 1)]
         return (number: randomScenarios.number,
@@ -58,9 +77,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     var screenCenter: CGPoint {
         return sceneView.center
     }
-    
-    var randomScenario: (number: Int, shape: String, color: String)?
-    
+        
     // Varibles for button image changes
     private var toggleState = 1
     private let imgPlay = UIImage(named: "playBtn")
@@ -69,98 +86,110 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // Controls whether gesture works or not
     var inStateOfPlayForGestureControl = false // Unsure whether this is the swifty way
     
-    /* Implementation of ContainerTableView delegate function:
-     Check ContainerTableViewController for protocol implementation */
-    func passVirtualObject() -> [(name: String, count: Int)] {
-        return virtualObjectInstance.virtualObjectsNames
-    }
     
     // MARK: - IBOutlets
     
-    /* Segue Button at bottom right corner opens tableView (Container...) to keep score of
-     swiped down objects from main view */
+    /*
+     Segue Button at bottom right corner opens tableView (Container...) to keep score of
+     swiped down objects from main view
+     */
     // Outlet for changing background image of button depending on the object which is swiped down
     @IBOutlet weak var segueButton: UIButton!
     
     // Button for changing mode to Playing - toggling image underlying the button
     @IBOutlet weak var playButton: UIButton!
     
+    var chosenScenarios: [(number: Int, shape: String, color: String)] = []
+    var chosenScenarioForChallenge: (number: Int, shape: String, color: String)?
     
-    // Method to hide/ unhide set of buttons/ object depending on play mode or else
+    /*
+     Major method which controls the rhythm of the whole game. Game starts when
+     certain number of planes are detected and objects are placed corresponding
+     to the anchors therein. Game ends when use through tap gesture is able to
+     collect the object as required to complete the challenge. Game restarts
+     again after that. */
+    
     func inStateOfPlay(playing: Bool) {
         if playing {
-            inStateOfPlayForGestureControl = true
-            playButton.setBackgroundImage(imgStop, for: .normal)
-            randomScenario = generateRandomScenario()
-            // Speech to start play mode
-            DispatchQueue.global(qos: .userInitiated).async {
-                self.speech.say(text: self.speech.welcomeText)
-                self.speech.sayFind(number: (self.randomScenario?.number)!,
-                                    color: (self.randomScenario?.color)!,
-                                    shape: (self.randomScenario?.shape)!)
-            }
             
-            for nodeInScene in nodesAddedInScene {
-//                nodeInScene.key.childNodes.first?.opacity = 0.0
-//                let cube = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0)
-                
-//                let cubeNode = SCNNode(geometry: cube)
-                
-//                let physicsBody = SCNPhysicsBody(
-//                    type: .dynamic,
-//                    shape: SCNPhysicsShape(node: cubeNode, options: nil))
-//                physicsBody.mass = 1.25
-//                physicsBody.restitution = 0.1
-//                physicsBody.friction = 0.8
-//                physicsBody.rollingFriction = 1.0
-//                physicsBody.damping = 0.8
-//                physicsBody.angularDamping = 0.8
-//                cubeNode.physicsBody = physicsBody
-//
-//                cubeNode.simdPosition = float3(nodeInScene.value.x,
-//                                               nodeInScene.value.y + 1.0,
-//                                               nodeInScene.value.z)
-//                nodeInScene.key.addChildNode(cubeNode)
-                
-//                let when = DispatchTime.now() + 0.5
-                
-                for object in scenarios {
-                    let shape = virtualObjectInstance.createNodes(from: object.shape,
-                                                      with: virtualObjectInstance.virtualObjectsColors[object.color]!)
-                    
-                    let physicsBody = SCNPhysicsBody(
-                        type: .dynamic,
-                        shape: SCNPhysicsShape(node: shape, options: nil))
-                    physicsBody.mass = 1.25
-                    physicsBody.restitution = 0.1
-                    physicsBody.friction = 0.8
-                    physicsBody.rollingFriction = 1.0
-                    physicsBody.damping = 0.8
-                    physicsBody.angularDamping = 0.8
-                    shape.physicsBody = physicsBody
-                    
-                    nodeInScene.key.addChildNode(shape)
-                    shape.simdPosition = float3(nodeInScene.value.x,
-                                                nodeInScene.value.y + 1.0,
-                                                nodeInScene.value.z)
+            // To make sure tap gesture is operative only when user is on play more
+            inStateOfPlayForGestureControl = true
+            
+            // Setting background image to "Stop" as soon as user enters the play more
+            playButton.setBackgroundImage(imgStop, for: .normal)
+            
+            /*
+             Add randomly generated shapes in an optimum fashion to the plane Nodes
+             
+             PlaneAnchorNode:
+              ________________________
+             |     1     2     3      |
+             |    ____|_____|____     |  // 5 is the center. All other tiles spawn
+             |     4  |  5  |  6      |  // around center.
+             |    ____|_____|____     |
+             |     7  |  8  |  9      |
+             |________________________|
+             
+             PlaneAnchor node must be fitted with tiles measuring 0.1*0.1, with central
+             tile covering center of the PlaneAnchorNode. In order to make sure of this,
+             we use the func findOptimumNumberOfNodesToFit. After we obtain the number
+             of tile it will take to fill the PlaneAnchorNode, we can safely place
+             random objects on each tile, without any interaction between them.
+             */
+            
+            DispatchQueue.global(qos: .userInitiated).async {
+                for nodeInScene in self.nodesAddedInScene {
+                    nodeInScene.key.childNodes.first?.opacity = 0.0
+                    let optimumFit = self.findOptimumNumberOfNodesToFit(extent: nodeInScene.value.last!)
+                    for Z in (-optimumFit.alongZ/2)...(optimumFit.alongZ/2) {
+                        for X in (-optimumFit.alongX/2)...(optimumFit.alongX/2) {
+                            let randomScenario = self.generateRandomScenario()
+                            self.chosenScenarios.append(randomScenario)
+                            let shape = self.virtualObjectInstance.createNodes(
+                                from: randomScenario.shape,
+                                with: self.virtualObjectInstance.virtualObjectsColors[randomScenario.color]!
+                            )
+                            DispatchQueue.main.async {
+                                nodeInScene.key.addChildNode(shape)
+                                shape.simdPosition = float3((nodeInScene.value.first?.x)! + Float(X)*0.2,
+                                                            (nodeInScene.value.first?.y)!,
+                                                            (nodeInScene.value.first?.z)! + Float(Z)*0.2)
+                            }
+                        }
+                    }
                 }
                 
-//                for shape in shapes {
-//                    DispatchQueue.main.asyncAfter(deadline: when, execute: {
-//                        nodeInScene.key.addChildNode(shape)
-//                        shape.simdPosition = float3(nodeInScene.value.x,
-//                                                    nodeInScene.value.y + 1.0,
-//                                                    nodeInScene.value.z)
-//                    })
-//                }
+                self.speech.say(text: self.speech.welcomeText)
+                self.chosenScenarioForChallenge = self.chosenScenarios[self.randRange(lower: 0, upper: self.chosenScenarios.count-1)]
+                self.speech.sayFind(color: (self.chosenScenarioForChallenge?.color)!,
+                                    shape: (self.chosenScenarioForChallenge?.shape)!
+                )
+                
             }
-            
         } else {
             inStateOfPlayForGestureControl = false
             playButton.setBackgroundImage(imgPlay, for: .normal)
+            for node in nodesAddedInScene.keys {
+                node.childNodes.first?.opacity = 0.25
+                if node.childNodes.count > 1 {
+                    for index in 1...node.childNodes.count-1 {
+                        
+                        /// @TODO: Remove from parent Node
+//                        node.childNodes[index].removeFromParentNode()
+                    }
+                }
+            }
+//            inStateOfPlay(playing: true)
         }
     }
     
+    private func findOptimumNumberOfNodesToFit(extent: vector_float3) -> (alongX: Int, alongZ: Int) {
+        let numberOfNodesAlongX = Int((extent.x / 2 - 0.1) / 0.2) * 2 + 1
+        let numberOfNodesAlongZ = Int((extent.z / 2 - 0.1) / 0.2) * 2 + 1
+        return (alongX: numberOfNodesAlongX, alongZ: numberOfNodesAlongZ)
+    }
+    
+    // No use of physics yet.
     private func addPhysics(to node: SCNNode) -> SCNNode {
         let physicsBody = SCNPhysicsBody(
             type: .dynamic,
@@ -187,7 +216,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             tapGesture.numberOfTapsRequired = 1
             tapGesture.numberOfTouchesRequired = 1
             sceneView.addGestureRecognizer(tapGesture)
-                  
         }
     }
     
@@ -207,13 +235,13 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         if toggleState == 1 {
             toggleState = 2
             playButton.setBackgroundImage(imgStop, for: .normal)
-            inStateOfPlayForGestureControl = true // Unsure whether this is the swifty way
+            inStateOfPlayForGestureControl = true
             inStateOfPlay(playing: true)
             
         } else {
             toggleState = 1
             playButton.setBackgroundImage(imgPlay, for: .normal)
-            inStateOfPlayForGestureControl = false // Unsure whether this is the swifty way
+            inStateOfPlayForGestureControl = false
             inStateOfPlay(playing: false)
         }
     }

@@ -27,6 +27,12 @@ extension ViewController: UIGestureRecognizerDelegate {
             DispatchQueue.global(qos: .userInteractive).async {
 //                self.sound.playSound(named: "swoosh") // Probably not needed since textToSpeech included
                 self.speech.say(text: self.speech.randomAccolade)
+                self.speech.say(text: "Done and dusted, let's move to the next.")
+                
+                // Remove existing objects, restart the game.
+                DispatchQueue.main.async {
+                    self.inStateOfPlay(playing: false)
+                }
             }
             node.runAction(actionVanish)
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) { [weak self] in
@@ -58,7 +64,6 @@ extension ViewController: UIGestureRecognizerDelegate {
         let hitResults = sceneView.hitTest(p, options: [:])
         if hitResults.count > 0 && hitResults.first?.node.name != "anchorPlane" {
             let result = hitResults.first!
-            
             segueButton.isHidden = false
             
             if (result.node.parent?.name) != nil {
@@ -67,24 +72,23 @@ extension ViewController: UIGestureRecognizerDelegate {
                 }
                 
                 let nodeToBeRemoved = result.node.parent!
-                let nodeWithAttributes = randomScenario!
-                
-                switch nodeToBeRemoved.name {
-                case nodeWithAttributes.shape? :
-                    switch virtualObjectInstance.findColor(of: nodeToBeRemoved.childNodes.last!) {
-                    case nodeWithAttributes.color :
-                        action(on: nodeToBeRemoved, for: "vanish")
+                if let nodeWithAttributes = chosenScenarioForChallenge {
+                    switch nodeToBeRemoved.name {
+                    case nodeWithAttributes.shape? :
+                        switch virtualObjectInstance.findColor(of: nodeToBeRemoved.childNodes.last!) {
+                        case nodeWithAttributes.color :
+                            action(on: nodeToBeRemoved, for: "vanish")
+                            
+                        default:
+                            action(on: nodeToBeRemoved, for: "jump")
+                        }
                     default:
                         action(on: nodeToBeRemoved, for: "jump")
                     }
-                default:
-                    action(on: nodeToBeRemoved, for: "jump")
                 }
             }
-
         }
     }
-    
     
 }
 
