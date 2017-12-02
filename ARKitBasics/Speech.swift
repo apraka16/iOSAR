@@ -13,7 +13,7 @@ class Speech: AVSpeechSynthesizer {
     
     private var voice = AVSpeechSynthesisVoice(identifier: "com.apple.ttsbundle.siri_female_en-US_compact")
     
-    let welcomeText = "All right! Let's start!"
+    let welcomeText = "Let's start!"
     
     private let accolades = ["Great!",
                              "Perfect!",
@@ -47,7 +47,7 @@ class Speech: AVSpeechSynthesizer {
     func say(text: String) {
         let speechUtterance = AVSpeechUtterance(string: text)
         speechUtterance.voice = voice
-        speechUtterance.rate = 0.4
+        speechUtterance.rate = 0.5
         self.speak(speechUtterance)
     }
     

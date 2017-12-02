@@ -169,17 +169,14 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         } else {
             inStateOfPlayForGestureControl = false
             playButton.setBackgroundImage(imgPlay, for: .normal)
-            for node in nodesAddedInScene.keys {
-                node.childNodes.first?.opacity = 0.25
-                if node.childNodes.count > 1 {
-                    for index in 1...node.childNodes.count-1 {
-                        
-                        /// @TODO: Remove from parent Node
-//                        node.childNodes[index].removeFromParentNode()
+            DispatchQueue.global(qos: .userInteractive).async {
+                for node in self.nodesAddedInScene.keys {
+                    while node.childNodes.count > 1 {
+                        node.childNodes.last?.removeFromParentNode()
                     }
                 }
             }
-//            inStateOfPlay(playing: true)
+            inStateOfPlay(playing: true)
         }
     }
     
