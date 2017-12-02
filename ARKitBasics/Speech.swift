@@ -68,6 +68,13 @@ class Speech: AVSpeechSynthesizer {
         self.speak(speechUtterance)
     }
     
+    func sayNegativeExplanation(color: String, shape: String) {
+        let speechUtterance = AVSpeechUtterance(string: "This is \(color), \(shape)")
+        speechUtterance.voice = voice
+        speechUtterance.rate = 0.5
+        self.speak(speechUtterance)
+    }
+    
     private func randRange (lower: Int, upper: Int) -> Int {
         return Int(UInt32(lower) + arc4random_uniform(UInt32(upper) - UInt32(lower) + 1))
     }

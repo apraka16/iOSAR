@@ -167,11 +167,15 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
                 self.speech.sayFind(color: (self.chosenScenarioForChallenge?.color)!,
                                     shape: (self.chosenScenarioForChallenge?.shape)!
                 )
+                DispatchQueue.main.async {
+                    self.audio.isHidden = false
+                }
             }
         } else {
             inStateOfPlayForGestureControl = false
             playButton.setBackgroundImage(imgPlay, for: .normal)
             prepareSceneForNextRun()
+            self.audio.isHidden = true
             inStateOfPlay(playing: true)
         }
     }
@@ -243,29 +247,21 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     
     // Reset button - top right corner resets AR rendering
     @IBAction func reset(_ sender: UIButton) {
-        sender.showsTouchWhenHighlighted = true
         resetTracking()
     }
     
     
-    /* Button to select play mode. Under play mode:
-     - Info and add buttons are hidden
-     - Image underlying the button toggle play/ stop images (imgPlay and imgStop - declared in vars)*/
-    @IBAction func play(_ sender: UIButton) {
-        if toggleState == 1 {
-            toggleState = 2
-            playButton.setBackgroundImage(imgStop, for: .normal)
-            inStateOfPlayForGestureControl = true
-            inStateOfPlay(playing: true)
-            
-        } else {
-            toggleState = 1
-            playButton.setBackgroundImage(imgPlay, for: .normal)
-            inStateOfPlayForGestureControl = false
-            inStateOfPlay(playing: false)
-        }
-    }
     
+    @IBOutlet weak var audio: UIButton!
+    
+    @IBAction func repeatChallengeAudio(_ sender: UIButton) {
+        if self.speech.isSpeaking {
+            self.speech.stopSpeaking(at: AVSpeechBoundary.immediate)
+        }
+        self.speech.sayFind(color: (self.chosenScenarioForChallenge?.color)!,
+                       shape: (self.chosenScenarioForChallenge?.shape)!
+        )
+    }
     
     // Segue button to segue to ContainerTableView
     @IBAction func btnPerformSeguePressed(_ sender: UIButton) {
@@ -307,7 +303,10 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         let crosshair = Crosshairs()
         crosshair.displayAsBillboard()
         
+        audio.isHidden = true
+        
         sceneView.pointOfView?.addChildNode(crosshair)
+        
         
     }
     

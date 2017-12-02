@@ -140,7 +140,7 @@
                                     </segue>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ggI-af-33C">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ggI-af-33C">
                                 <rect key="frame" x="319" y="20" width="40" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="8bQ-uv-0a9"/>
@@ -173,6 +173,16 @@
                                     </segue>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dpR-3V-pwu">
+                                <rect key="frame" x="319" y="66" width="40" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="Ipc-ix-QqI"/>
+                                </constraints>
+                                <state key="normal" backgroundImage="audioBtn"/>
+                                <connections>
+                                    <action selector="repeatChallengeAudio:" destination="7dh-A0-qGE" eventType="touchUpInside" id="o43-c2-YOF"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -180,8 +190,11 @@
                             <constraint firstItem="ggI-af-33C" firstAttribute="top" secondItem="37h-bD-Iyn" secondAttribute="top" id="ARR-K3-krX"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="37h-bD-Iyn" secondAttribute="top" constant="-20" id="Gvn-CI-bzv"/>
                             <constraint firstItem="bIU-sv-Nyk" firstAttribute="top" secondItem="OMb-B6-59U" secondAttribute="top" id="Hw1-jf-Xtk"/>
+                            <constraint firstItem="dpR-3V-pwu" firstAttribute="trailing" secondItem="ggI-af-33C" secondAttribute="trailing" id="LRU-SP-sHM"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="71x-2l-AWw" secondAttribute="leading" id="QIa-Ri-qJo"/>
+                            <constraint firstItem="dpR-3V-pwu" firstAttribute="leading" secondItem="ggI-af-33C" secondAttribute="leading" id="UhE-Qb-C2w"/>
                             <constraint firstItem="bIU-sv-Nyk" firstAttribute="leading" secondItem="loo-cG-myf" secondAttribute="leadingMargin" id="W1t-I5-UcG"/>
+                            <constraint firstItem="dpR-3V-pwu" firstAttribute="top" secondItem="ggI-af-33C" secondAttribute="bottom" constant="6" id="Wxe-k2-d3P"/>
                             <constraint firstItem="71x-2l-AWw" firstAttribute="trailing" secondItem="OMb-B6-59U" secondAttribute="trailing" constant="16" id="ZTb-Cd-GD9"/>
                             <constraint firstItem="71x-2l-AWw" firstAttribute="trailing" secondItem="BrB-h1-WRS" secondAttribute="trailing" id="a3B-9u-pb1"/>
                             <constraint firstItem="bIU-sv-Nyk" firstAttribute="top" secondItem="0eC-a2-YBy" secondAttribute="bottom" constant="17" id="akV-rc-Ouf"/>
@@ -195,6 +208,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Main" image="game_controller" landscapeImage="game_controller" largeContentSizeImage="game_controller" selectedImage="game_controller" id="qxM-vS-r9h"/>
                     <connections>
+                        <outlet property="audio" destination="dpR-3V-pwu" id="5wC-hU-7Jo"/>
                         <outlet property="playButton" destination="H2O-4a-Dsm" id="j4Q-2I-pLJ"/>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="sgr-g8-kdG"/>
                         <outlet property="segueButton" destination="OMb-B6-59U" id="HE0-9J-PFg"/>
@@ -502,9 +516,10 @@
         </scene>
     </scenes>
     <resources>
+        <image name="audioBtn" width="100" height="100"/>
         <image name="game_controller" width="30" height="30"/>
         <image name="playBtn" width="100" height="100"/>
-        <image name="refreshBtn" width="20" height="20"/>
+        <image name="refreshBtn" width="100" height="100"/>
         <image name="settings" width="30" height="30"/>
     </resources>
 </document>

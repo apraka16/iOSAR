@@ -77,9 +77,24 @@ extension ViewController: UIGestureRecognizerDelegate {
                             
                         default:
                             action(on: nodeToBeRemoved, for: "jump")
+                            // This actually is a non-hygienic way - think of alternative
+                            // Queuing is not proper - at times one statement is spoken first
+                            // and others - other one. @TODO
+                            DispatchQueue.global(qos: .userInteractive).async {
+                                self.speech.sayNegativeExplanation(
+                                    color: self.virtualObjectInstance.findColor(of: nodeToBeRemoved.childNodes.last!),
+                                    shape: nodeToBeRemoved.name!)
+                            }
+                            
                         }
                     default:
                         action(on: nodeToBeRemoved, for: "jump")
+                        // This actually is a non-hygienic way - think of alternative
+                        DispatchQueue.global(qos: .userInteractive).async {
+                            self.speech.sayNegativeExplanation(
+                                color: self.virtualObjectInstance.findColor(of: nodeToBeRemoved.childNodes.last!),
+                                shape: nodeToBeRemoved.name!)
+                        }
                     }
                 }
             }
