@@ -27,17 +27,17 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
                 planeNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
                 
                 DispatchQueue.global(qos: .userInitiated).async {
-                    
-                    let body = SCNPhysicsBody(type: .kinematic,
-                                              shape: SCNPhysicsShape(geometry: plane, options: nil))
-                    body.restitution = 0.0
-                    body.friction = 1.0
-                    planeNode.physicsBody = body
+                    // Physics not being used currently.
+                    // let body = SCNPhysicsBody(type: .kinematic,
+                    //                          shape: SCNPhysicsShape(geometry: plane, options: nil))
+                    // body.restitution = 0.0
+                    // body.friction = 1.0
+                    // planeNode.physicsBody = body
                     
                     switch numberOfAnchorsInScene {
                     case 1: self.speech.say(text: "That's one. Keep moving around")
                     case 3: self.speech.say(text: "Three surfaces now")
-                    case 4: self.speech.say(text: "One more surface to go.")
+                    case 4: self.speech.say(text: "One more to go.")
                     default: break
                     }
                 }
@@ -191,6 +191,11 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
     func resetTracking() {
         let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = .horizontal
+        
+        // To make sure almost everything re-runs when a user resets his/ her experience.
+        // Game starts only when inStateOfPlayForGestureControl is false
+        
+        inStateOfPlayForGestureControl = false
         sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
     }
 }

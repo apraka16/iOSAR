@@ -48,10 +48,6 @@ extension ViewController: UIGestureRecognizerDelegate {
         default: break
         }
     }
-    
-    private func randRange (lower: Int, upper: Int) -> Int {
-        return Int(UInt32(lower) + arc4random_uniform(UInt32(upper) - UInt32(lower) + 1))
-    }
 
     // MARK: - Gesture Methods
     

@@ -29,7 +29,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // MARK: - Instance Variables
     
     // Configurable complexity of the game
-    let levelOfPlay = 10
+    let levelOfPlay = 1
     
     // This variable stores a dictionary of the root node which is added by auto-plane
     // detection in ARSCN Delegate and corresponding center of the node and extent, i.e.,
@@ -84,7 +84,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     private let imgStop = UIImage(named: "stopBtn")
     
     // Controls whether gesture works or not
-    var inStateOfPlayForGestureControl = false // Unsure whether this is the swifty way
+    var inStateOfPlayForGestureControl = false 
     
     
     // MARK: - IBOutlets
@@ -170,6 +170,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             inStateOfPlayForGestureControl = false
             playButton.setBackgroundImage(imgPlay, for: .normal)
             DispatchQueue.global(qos: .userInteractive).async {
+                self.chosenScenarios.removeAll()
                 for node in self.nodesAddedInScene.keys {
                     while node.childNodes.count > 1 {
                         node.childNodes.last?.removeFromParentNode()
@@ -351,7 +352,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         super.viewDidDisappear(animated)
     }
     
-    private func randRange (lower: Int, upper: Int) -> Int {
+    func randRange (lower: Int, upper: Int) -> Int {
         return Int(UInt32(lower) + arc4random_uniform(UInt32(upper) - UInt32(lower) + 1))
     }
     
