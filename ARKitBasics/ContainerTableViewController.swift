@@ -17,7 +17,7 @@ class ContainerTableViewController: UITableViewController {
     
     var delegate: VCFinalDelegate?
     
-//    private let virtualObjects = VirtualObjects()
+    //    private let virtualObjects = VirtualObjects()
     
     @IBAction func cancel(_ sender: UIBarButtonItem) {
         presentingViewController?.dismiss(animated: true)
@@ -25,10 +25,10 @@ class ContainerTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-
+        
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
@@ -38,21 +38,21 @@ class ContainerTableViewController: UITableViewController {
         let size = tableView.minimumSize(forSection: 0)
         preferredContentSize = size
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     // MARK: - Table view data source
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         let data = delegate?.passVirtualObject()
-//        return virtualObjects.virtualObjectCountArray.count
+        //        return virtualObjects.virtualObjectCountArray.count
         return data?.count ?? 0
     }
-
+    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let data = delegate?.passVirtualObject()
@@ -77,14 +77,14 @@ extension UITableView {
         for row in 0..<numberOfRows(inSection: section) {
             let indexPath = IndexPath(item: row, section: section)
             if let cell = cellForRow(at: indexPath) ?? dataSource?.tableView(self, cellForRowAt: indexPath) {
-//                print(cell.contentView.frame.height)
-//                let cellSize = cell.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
-//                width = max(width, cellSize.width)
+                //                print(cell.contentView.frame.height)
+                //                let cellSize = cell.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
+                //                width = max(width, cellSize.width)
                 width = cell.contentView.frame.width
                 height += cell.contentView.frame.height
                 // height += heightForRow(at: indexPath)
-//                height += cellSize.height
-//                print(height, width)
+                //                height += cellSize.height
+                //                print(height, width)
             }
         }
         return CGSize(width: width, height: height)

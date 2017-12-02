@@ -115,7 +115,7 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
     
     
     // Testing: @TODO: - Smoothening of object placement and change in focussquare orientation on camera movement
-
+    
     // MARK: - ARSessionDelegate
     
     func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
@@ -130,7 +130,7 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
     }
     
     func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
-
+        
     }
     
     func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {

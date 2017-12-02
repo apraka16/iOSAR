@@ -52,7 +52,7 @@ class VirtualObjects {
             return result
         }
     }
-
+    
     
     // Helper function to find name of the color when nodes are hit test.
     func findColor(of node: SCNNode) -> String {
@@ -71,7 +71,7 @@ class VirtualObjects {
             return (name: names[randRange(lower: 0, upper: 1)], color: colors[randRange(lower: 0, upper: 2)])
         }
     }
-
+    
     // Get scenarios out of array of scenario of similar difficulty
     func getScenarios(expectedLevel: Int) -> [(number: Int, shape: String, color: String, score: Int)] {
         return brain.getScenarios(expectedScore: expectedLevel)
@@ -79,7 +79,7 @@ class VirtualObjects {
     
     //  Create nodes from Object name - e.g. "cube"
     func createNodes(from object: String, with color: UIColor) -> SCNNode {
-    
+        
         let wrapperNode = SCNNode()
         if let virtualScene = SCNScene(named: object.capitalized + ".scn", inDirectory: "Assets.scnassets/Shapes") {
             for child in virtualScene.rootNode.childNodes {

@@ -13,7 +13,7 @@ import CoreData
 class DbViewController: ViewController {
     
     let container: NSPersistentContainer? = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
-
+    
     override func insertObject(_ newObject: SCNNode) {
         super.insertObject(newObject)
         updateDatabase(with: newObject)
@@ -32,12 +32,12 @@ class DbViewController: ViewController {
     private func printDatabaseStatistics() {
         if let context = container?.viewContext {
             context.perform {
-//                Object.deleteAllObjects(in: context)
-//                Session.deleteAllSessions(in: context)
+                //                Object.deleteAllObjects(in: context)
+                //                Session.deleteAllSessions(in: context)
                 Object.fetchObjectCount(in: context)
-//                Object.fetchAllObjects(in: context)
+                //                Object.fetchAllObjects(in: context)
                 Session.fetchSessionCount(in: context)
-//                Session.fetchAllSessions(in: context)
+                //                Session.fetchAllSessions(in: context)
             }
         }
     }
@@ -55,7 +55,7 @@ class DbViewController: ViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        printDatabaseStatistics()
+        //        printDatabaseStatistics()
     }
     
 }

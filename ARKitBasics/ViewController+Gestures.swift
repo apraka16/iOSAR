@@ -25,7 +25,7 @@ extension ViewController: UIGestureRecognizerDelegate {
         switch key {
         case "vanish":
             DispatchQueue.global(qos: .userInteractive).async {
-//                self.sound.playSound(named: "swoosh") // Probably not needed since textToSpeech included
+                //                self.sound.playSound(named: "swoosh") // Probably not needed since textToSpeech included
                 self.speech.say(text: self.speech.randomAccolade)
                 self.speech.say(text: "Let's move to the next.")
                 
@@ -41,14 +41,14 @@ extension ViewController: UIGestureRecognizerDelegate {
             }
         case "jump":
             DispatchQueue.global(qos: .userInteractive).async {
-//                self.sound.playSound(named: "jump") // Probably not needed since textToSpeech included
+                //                self.sound.playSound(named: "jump") // Probably not needed since textToSpeech included
                 self.speech.sayWithInterruption(text: self.speech.randomNegation)
             }
             node.parent?.runAction(actionJump)
         default: break
         }
     }
-
+    
     // MARK: - Gesture Methods
     
     @objc

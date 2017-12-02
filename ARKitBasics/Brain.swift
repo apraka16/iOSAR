@@ -98,7 +98,7 @@ class Brain {
                 result.append(scenario)
             }
         }
-
+        
         return result
     }
     

@@ -1,9 +1,9 @@
 /*
-See LICENSE folder for this sample’s licensing information.
-
-Abstract:
-Main view controller for the AR experience.
-*/
+ See LICENSE folder for this sample’s licensing information.
+ 
+ Abstract:
+ Main view controller for the AR experience.
+ */
 
 import UIKit
 import SceneKit
@@ -36,7 +36,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // width(x) and height(z) of the PlaneAnchorNode which is added upon the root node.
     var nodesAddedInScene: [SCNNode: [vector_float3]] = [:]
     
-
+    
     // Instantiate Speech Class for text to speech conversion
     let speech = Speech()
     
@@ -77,7 +77,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     var screenCenter: CGPoint {
         return sceneView.center
     }
-        
+    
     // Varibles for button image changes
     private var toggleState = 1
     private let imgPlay = UIImage(named: "playBtn")
@@ -122,7 +122,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
              Add randomly generated shapes in an optimum fashion to the plane Nodes
              
              PlaneAnchorNode:
-              ________________________
+             ________________________
              |     1     2     3      |
              |    ____|_____|____     |  // 5 is the center. All other tiles spawn
              |     4  |  5  |  6      |  // around center.
@@ -143,12 +143,11 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
                     let optimumFit = self.findOptimumNumberOfNodesToFit(extent: nodeInScene.value.last!)
                     for Z in (-optimumFit.alongZ/2)...(optimumFit.alongZ/2) {
                         for X in (-optimumFit.alongX/2)...(optimumFit.alongX/2) {
-                            let randomScenario = self.generateRandomScenario()
-                            self.chosenScenarios.append(randomScenario)
-                            let shape = self.virtualObjectInstance.createNodes(
-                                from: randomScenario.shape,
-                                with: self.virtualObjectInstance.virtualObjectsColors[randomScenario.color]!
-                            )
+                            
+                            // Generate random shape and add to array
+                            let shape = self.generateShapesRandomly()
+                            
+                            // Add shapes to the center as calculated by optimum node function
                             DispatchQueue.main.async {
                                 nodeInScene.key.addChildNode(shape)
                                 shape.simdPosition = float3((nodeInScene.value.first?.x)! + Float(X)*0.2,
@@ -159,34 +158,58 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
                     }
                 }
                 self.speech.say(text: self.speech.welcomeText)
-                self.chosenScenarioForChallenge = self.chosenScenarios[self.randRange(lower: 0, upper: self.chosenScenarios.count-1)]
+                
+                // Chosen Scenario is used for actual challenge
+                self.chosenScenarioForChallenge = self.chosenScenarios[
+                    self.randRange(lower: 0, upper: self.chosenScenarios.count-1)
+                ]
+                
                 self.speech.sayFind(color: (self.chosenScenarioForChallenge?.color)!,
                                     shape: (self.chosenScenarioForChallenge?.shape)!
                 )
-                
             }
         } else {
             inStateOfPlayForGestureControl = false
             playButton.setBackgroundImage(imgPlay, for: .normal)
-            DispatchQueue.global(qos: .userInteractive).async {
-                self.chosenScenarios.removeAll()
-                for node in self.nodesAddedInScene.keys {
-                    while node.childNodes.count > 1 {
-                        node.childNodes.last?.removeFromParentNode()
-                    }
-                }
-            }
+            prepareSceneForNextRun()
             inStateOfPlay(playing: true)
         }
     }
     
+    
+    // Create shapes sequentially and add to randomScenario array
+    private func generateShapesRandomly() -> SCNNode {
+        let randomScenario = self.generateRandomScenario()
+        self.chosenScenarios.append(randomScenario)
+        let shape = self.virtualObjectInstance.createNodes(
+            from: randomScenario.shape,
+            with: self.virtualObjectInstance.virtualObjectsColors[randomScenario.color]!
+        )
+        return shape
+    }
+    
+    // After a run of the game, clears all objects and empties the array of scenarios used in
+    // the game
+    private func prepareSceneForNextRun() {
+        DispatchQueue.global(qos: .userInteractive).async {
+            self.chosenScenarios.removeAll()
+            for node in self.nodesAddedInScene.keys {
+                while node.childNodes.count > 1 {
+                    node.childNodes.last?.removeFromParentNode()
+                }
+            }
+        }
+    }
+    
+    // Find number of nodes which can be fitted along X and Z directions on the planeAnchor
+    // TODO: 0.1 and 0.2 should actually be changed to make the function re-usable if need be.
     private func findOptimumNumberOfNodesToFit(extent: vector_float3) -> (alongX: Int, alongZ: Int) {
         let numberOfNodesAlongX = Int((extent.x / 2 - 0.1) / 0.2) * 2 + 1
         let numberOfNodesAlongZ = Int((extent.z / 2 - 0.1) / 0.2) * 2 + 1
         return (alongX: numberOfNodesAlongX, alongZ: numberOfNodesAlongZ)
     }
     
-    // No use of physics yet.
+    // NO use of physics yet.
     private func addPhysics(to node: SCNNode) -> SCNNode {
         let physicsBody = SCNPhysicsBody(
             type: .dynamic,
@@ -285,7 +308,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         crosshair.displayAsBillboard()
         
         sceneView.pointOfView?.addChildNode(crosshair)
-
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -296,7 +319,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     /// - Tag: StartARSession
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
+        
         guard ARWorldTrackingConfiguration.isSupported else {
             fatalError("""
                 ARKit is not available on this device. For apps that require ARKit
@@ -308,44 +331,44 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
                 determine whether to show UI for launching AR experiences.
             """)
         }
-
+        
         /*
          Start the view's AR session with a configuration that uses the rear camera,
          device position and orientation tracking, and plane detection.
-        */
+         */
         let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = .horizontal
         sceneView.session.run(configuration)
-
+        
         // Set a delegate to track the number of plane anchors for providing UI feedback.
         sceneView.session.delegate = self
         
         /*
          Prevent the screen from being dimmed after a while as users will likely
          have long periods of interaction without touching the screen or buttons.
-        */
+         */
         UIApplication.shared.isIdleTimerDisabled = true
         
         // Show debug UI to view performance metrics (e.g. frames per second).
         sceneView.showsStatistics = true
         
         // Debug options - for showing feature points (yellow dots) and world origin axes
-//        sceneView.debugOptions = [
-//            ARSCNDebugOptions.showFeaturePoints,
-//            ARSCNDebugOptions.showWorldOrigin
-//        ]
+        //        sceneView.debugOptions = [
+        //            ARSCNDebugOptions.showFeaturePoints,
+        //            ARSCNDebugOptions.showWorldOrigin
+        //        ]
         sceneView.autoenablesDefaultLighting = true
         sceneView.automaticallyUpdatesLighting = true
         self.sceneView.antialiasingMode = .multisampling4X
-
+        
     }
     
-	override func viewWillDisappear(_ animated: Bool) {
-		super.viewWillDisappear(animated)
-		
-		// Pause the view's AR session. //
-		sceneView.session.pause()
-	}
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        // Pause the view's AR session. //
+        sceneView.session.pause()
+    }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
