@@ -158,7 +158,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
                         }
                     }
                 }
-                
                 self.speech.say(text: self.speech.welcomeText)
                 self.chosenScenarioForChallenge = self.chosenScenarios[self.randRange(lower: 0, upper: self.chosenScenarios.count-1)]
                 self.speech.sayFind(color: (self.chosenScenarioForChallenge?.color)!,

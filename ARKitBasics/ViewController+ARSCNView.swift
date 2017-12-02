@@ -35,9 +35,10 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
                     // planeNode.physicsBody = body
                     
                     switch numberOfAnchorsInScene {
-                    case 1: self.speech.say(text: "That's one. Keep moving around")
-                    case 3: self.speech.say(text: "Three surfaces now")
-                    case 4: self.speech.say(text: "One more to go.")
+                    case 1: self.speech.sayWithInterruption(text: "That's one. Keep moving around")  // Says: "That's one. Keep moving around"
+                    case 2: self.speech.sayWithInterruption(text: "Makes it two")                    // Says: "Makes it two"
+                    case 3: self.speech.sayWithInterruption(text: "Three surfaces now")              // Says: "Three surfaces now"
+                    case 4: self.speech.sayWithInterruption(text: "One more to go.")                 // Says: "One more to go."
                     default: break
                     }
                 }
@@ -181,7 +182,7 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
             
         case .limited(.initializing):
             message = "Initializing AR session."
-            speech.say(text: "We will detect a few surfaces before we start. Please move around your device")
+            speech.say(text: "We will detect a few surfaces. Please move your device around")
         }
         
         sessionInfoLabel.text = message
