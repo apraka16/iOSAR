@@ -144,47 +144,47 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
              random objects on each tile, without any interaction between them.
              */
             
-            DispatchQueue.global(qos: .userInitiated).async {
-                for nodeInScene in self.nodesAddedInScene {
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                for nodeInScene in (self?.nodesAddedInScene)! {
 //                    nodeInScene.key.childNodes.first?.opacity = 0.0
-                    let optimumFit = self.findOptimumNumberOfNodesToFit(extent: nodeInScene.value.last!)
-                    for Z in (-optimumFit.alongZ/2)...(optimumFit.alongZ/2) {
-                        for X in (-optimumFit.alongX/2)...(optimumFit.alongX/2) {
-                            if self.generateRandomBool(with: self.sceneComplexity) {
+                    let optimumFit = self?.findOptimumNumberOfNodesToFit(extent: nodeInScene.value.last!)
+                    for Z in (-(optimumFit?.alongZ)!/2)...((optimumFit?.alongZ)!/2) {
+                        for X in (-(optimumFit?.alongX)!/2)...((optimumFit?.alongX)!/2) {
+                            if (self?.generateRandomBool(with: (self?.sceneComplexity)!))! {
                                 // Generate random shape and add to array
-                                let shape = self.generateShapesRandomly()
+                                let shape = self?.generateShapesRandomly()
                                 // Add shapes to the center as calculated by optimum node function
                                 DispatchQueue.main.async {
-                                    nodeInScene.key.addChildNode(shape)
-                                    shape.simdPosition = float3(
-                                        (nodeInScene.value.first?.x)! + Float(X)*(0.2 + self.marginForTiles),
+                                    nodeInScene.key.addChildNode(shape!)
+                                    shape?.simdPosition = float3(
+                                        (nodeInScene.value.first?.x)! + Float(X)*(0.2 + (self?.marginForTiles)!),
                                         (nodeInScene.value.first?.y)!,
-                                        (nodeInScene.value.first?.z)! + Float(Z)*(0.2 + self.marginForTiles)
+                                        (nodeInScene.value.first?.z)! + Float(Z)*(0.2 + (self?.marginForTiles)!)
                                     )
                                 }
                             }
                         }
                     }
                 }
-                self.speech.say(text: self.speech.welcomeText)
+                self?.speech.say(text: (self?.speech.welcomeText)!)
                 
                 // Chosen Scenario is used for actual challenge
-                self.chosenScenarioForChallenge = self.chosenScenarios[
-                    self.randRange(lower: 0, upper: self.chosenScenarios.count-1)
+                self?.chosenScenarioForChallenge = self?.chosenScenarios[
+                    (self?.randRange(lower: 0, upper: (self?.chosenScenarios.count)!-1))!
                 ]
                 
-                self.speech.sayFind(color: (self.chosenScenarioForChallenge?.color)!,
-                                    shape: (self.chosenScenarioForChallenge?.shape)!
+                self?.speech.sayFind(color: (self?.chosenScenarioForChallenge?.color)!,
+                                    shape: (self?.chosenScenarioForChallenge?.shape)!
                 )
                 DispatchQueue.main.async {
-                    self.audio.isHidden = false
+                    self?.audio.isHidden = false
                 }
             }
         } else {
             inStateOfPlayForGestureControl = false
             playButton.setBackgroundImage(imgPlay, for: .normal)
             prepareSceneForNextRun()
-            self.audio.isHidden = true
+            audio.isHidden = true
             inStateOfPlay(playing: true)
         }
     }
@@ -203,11 +203,11 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     
     // Create shapes sequentially and add to randomScenario array
     private func generateShapesRandomly() -> SCNNode {
-        let randomScenario = self.generateRandomScenario()
-        self.chosenScenarios.append(randomScenario)
-        let shape = self.virtualObjectInstance.createNodes(
+        let randomScenario = generateRandomScenario()
+        chosenScenarios.append(randomScenario)
+        let shape = virtualObjectInstance.createNodes(
             from: randomScenario.shape,
-            with: self.virtualObjectInstance.virtualObjectsColors[randomScenario.color]!
+            with: virtualObjectInstance.virtualObjectsColors[randomScenario.color]!
         )
         return shape
     }
@@ -215,9 +215,9 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // After a run of the game, clears all objects and empties the array of scenarios used in
     // the game
     private func prepareSceneForNextRun() {
-        DispatchQueue.global(qos: .userInteractive).async {
-            self.chosenScenarios.removeAll()
-            for node in self.nodesAddedInScene.keys {
+        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+            self?.chosenScenarios.removeAll()
+            for node in (self?.nodesAddedInScene.keys)! {
                 while node.childNodes.count > 1 {
                     node.childNodes.last?.removeFromParentNode()
                 }
@@ -284,11 +284,11 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     @IBOutlet weak var audio: UIButton!
     
     @IBAction func repeatChallengeAudio(_ sender: UIButton) {
-        if self.speech.isSpeaking {
-            self.speech.stopSpeaking(at: AVSpeechBoundary.immediate)
+        if speech.isSpeaking {
+            speech.stopSpeaking(at: AVSpeechBoundary.immediate)
         }
-        self.speech.sayFind(color: (self.chosenScenarioForChallenge?.color)!,
-                            shape: (self.chosenScenarioForChallenge?.shape)!
+        speech.sayFind(color: (chosenScenarioForChallenge?.color)!,
+                            shape: (chosenScenarioForChallenge?.shape)!
         )
     }
     
@@ -387,7 +387,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         //        ]
         sceneView.autoenablesDefaultLighting = true
         sceneView.automaticallyUpdatesLighting = true
-        self.sceneView.antialiasingMode = .multisampling4X
+        sceneView.antialiasingMode = .multisampling4X
         
     }
     

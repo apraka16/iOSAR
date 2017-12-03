@@ -28,14 +28,14 @@ extension ViewController: UIGestureRecognizerDelegate {
         let actionVanish = SCNAction.scale(to: 0.5, duration: 0.1)
         switch key {
         case "vanish":
-            DispatchQueue.global(qos: .userInteractive).async {
+            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
                 //                self.sound.playSound(named: "swoosh") // Probably not needed since textToSpeech included
-                self.speech.say(text: self.speech.randomAccolade)
-                self.speech.say(text: "Let's move to the next.")
+                self?.speech.say(text: (self?.speech.randomAccolade)!)
+                self?.speech.say(text: "Let's move to the next.")
                 
                 // Remove existing objects, restart the game.
                 DispatchQueue.main.async {
-                    self.inStateOfPlay(playing: false)
+                    self?.inStateOfPlay(playing: false)
                 }
             }
             node.runAction(actionVanish)
@@ -44,9 +44,9 @@ extension ViewController: UIGestureRecognizerDelegate {
                 self?.segueButton.setBackgroundImage(UIImage(named: "cube-blue"), for: .normal)
             }
         case "jump":
-            DispatchQueue.global(qos: .userInteractive).async {
+            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
                 //                self.sound.playSound(named: "jump") // Probably not needed since textToSpeech included
-                self.speech.sayWithInterruption(text: self.speech.randomNegation)
+                self?.speech.sayWithInterruption(text: (self?.speech.randomNegation)!)
             }
             node.parent?.runAction(actionJump)
         default: break
@@ -88,9 +88,9 @@ extension ViewController: UIGestureRecognizerDelegate {
                             // This actually is a non-hygienic way - think of alternative
                             // Queuing is not proper - at times one statement is spoken first
                             // and others - other one. @TODO
-                            DispatchQueue.global(qos: .userInteractive).async {
-                                self.speech.sayNegativeExplanation(
-                                    color: self.virtualObjectInstance.findColor(of: nodeToBeRemoved.childNodes.last!),
+                            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+                                self?.speech.sayNegativeExplanation(
+                                    color: (self?.virtualObjectInstance.findColor(of: nodeToBeRemoved.childNodes.last!))!,
                                     shape: nodeToBeRemoved.name!)
                             }
                             
@@ -98,9 +98,9 @@ extension ViewController: UIGestureRecognizerDelegate {
                     default:
                         action(on: nodeToBeRemoved, for: "jump")
                         // This actually is a non-hygienic way - think of alternative
-                        DispatchQueue.global(qos: .userInteractive).async {
-                            self.speech.sayNegativeExplanation(
-                                color: self.virtualObjectInstance.findColor(of: nodeToBeRemoved.childNodes.last!),
+                        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+                            self?.speech.sayNegativeExplanation(
+                                color: (self?.virtualObjectInstance.findColor(of: nodeToBeRemoved.childNodes.last!))!,
                                 shape: nodeToBeRemoved.name!)
                         }
                     }

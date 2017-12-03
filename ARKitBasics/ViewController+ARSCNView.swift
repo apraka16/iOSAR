@@ -114,7 +114,6 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
                 self.arrayFeaturePointDistance = Array(self.arrayFeaturePointDistance.suffix(10))
                 let average = self.arrayFeaturePointDistance.reduce(CGFloat(0), { $0 + $1 }) / CGFloat(self.arrayFeaturePointDistance.count)
                 self.sceneView.pointOfView?.childNodes[0].position.z = min(-0.6, Float(-average))
-//                self.sceneView.pointOfView?.childNodes[0].eulerAngles.x = (self.sceneView.pointOfView?.worldOrientation.x)!
                 self.sceneView.pointOfView?.childNodes[0].eulerAngles.x = (self.sceneView.session.currentFrame?.camera.eulerAngles.x)!
             }
         }
@@ -204,8 +203,8 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         
         inStateOfPlayForGestureControl = false
         playButton.setBackgroundImage(imgPlay, for: .normal)
-        self.audio.isHidden = true
-        self.chosenScenarios.removeAll()
+        audio.isHidden = true
+        chosenScenarios.removeAll()
 
         sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
     }
