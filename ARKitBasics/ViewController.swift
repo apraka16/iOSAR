@@ -20,8 +20,12 @@ protocol ColorObjectToVCDelegate {
 
 class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationControllerDelegate {
     
-    /* Implementation of ContainerTableView delegate function:
-     Check ContainerTableViewController for protocol implementation */
+    /*!
+     @method passVirtualObject
+     @abstract Implementation of ContainerTableView delegate function
+     @param none
+     @discussion Check ContainerTableViewController for protocol implementation
+     */
     func passVirtualObject() -> [(name: String, count: Int)] {
         return virtualObjectInstance.virtualObjectsNames
     }
@@ -29,7 +33,8 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // MARK: - Instance Variables
     
     // Configurable complexity of the game
-    let levelOfPlay = 1
+    let levelOfPlay = 4     // 1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15
+    let sceneComplexity = 0.5  // More complex, closer to 1, less complex closer to 0.
     
     // This variable stores a dictionary of the root node which is added by auto-plane
     // detection in ARSCN Delegate and corresponding center of the node and extent, i.e.,
@@ -80,7 +85,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     
     // Varibles for button image changes
     private var toggleState = 1
-    private let imgPlay = UIImage(named: "playBtn")
+    let imgPlay = UIImage(named: "playBtn")
     private let imgStop = UIImage(named: "stopBtn")
     
     // Controls whether gesture works or not
@@ -137,22 +142,24 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
              random objects on each tile, without any interaction between them.
              */
             
+            
+            
             DispatchQueue.global(qos: .userInitiated).async {
                 for nodeInScene in self.nodesAddedInScene {
                     nodeInScene.key.childNodes.first?.opacity = 0.0
                     let optimumFit = self.findOptimumNumberOfNodesToFit(extent: nodeInScene.value.last!)
                     for Z in (-optimumFit.alongZ/2)...(optimumFit.alongZ/2) {
                         for X in (-optimumFit.alongX/2)...(optimumFit.alongX/2) {
-                            
-                            // Generate random shape and add to array
-                            let shape = self.generateShapesRandomly()
-                            
-                            // Add shapes to the center as calculated by optimum node function
-                            DispatchQueue.main.async {
-                                nodeInScene.key.addChildNode(shape)
-                                shape.simdPosition = float3((nodeInScene.value.first?.x)! + Float(X)*0.2,
-                                                            (nodeInScene.value.first?.y)!,
-                                                            (nodeInScene.value.first?.z)! + Float(Z)*0.2)
+                            if self.generateRandomBool(with: self.sceneComplexity) {
+                                // Generate random shape and add to array
+                                let shape = self.generateShapesRandomly()
+                                // Add shapes to the center as calculated by optimum node function
+                                DispatchQueue.main.async {
+                                    nodeInScene.key.addChildNode(shape)
+                                    shape.simdPosition = float3((nodeInScene.value.first?.x)! + Float(X)*0.2,
+                                                                (nodeInScene.value.first?.y)!,
+                                                                (nodeInScene.value.first?.z)! + Float(Z)*0.2)
+                                }
                             }
                         }
                     }
@@ -180,6 +187,17 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         }
     }
     
+    // Generate bool basis probability parameter. Usage: if one wants to generate true
+    // with 80% probability, one will use 0.8 in place of probability parameter.
+    private func generateRandomBool(with probability: Double) -> Bool {
+        let randomNumberBetweenOneAndTen = randRange(lower: 1, upper: 10)
+        // Note that Int casting will always round down
+        if randomNumberBetweenOneAndTen <= Int(10*probability) {
+            return true
+        } else {
+            return false
+        }
+    }
     
     // Create shapes sequentially and add to randomScenario array
     private func generateShapesRandomly() -> SCNNode {
@@ -259,7 +277,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             self.speech.stopSpeaking(at: AVSpeechBoundary.immediate)
         }
         self.speech.sayFind(color: (self.chosenScenarioForChallenge?.color)!,
-                       shape: (self.chosenScenarioForChallenge?.shape)!
+                            shape: (self.chosenScenarioForChallenge?.shape)!
         )
     }
     

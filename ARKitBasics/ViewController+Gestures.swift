@@ -19,6 +19,10 @@ extension ViewController: UIGestureRecognizerDelegate {
         // Database udpate - overridden in subclass
     }
     
+//    private func distanceFromCamera() {
+//        return sceneView.
+//    }
+    
     private func action(on node: SCNNode, for key: String) {
         let actionJump = SCNAction.sequence([SCNAction.scale(to: 0.7, duration: 0.1), SCNAction.scale(to: 1, duration: 0.05)])
         let actionVanish = SCNAction.scale(to: 0.5, duration: 0.1)
@@ -68,6 +72,10 @@ extension ViewController: UIGestureRecognizerDelegate {
                 }
                 
                 let nodeToBeRemoved = result.node.parent!
+//                print(nodeToBeRemoved.worldPosition)
+//                print(sceneView.session.currentFrame?.camera.transform)
+//                print(sceneView.scene.rootNode.worldPosition)
+                
                 if let nodeWithAttributes = chosenScenarioForChallenge {
                     switch nodeToBeRemoved.name {
                     case nodeWithAttributes.shape? :

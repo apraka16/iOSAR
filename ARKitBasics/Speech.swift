@@ -25,11 +25,11 @@ class Speech: AVSpeechSynthesizer {
                              "Superb!",
                              "Keep up the good work"]
     
-    private let negation = ["Oops! that's not it!",
-                            "Nope, not this!",
-                            "Nope, try again with other object.",
-                            "Oops! missed it!",
-                            "No, check out other things."]
+    private let negation = ["That's not it!",
+                            "Not this!",
+                            "Try again with other object.",
+                            "Missed it!",
+                            "Check out other things."]
     
     
     var randomAccolade: String {

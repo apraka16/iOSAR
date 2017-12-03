@@ -21,7 +21,8 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
                 // Place content only for anchors found by plane detection.
                 guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
                 
-                let plane = SCNPlane(width: CGFloat(planeAnchor.extent.x), height: CGFloat(planeAnchor.extent.z))
+                let plane = SCNPlane(width: CGFloat(planeAnchor.extent.x),
+                                     height: CGFloat(planeAnchor.extent.z))
                 let planeNode = SCNNode(geometry: plane)
                 planeNode.name = "anchorPlane"
                 planeNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
@@ -35,10 +36,15 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
                     // planeNode.physicsBody = body
                     
                     switch numberOfAnchorsInScene {
-                    case 1: self.speech.sayWithInterruption(text: "That's one. Keep moving around")  // Says: "That's one. Keep moving around"
-                    case 2: self.speech.sayWithInterruption(text: "Makes it two")                    // Says: "Makes it two"
-                    case 3: self.speech.sayWithInterruption(text: "Three surfaces now")              // Says: "Three surfaces now"
-                    case 4: self.speech.sayWithInterruption(text: "One more to go.")                 // Says: "One more to go."
+                    // Says: "That's one. Keep moving around"
+                    case 1: self.speech.sayWithInterruption(text: "That's one. Keep moving around")
+                    // Says: "Makes it two"
+                    case 2: self.speech.sayWithInterruption(text: "Makes it two")
+                    // Says: "Three surfaces now"
+                    case 3: self.speech.sayWithInterruption(text: "Three surfaces now")
+                    // Says: "One more to go."
+                    case 4: self.speech.sayWithInterruption(text: "One more to go.")
+                        
                     default: break
                     }
                 }
@@ -112,7 +118,6 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
             }
         }
     }
-    
     
     // Testing: @TODO: - Smoothening of object placement and change in focussquare orientation on camera movement
     
@@ -197,6 +202,10 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         // Game starts only when inStateOfPlayForGestureControl is false
         
         inStateOfPlayForGestureControl = false
+        playButton.setBackgroundImage(imgPlay, for: .normal)
+        self.audio.isHidden = true
+        self.chosenScenarios.removeAll()
+
         sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
     }
 }

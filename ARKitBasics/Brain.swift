@@ -6,6 +6,25 @@
 //  Copyright © 2017 Apple. All rights reserved.
 //
 
+
+/*
+ Algo for calculating complexity should be based on 4 parameters:
+ 1. Number of objects (ranges from 1 to 5): respective score
+ 2. Color of objects (red, blue, green, white, black, yellow): score of 1
+    - possibly we can include half colors later whose score can be 2
+ 3. Shape of objects:
+    - Circle, Rectangle, Square: score of 1
+    - Cube, Cylinder, Sphere: score of 2
+    - Cone, Pyramid, Torus, Cuboid: score of 3
+ 4. Number of objects in scene:
+    This is more difficult to calculate.
+    Approach: Calculate number of optimum tiles which can be fit onto a detected plane.
+    Choose a random number of tiles out of total tiles and throw in those many number of
+    shapes onto those particular tiles. Let's say total number of tiles we have across all
+    PlaneAnchorNodes is 25, we choose a number 16 (which is the complexity - since more
+    number of objects increases confusion), we choose 16 random tiles to place these
+    objects. As we go along we increase this complexity. 
+ */
 import Foundation
 
 class Brain {
