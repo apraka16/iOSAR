@@ -33,8 +33,8 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // MARK: - Instance Variables
     
     // Configurable complexity of the game
-    let levelOfPlay = 4     // 1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15
-    let sceneComplexity = 0.5  // More complex, closer to 1, less complex closer to 0.
+    let levelOfPlay = 15   // 1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15
+    let sceneComplexity = 1.0  // More complex, closer to 1, less complex closer to 0.
     
     // This variable stores a dictionary of the root node which is added by auto-plane
     // detection in ARSCN Delegate and corresponding center of the node and extent, i.e.,
@@ -114,6 +114,8 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
      collect the object as required to complete the challenge. Game restarts
      again after that. */
     
+    private let marginForTiles: Float = 0.01
+    
     func inStateOfPlay(playing: Bool) {
         if playing {
             
@@ -142,11 +144,9 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
              random objects on each tile, without any interaction between them.
              */
             
-            
-            
             DispatchQueue.global(qos: .userInitiated).async {
                 for nodeInScene in self.nodesAddedInScene {
-                    nodeInScene.key.childNodes.first?.opacity = 0.0
+//                    nodeInScene.key.childNodes.first?.opacity = 0.0
                     let optimumFit = self.findOptimumNumberOfNodesToFit(extent: nodeInScene.value.last!)
                     for Z in (-optimumFit.alongZ/2)...(optimumFit.alongZ/2) {
                         for X in (-optimumFit.alongX/2)...(optimumFit.alongX/2) {
@@ -156,9 +156,11 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
                                 // Add shapes to the center as calculated by optimum node function
                                 DispatchQueue.main.async {
                                     nodeInScene.key.addChildNode(shape)
-                                    shape.simdPosition = float3((nodeInScene.value.first?.x)! + Float(X)*0.2,
-                                                                (nodeInScene.value.first?.y)!,
-                                                                (nodeInScene.value.first?.z)! + Float(Z)*0.2)
+                                    shape.simdPosition = float3(
+                                        (nodeInScene.value.first?.x)! + Float(X)*(0.2 + self.marginForTiles),
+                                        (nodeInScene.value.first?.y)!,
+                                        (nodeInScene.value.first?.z)! + Float(Z)*(0.2 + self.marginForTiles)
+                                    )
                                 }
                             }
                         }
@@ -226,8 +228,17 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // Find number of nodes which can be fitted along X and Z directions on the planeAnchor
     // TODO: 0.1 and 0.2 should actually be changed to make the function re-usable if need be.
     private func findOptimumNumberOfNodesToFit(extent: vector_float3) -> (alongX: Int, alongZ: Int) {
-        let numberOfNodesAlongX = Int((extent.x / 2 - 0.1) / 0.2) * 2 + 1
-        let numberOfNodesAlongZ = Int((extent.z / 2 - 0.1) / 0.2) * 2 + 1
+        var numberOfNodesAlongX =
+            Int((extent.x / 2 - 0.2 - marginForTiles) / (0.4 + 2 * marginForTiles)) * 2 + 1
+        var numberOfNodesAlongZ =
+            Int((extent.z / 2 - 0.2 - marginForTiles) / (0.4 + 2 * marginForTiles)) * 2 + 1
+        
+        // To make sure atleast there is one node along both X and Z, which is actually valid, since
+        // bare minimum one object can be placed on the center of the plane, which is what we are
+        // ensuring
+        if numberOfNodesAlongX < 1 { numberOfNodesAlongX = 1 }
+        if numberOfNodesAlongZ < 1 { numberOfNodesAlongZ = 1 }
+        
         return (alongX: numberOfNodesAlongX, alongZ: numberOfNodesAlongZ)
     }
     
