@@ -114,7 +114,13 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
      collect the object as required to complete the challenge. Game restarts
      again after that. */
     
-    private let marginForTiles: Float = 0.01
+    // Struct with static vars to use when calculating optimum number of tiles to
+    // fit a certain detected surface.
+    private struct OptimumTiles {
+        static let halfTileSize: Float = 0.2
+        static let fullTileSize: Float = 0.4
+        static let margin: Float = 0.01
+    }
     
     func inStateOfPlay(playing: Bool) {
         if playing {
@@ -157,9 +163,9 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
                                 DispatchQueue.main.async {
                                     nodeInScene.key.addChildNode(shape!)
                                     shape?.simdPosition = float3(
-                                        (nodeInScene.value.first?.x)! + Float(X)*(0.2 + (self?.marginForTiles)!),
+                                        (nodeInScene.value.first?.x)! + Float(X)*(0.2 + OptimumTiles.margin),
                                         (nodeInScene.value.first?.y)!,
-                                        (nodeInScene.value.first?.z)! + Float(Z)*(0.2 + (self?.marginForTiles)!)
+                                        (nodeInScene.value.first?.z)! + Float(Z)*(0.2 + OptimumTiles.margin)
                                     )
                                 }
                             }
@@ -226,12 +232,14 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     }
     
     // Find number of nodes which can be fitted along X and Z directions on the planeAnchor
-    // TODO: 0.1 and 0.2 should actually be changed to make the function re-usable if need be.
     private func findOptimumNumberOfNodesToFit(extent: vector_float3) -> (alongX: Int, alongZ: Int) {
         var numberOfNodesAlongX =
-            Int((extent.x / 2 - 0.2 - marginForTiles) / (0.4 + 2 * marginForTiles)) * 2 + 1
+            Int((extent.x / 2 - OptimumTiles.halfTileSize - OptimumTiles.margin)
+                / (OptimumTiles.fullTileSize + 2 * OptimumTiles.margin)) * 2 + 1
+        
         var numberOfNodesAlongZ =
-            Int((extent.z / 2 - 0.2 - marginForTiles) / (0.4 + 2 * marginForTiles)) * 2 + 1
+            Int((extent.z / 2 - OptimumTiles.halfTileSize - OptimumTiles.margin)
+                / (OptimumTiles.fullTileSize + 2 * OptimumTiles.margin)) * 2 + 1
         
         // To make sure atleast there is one node along both X and Z, which is actually valid, since
         // bare minimum one object can be placed on the center of the plane, which is what we are
