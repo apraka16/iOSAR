@@ -231,6 +231,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         }
     }
     
+    
     // Find number of nodes which can be fitted along X and Z directions on the planeAnchor
     private func findOptimumNumberOfNodesToFit(extent: vector_float3) -> (alongX: Int, alongZ: Int) {
         var numberOfNodesAlongX =

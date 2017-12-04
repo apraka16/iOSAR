@@ -24,8 +24,9 @@ extension ViewController: UIGestureRecognizerDelegate {
     //    }
     
     private func action(on node: SCNNode, for key: String) {
-        let actionJump = SCNAction.sequence([SCNAction.scale(to: 0.7, duration: 0.1), SCNAction.scale(to: 1, duration: 0.05)])
         let actionVanish = SCNAction.scale(to: 0.5, duration: 0.1)
+        let actionJump = SCNAction.sequence([SCNAction.scale(to: 0.7, duration: 0.1), SCNAction.scale(to: 1, duration: 0.05)])
+        
         switch key {
         case "vanish":
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
@@ -62,7 +63,7 @@ extension ViewController: UIGestureRecognizerDelegate {
         }
         let p = gestureRecognize.location(in: sceneView)
         let hitResults = sceneView.hitTest(p, options: [:])
-        if hitResults.count > 0 && hitResults.first?.node.name != "anchorPlane" {
+        if hitResults.count > 0 && hitResults.first?.node.name != "anchorPlane" && hitResults.first?.node.name != "crosshair" {
             let result = hitResults.first!
             segueButton.isHidden = false
             
@@ -72,9 +73,6 @@ extension ViewController: UIGestureRecognizerDelegate {
                 }
                 
                 let nodeToBeRemoved = result.node.parent!
-                //                print(nodeToBeRemoved.worldPosition)
-                //                print(sceneView.session.currentFrame?.camera.transform)
-                //                print(sceneView.scene.rootNode.worldPosition)
                 
                 if let nodeWithAttributes = chosenScenarioForChallenge {
                     switch nodeToBeRemoved.name {
