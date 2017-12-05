@@ -43,8 +43,11 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
                     // Says: "Three surfaces now"
                     case 3: self.speech.sayWithInterruption(text: "Three surfaces now")
                     // Says: "One more to go."
-                    case 4: self.speech.sayWithInterruption(text: "One more to go.")
-                        
+                    case 4:
+                        self.speech.sayWithInterruption(text: "One more to go. Hit Play")
+                        DispatchQueue.main.async {
+                            self.playButton.isHidden = false
+                        }
                     default: break
                     }
                 }
@@ -67,13 +70,12 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
                 node.addChildNode(planeNode)
                 nodesAddedInScene[node] = [planeAnchor.center, planeAnchor.extent]
                 
-            } else {
-                if !inStateOfPlayForGestureControl {
-                    DispatchQueue.main.async {
-                        self.inStateOfPlay(playing: true)
-                    }
-                }
             }
+//            else {
+//                DispatchQueue.main.async {
+//                    self.playButton.isHidden = false
+//                }
+//            }
         }
     }
     
@@ -202,10 +204,10 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         // Game starts only when inStateOfPlayForGestureControl is false
         
         inStateOfPlayForGestureControl = false
+        playButton.isHidden = true
         playButton.setBackgroundImage(imgPlay, for: .normal)
         audio.isHidden = true
         chosenScenarios.removeAll()
-
         sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
     }
 }

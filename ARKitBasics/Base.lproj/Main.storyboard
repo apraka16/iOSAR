@@ -161,6 +161,9 @@
                                             <constraint firstAttribute="width" constant="64" id="POA-As-lkr"/>
                                         </constraints>
                                         <state key="normal" backgroundImage="playBtn"/>
+                                        <connections>
+                                            <action selector="play:" destination="7dh-A0-qGE" eventType="touchUpInside" id="ldR-zc-iXX"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>

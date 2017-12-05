@@ -69,7 +69,7 @@ class Speech: AVSpeechSynthesizer {
     }
     
     func sayNegativeExplanation(color: String, shape: String) {
-        let speechUtterance = AVSpeechUtterance(string: "This is \(color), \(shape)")
+        let speechUtterance = AVSpeechUtterance(string: "This is \(color) \(shape)")
         speechUtterance.voice = voice
         speechUtterance.rate = 0.5
         self.speak(speechUtterance)

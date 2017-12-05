@@ -33,7 +33,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // MARK: - Instance Variables
     
     // Configurable complexity of the game
-    let levelOfPlay = 15   // 1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15
+    let levelOfPlay = 10   // 1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15
     let sceneComplexity = 1.0  // More complex, closer to 1, less complex closer to 0.
     
     // This variable stores a dictionary of the root node which is added by auto-plane
@@ -84,7 +84,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     }
     
     // Varibles for button image changes
-    private var toggleState = 1
     let imgPlay = UIImage(named: "playBtn")
     private let imgStop = UIImage(named: "stopBtn")
     
@@ -104,22 +103,41 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // Button for changing mode to Playing - toggling image underlying the button
     @IBOutlet weak var playButton: UIButton!
     
+    
+    @IBAction func play(_ sender: UIButton) {
+        deleteAllObjects()
+        if sender.backgroundImage(for: .normal) == imgPlay {
+            if !inStateOfPlayForGestureControl {
+                inStateOfPlay(playing: true)
+            }
+        } else {
+            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+                self?.speech.sayWithInterruption(text: "Hit play for next.")
+            }
+            inStateOfPlayForGestureControl = false
+            sender.setBackgroundImage(imgPlay, for: .normal)
+        }
+//        if sender.backgroundImage(for: .normal) == imgStop {
+//            deleteAllObjects()
+//            sender.setBackgroundImage(imgPlay, for: .normal)
+//        }
+    }
     var chosenScenarios: [(number: Int, shape: String, color: String)] = []
     var chosenScenarioForChallenge: (number: Int, shape: String, color: String)?
     
     /*
-     Major method which controls the rhythm of the whole game. Game starts when
+     Main method which controls the rhythm of the whole game. Game starts when
      certain number of planes are detected and objects are placed corresponding
      to the anchors therein. Game ends when use through tap gesture is able to
      collect the object as required to complete the challenge. Game restarts
      again after that. */
     
     // Struct with static vars to use when calculating optimum number of tiles to
-    // fit a certain detected surface.
+    // fit a detected surface.
     private struct OptimumTiles {
-        static let halfTileSize: Float = 0.2
-        static let fullTileSize: Float = 0.4
-        static let margin: Float = 0.01
+        static let halfTileSize: Float = 0.1
+        static let fullTileSize: Float = 0.2
+        static let margin: Float = 0.05
     }
     
     func inStateOfPlay(playing: Bool) {
@@ -176,7 +194,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
                 
                 // Chosen Scenario is used for actual challenge
                 self?.chosenScenarioForChallenge = self?.chosenScenarios[
-                    (self?.randRange(lower: 0, upper: (self?.chosenScenarios.count)!-1))!
+                    (self?.randRange(lower: 0, upper: (self?.chosenScenarios.count)! - 1))!
                 ]
                 
                 self?.speech.sayFind(color: (self?.chosenScenarioForChallenge?.color)!,
@@ -189,9 +207,9 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         } else {
             inStateOfPlayForGestureControl = false
             playButton.setBackgroundImage(imgPlay, for: .normal)
-            prepareSceneForNextRun()
+            animationForObjects()
             audio.isHidden = true
-            inStateOfPlay(playing: true)
+//            inStateOfPlay(playing: true)
         }
     }
     
@@ -218,14 +236,69 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         return shape
     }
     
+    // CAAnimation object - apply to nodes for animating transition, rotation and fading
+    private func riseUpSpinAndFadeAnimation(on shape: SCNNode) {
+        let riseUpAnimation = CABasicAnimation(keyPath: "position")
+        riseUpAnimation.fromValue = SCNVector3(shape.position.x, shape.position.y, shape.position.z)
+        riseUpAnimation.toValue = SCNVector3(shape.position.x, shape.position.y + 0.5, shape.position.z)
+        
+        let spinAnimation = CABasicAnimation(keyPath: "eulerAngles.y")
+        spinAnimation.toValue = shape.eulerAngles.y + 180.0
+        spinAnimation.autoreverses = true
+        
+        let fadeAnimation = CABasicAnimation(keyPath: "opacity")
+        fadeAnimation.toValue = 0.0
+        
+        let riseUpSpinAndFadeAnimation = CAAnimationGroup()
+        riseUpSpinAndFadeAnimation.animations = [riseUpAnimation, fadeAnimation, spinAnimation]
+        riseUpSpinAndFadeAnimation.duration = 1.0
+        riseUpSpinAndFadeAnimation.fillMode = kCAFillModeForwards
+        riseUpSpinAndFadeAnimation.isRemovedOnCompletion = false
+        
+        shape.addAnimation(riseUpSpinAndFadeAnimation, forKey: "riseUpSpinAndFade")
+    }
+    
+    // CAAnimation object - apply to nodes for fading
+    private func fadeAnimation(on shape: SCNNode) {
+        let fadeAnimation = CABasicAnimation(keyPath: "opacity")
+        fadeAnimation.toValue = 0.0
+        fadeAnimation.duration = 0.5
+        fadeAnimation.fillMode = kCAFillModeForwards
+        fadeAnimation.isRemovedOnCompletion = false
+        shape.addAnimation(fadeAnimation, forKey: "fade")
+    }
+    
     // After a run of the game, clears all objects and empties the array of scenarios used in
     // the game
-    private func prepareSceneForNextRun() {
+    private func animationForObjects() {
         DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-            self?.chosenScenarios.removeAll()
             for node in (self?.nodesAddedInScene.keys)! {
-                while node.childNodes.count > 1 {
-                    node.childNodes.last?.removeFromParentNode()
+                // Index being started at 1, since planeAnchors should not be animated
+                for index in 1...node.childNodes.count - 1 {
+                    // user tapped node is being named "target" in gesture controller
+                    if node.childNodes[index].childNodes.first?.name == "target" {
+                        // user tapped node should run transition, rotation and fading animation
+                        self?.riseUpSpinAndFadeAnimation(on: node.childNodes[index])
+                    } else {
+                        // All other nodes should run fading animation
+                        self?.fadeAnimation(on: node.childNodes[index])
+                    }
+                }
+            }
+        }
+    }
+    
+    // Delete all nodes except the planeAnchor node.
+    // Empty chosenScenario array
+    private func deleteAllObjects() {
+        DispatchQueue.global(qos: .userInteractive).async {
+            if self.chosenScenarios.count > 0 {
+                self.chosenScenarios.removeAll()
+                for node in self.nodesAddedInScene.keys {
+                    while node.childNodes.count > 1 {
+//                        node.childNodes.last?.removeAllAnimations()
+                        node.childNodes.last?.removeFromParentNode()
+                    }
                 }
             }
         }
@@ -242,7 +315,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             Int((extent.z / 2 - OptimumTiles.halfTileSize - OptimumTiles.margin)
                 / (OptimumTiles.fullTileSize + 2 * OptimumTiles.margin)) * 2 + 1
         
-        // To make sure atleast there is one node along both X and Z, which is actually valid, since
+        // Make sure atleast there is one node along both X and Z, which is actually valid, since
         // bare minimum one object can be placed on the center of the plane, which is what we are
         // ensuring
         if numberOfNodesAlongX < 1 { numberOfNodesAlongX = 1 }
@@ -251,20 +324,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         return (alongX: numberOfNodesAlongX, alongZ: numberOfNodesAlongZ)
     }
     
-    // NO use of physics yet.
-    private func addPhysics(to node: SCNNode) -> SCNNode {
-        let physicsBody = SCNPhysicsBody(
-            type: .dynamic,
-            shape: SCNPhysicsShape(node: node, options: nil))
-        physicsBody.mass = 1.25
-        physicsBody.restitution = 0.1
-        physicsBody.friction = 0.8
-        physicsBody.rollingFriction = 1.0
-        physicsBody.damping = 0.8
-        physicsBody.angularDamping = 0.8
-        node.physicsBody = physicsBody
-        return node
-    }
     
     // Info label and view
     // @TODO: Hide label when play mode is operational
@@ -287,7 +346,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     @IBAction func reset(_ sender: UIButton) {
         resetTracking()
     }
-    
     
     
     @IBOutlet weak var audio: UIButton!
@@ -340,7 +398,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         
         let crosshair = Crosshairs()
         crosshair.displayAsBillboard()
-        
+        playButton.isHidden = true
         audio.isHidden = true
         
         sceneView.pointOfView?.addChildNode(crosshair)

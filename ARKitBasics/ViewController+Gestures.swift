@@ -24,24 +24,27 @@ extension ViewController: UIGestureRecognizerDelegate {
     //    }
     
     private func action(on node: SCNNode, for key: String) {
-        let actionVanish = SCNAction.scale(to: 0.5, duration: 0.1)
+//        let actionVanish = SCNAction.scale(to: 0.5, duration: 0.1) // It's not even visible because node is removed sooner than this happens
         let actionJump = SCNAction.sequence([SCNAction.scale(to: 0.7, duration: 0.1), SCNAction.scale(to: 1, duration: 0.05)])
         
         switch key {
-        case "vanish":
+        case "vanish":            
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
                 //                self.sound.playSound(named: "swoosh") // Probably not needed since textToSpeech included
-                self?.speech.say(text: (self?.speech.randomAccolade)!)
-                self?.speech.say(text: "Let's move to the next.")
+                self?.speech.sayWithInterruption(text: (self?.speech.randomAccolade)!)
+                self?.speech.say(text: "For next hit Play.")
                 
                 // Remove existing objects, restart the game.
                 DispatchQueue.main.async {
+                    node.name = "target"
                     self?.inStateOfPlay(playing: false)
                 }
             }
-            node.runAction(actionVanish)
+            node.name = "target"
+//            node.runAction(actionVanish)
+            
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) { [weak self] in
-                node.parent?.removeFromParentNode()
+//                node.parent?.removeFromParentNode()
                 self?.segueButton.setBackgroundImage(UIImage(named: "cube-blue"), for: .normal)
             }
         case "jump":
