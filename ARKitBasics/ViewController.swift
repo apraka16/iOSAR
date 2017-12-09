@@ -69,6 +69,8 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         }
     }
     
+    
+    
     // Generate random scenario from all scenarios to be used while creating
     // challenges and scene for the user.
     func generateRandomScenario() -> (number: Int, shape: String, color: String) {
@@ -88,7 +90,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     private let imgStop = UIImage(named: "stopBtn")
     
     // Controls whether gesture works or not
-    var inStateOfPlayForGestureControl = false 
+    var inStateOfPlay = false 
     
     
     // MARK: - IBOutlets
@@ -107,15 +109,16 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     @IBAction func play(_ sender: UIButton) {
         deleteAllObjects()
         if sender.backgroundImage(for: .normal) == imgPlay {
-            if !inStateOfPlayForGestureControl {
+            if !inStateOfPlay {
                 inStateOfPlay(playing: true)
             }
         } else {
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
                 self?.speech.sayWithInterruption(text: "Hit play for next.")
             }
-            inStateOfPlayForGestureControl = false
+            inStateOfPlay = false
             sender.setBackgroundImage(imgPlay, for: .normal)
+
         }
 //        if sender.backgroundImage(for: .normal) == imgStop {
 //            deleteAllObjects()
@@ -144,7 +147,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         if playing {
             
             // To make sure tap gesture is operative only when user is on play more
-            inStateOfPlayForGestureControl = true
+            inStateOfPlay = true
             
             // Setting background image to "Stop" as soon as user enters the play more
             playButton.setBackgroundImage(imgStop, for: .normal)
@@ -205,7 +208,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
                 }
             }
         } else {
-            inStateOfPlayForGestureControl = false
+            inStateOfPlay = false
             playButton.setBackgroundImage(imgPlay, for: .normal)
             animationForObjects()
             audio.isHidden = true
@@ -287,6 +290,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             }
         }
     }
+
     
     // Delete all nodes except the planeAnchor node.
     // Empty chosenScenario array

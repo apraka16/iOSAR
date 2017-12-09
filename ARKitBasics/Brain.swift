@@ -32,6 +32,7 @@ class Brain {
     private let maxNumberOfObjects = 5
     
     let colors = ["red", "blue", "green", "white", "black", "yellow"]
+//    let colorsWithDifficultyTwo = ["magenta", "orange", "purple", "gray", "brown", "cyan"]
     
     private let shapesWithDifficultyOne = ["circle", "rectangle", "square"]
     private let shapesWithDifficultyTwo = ["cube", "cylinder", "sphere"]

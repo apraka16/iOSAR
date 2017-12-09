@@ -17,7 +17,8 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         
         if let numberOfAnchorsInScene = sceneView.session.currentFrame?.anchors.count {
-            if numberOfAnchorsInScene <= 4 {
+            if !inStateOfPlay {
+//            if numberOfAnchorsInScene <= 4 {
                 // Place content only for anchors found by plane detection.
                 guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
                 
@@ -28,12 +29,6 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
                 planeNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
                 
                 DispatchQueue.global(qos: .userInitiated).async {
-                    // Physics not being used currently.
-                    // let body = SCNPhysicsBody(type: .kinematic,
-                    //                          shape: SCNPhysicsShape(geometry: plane, options: nil))
-                    // body.restitution = 0.0
-                    // body.friction = 1.0
-                    // planeNode.physicsBody = body
                     
                     switch numberOfAnchorsInScene {
                     // Says: "That's one. Keep moving around"
@@ -44,7 +39,7 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
                     case 3: self.speech.sayWithInterruption(text: "Three surfaces now")
                     // Says: "One more to go."
                     case 4:
-                        self.speech.sayWithInterruption(text: "One more to go. Hit Play")
+                        self.speech.sayWithInterruption(text: "Hit Play anytime to get started")
                         DispatchQueue.main.async {
                             self.playButton.isHidden = false
                         }
@@ -203,7 +198,7 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         // To make sure almost everything re-runs when a user resets his/ her experience.
         // Game starts only when inStateOfPlayForGestureControl is false
         
-        inStateOfPlayForGestureControl = false
+        inStateOfPlay = false
         playButton.isHidden = true
         playButton.setBackgroundImage(imgPlay, for: .normal)
         audio.isHidden = true

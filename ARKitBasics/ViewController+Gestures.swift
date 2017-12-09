@@ -61,7 +61,7 @@ extension ViewController: UIGestureRecognizerDelegate {
     
     @objc
     func collectObject(_ gestureRecognize: UITapGestureRecognizer) {
-        if !inStateOfPlayForGestureControl {
+        if !inStateOfPlay {
             return
         }
         let p = gestureRecognize.location(in: sceneView)
