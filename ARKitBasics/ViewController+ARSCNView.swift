@@ -18,7 +18,6 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         
         if let numberOfAnchorsInScene = sceneView.session.currentFrame?.anchors.count {
             if !inStateOfPlay {
-//            if numberOfAnchorsInScene <= 4 {
                 // Place content only for anchors found by plane detection.
                 guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
                 
@@ -66,11 +65,6 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
                 nodesAddedInScene[node] = [planeAnchor.center, planeAnchor.extent]
                 
             }
-//            else {
-//                DispatchQueue.main.async {
-//                    self.playButton.isHidden = false
-//                }
-//            }
         }
     }
     
@@ -98,11 +92,14 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         plane.height = CGFloat(planeAnchor.extent.z)
     }
     
+    // Remove nodes if the anchor plane is removed. YET to test whether it works.
     func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
         nodesAddedInScene.removeValue(forKey: node)
     }
     
     
+    // Update distance of crosshair in a timely fashion depending on feature point detection at
+    // screen's center.
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         DispatchQueue.main.async {
             let featurePointArray = self.sceneView.hitTest(self.screenCenter, types: .featurePoint)
@@ -111,8 +108,33 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
                 self.arrayFeaturePointDistance = Array(self.arrayFeaturePointDistance.suffix(10))
                 let average = self.arrayFeaturePointDistance.reduce(CGFloat(0), { $0 + $1 }) / CGFloat(self.arrayFeaturePointDistance.count)
                 self.sceneView.pointOfView?.childNodes[0].position.z = min(-0.6, Float(-average))
-                self.sceneView.pointOfView?.childNodes[0].eulerAngles.x = (self.sceneView.session.currentFrame?.camera.eulerAngles.x)!
+
+                // Orients crosshairs to match horizontal orientation
+                self.sceneView.pointOfView?.childNodes[0].eulerAngles.x = -self.switchCameraAngleToLieParallelToGround(angle: (self.sceneView.session.currentFrame?.camera.eulerAngles.x)!)
+                
             }
+        }
+    }
+    
+    
+    /* Converts camera euler angle to its complement.
+     Necessary to orient crosshairs so as to make it parallel to the physical ground.
+     Description: When the device is vertical, euler angles of X-axis to the pointOfView's camera
+     is at an angle of 0 (Float 0), which also is 90 degrees (Float -1.5) when camera is horizontal.
+     On rotating the device from top-up vertical to bottom-up vertical, euler angles of X-axis of
+     the camera starts decreasing from 0 through -1.5 to again rise to 0. Hence, the solution below
+     doesn't work well when device's orientation is from horizontal to bottom-up vertical.
+     Assuming user will (hopefully) not orient the device in such a way, the solution is left as-is for
+     the lack of a more thorough solution.
+     */
+    private func switchCameraAngleToLieParallelToGround(angle: Float) -> Float {
+        switch angle {
+        case let x where x >= 0:
+            return abs(Float.pi / 2 - x)
+        case let x where x < 0:
+            return abs(Float.pi / 2 + x)
+        default:
+            return Float.pi / 2
         }
     }
     
