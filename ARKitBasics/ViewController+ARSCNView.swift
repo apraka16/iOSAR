@@ -32,11 +32,8 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
                     switch numberOfAnchorsInScene {
                     // Says: "That's one. Keep moving around"
                     case 1: self.speech.sayWithInterruption(text: "That's one. Keep moving around")
-                    // Says: "Makes it two"
                     case 2: self.speech.sayWithInterruption(text: "Makes it two")
-                    // Says: "Three surfaces now"
                     case 3: self.speech.sayWithInterruption(text: "Three surfaces now")
-                    // Says: "One more to go."
                     case 4:
                         self.speech.sayWithInterruption(text: "Hit Play anytime to get started")
                         DispatchQueue.main.async {
@@ -138,7 +135,6 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         }
     }
     
-    // Testing: @TODO: - Smoothening of object placement and change in focussquare orientation on camera movement
     
     // MARK: - ARSessionDelegate
     

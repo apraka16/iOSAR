@@ -20,6 +20,7 @@
 		C304CAEB1FBDA32500982C82 /* thud.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C304CAEA1FBDA32400982C82 /* thud.mp3 */; };
 		C304CAED1FBDA4F400982C82 /* zip.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C304CAEC1FBDA4F400982C82 /* zip.mp3 */; };
 		C304CAF31FBDE6A200982C82 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C304CAF21FBDE6A200982C82 /* SettingsViewController.swift */; };
+		C30AD7941FDC4A4200394298 /* ViewController+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30AD7931FDC4A4200394298 /* ViewController+Animation.swift */; };
 		C314EB541FC6AEFD00E92B64 /* Crosshairs.swift in Sources */ = {isa = PBXBuildFile; fileRef = C314EB531FC6AEFD00E92B64 /* Crosshairs.swift */; };
 		C31966BD1FA0E03F00CA6059 /* VirtualObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31966BC1FA0E03F00CA6059 /* VirtualObjects.swift */; };
 		C344D8831FD01C350068042C /* Brain.swift in Sources */ = {isa = PBXBuildFile; fileRef = C344D8821FD01C350068042C /* Brain.swift */; };
@@ -55,6 +56,7 @@
 		C304CAEA1FBDA32400982C82 /* thud.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = thud.mp3; sourceTree = "<group>"; };
 		C304CAEC1FBDA4F400982C82 /* zip.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = zip.mp3; sourceTree = "<group>"; };
 		C304CAF21FBDE6A200982C82 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		C30AD7931FDC4A4200394298 /* ViewController+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Animation.swift"; sourceTree = "<group>"; };
 		C314EB531FC6AEFD00E92B64 /* Crosshairs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Crosshairs.swift; sourceTree = "<group>"; };
 		C31966BC1FA0E03F00CA6059 /* VirtualObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualObjects.swift; sourceTree = "<group>"; };
 		C344D8821FD01C350068042C /* Brain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Brain.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 				842316E31F2030C300D189D1 /* ViewController.swift */,
 				C304CAE11FBD74E300982C82 /* ViewController+Gestures.swift */,
 				C3BC389F1FB48323002E6844 /* ViewController+ARSCNView.swift */,
+				C30AD7931FDC4A4200394298 /* ViewController+Animation.swift */,
 				C3BD93861FCC4F770028C5BE /* Object.swift */,
 				C344D8821FD01C350068042C /* Brain.swift */,
 				C3BD93881FCC4F820028C5BE /* Session.swift */,
@@ -273,6 +276,7 @@
 				C344D8831FD01C350068042C /* Brain.swift in Sources */,
 				C3BD938B1FCC782F0028C5BE /* DbViewController.swift in Sources */,
 				C36739C51FC8158F00149459 /* AnchorPlane.swift in Sources */,
+				C30AD7941FDC4A4200394298 /* ViewController+Animation.swift in Sources */,
 				842316E41F2030C300D189D1 /* ViewController.swift in Sources */,
 				C3BD93871FCC4F770028C5BE /* Object.swift in Sources */,
 				C3BC38A01FB48323002E6844 /* ViewController+ARSCNView.swift in Sources */,
