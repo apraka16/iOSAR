@@ -51,11 +51,23 @@ class Speech: AVSpeechSynthesizer {
         self.speak(speechUtterance)
     }
     
+    func sayWithInterruptionAndDelay(text: String, delay: TimeInterval) {
+        if self.isSpeaking {
+            self.stopSpeaking(at: AVSpeechBoundary.immediate)
+        }
+        let speechUtterance = AVSpeechUtterance(string: text)
+        speechUtterance.preUtteranceDelay = delay
+        speechUtterance.voice = voice
+        speechUtterance.rate = 0.5
+        self.speak(speechUtterance)
+    }
+    
     func sayWithInterruption(text: String) {
         if self.isSpeaking {
             self.stopSpeaking(at: AVSpeechBoundary.immediate)
         }
         let speechUtterance = AVSpeechUtterance(string: text)
+        speechUtterance.preUtteranceDelay = 1.0
         speechUtterance.voice = voice
         speechUtterance.rate = 0.5
         self.speak(speechUtterance)

@@ -18,7 +18,9 @@ protocol ColorObjectToVCDelegate {
     func objectColor() -> UIColor
 }
 
-class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationControllerDelegate {
+class ViewController: UIViewController,
+VCFinalDelegate,
+UIPopoverPresentationControllerDelegate {
     
     /*!
      @method passVirtualObject
@@ -34,7 +36,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     
     // Configurable complexity of the game
     let levelOfPlay = 10   // 1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15
-    let sceneComplexity = 1.0  // More complex, closer to 1, less complex closer to 0.
+    let sceneComplexity = 0.5  // More complex, closer to 1, less complex closer to 0.
     
     // This variable stores a dictionary of the root node which is added by auto-plane
     // detection in ARSCN Delegate and corresponding center of the node and extent, i.e.,
@@ -111,7 +113,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             }
         } else {
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-                self?.speech.sayWithInterruption(text: "Hit play for next.")
+                self?.speech.sayWithInterruption(text: "Hit play for next")
             }
             inStateOfPlay = false
             sender.setBackgroundImage(imgPlay, for: .normal)
@@ -146,6 +148,7 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // Remove nodes from 'display' in case there already is node in the display
     // This is used when adding node to 'display' as well as when correct object is chosen
     // from tap gesture
+    
     func removeNodeFromDisplay() {
         if let countOfChildNodes = display.scene?.rootNode.childNodes.count {
             if countOfChildNodes >= 2 {
@@ -201,7 +204,9 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
              random objects on each tile, without any interaction between them.
              */
             
+            
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                self?.sound.playSound(named: "thud")
                 for nodeInScene in (self?.nodesAddedInScene)! {
 //                    nodeInScene.key.childNodes.first?.opacity = 0.0
                     let optimumFit = self?.findOptimumNumberOfNodesToFit(extent: nodeInScene.value.last!)
@@ -280,15 +285,17 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     private func animationForObjects() {
         DispatchQueue.global(qos: .userInteractive).async { [weak self] in
             for node in (self?.nodesAddedInScene.keys)! {
-                // Index being started at 1, since planeAnchors should not be animated
-                for index in 1...node.childNodes.count - 1 {
-                    // user tapped node is being named "target" in gesture controller
-                    if node.childNodes[index].childNodes.first?.name == "target" {
-                        // user tapped node should run transition, rotation and fading animation
-                        self?.riseUpSpinAndFadeAnimation(on: node.childNodes[index])
-                    } else {
-                        // All other nodes should run fading animation
-                        self?.fadeAnimation(on: node.childNodes[index])
+                if node.childNodes.count > 1 {
+                    // Index being started at 1, since planeAnchors should not be animated
+                    for index in 1...node.childNodes.count - 1 {
+                        // user tapped node is being named "target" in gesture controller
+                        if node.childNodes[index].childNodes.first?.name == "target" {
+                            // user tapped node should run transition, rotation and fading animation
+                            self?.riseUpSpinAndFadeAnimation(on: node.childNodes[index])
+                        } else {
+                            // All other nodes should run fading animation
+                            self?.fadeAnimation(on: node.childNodes[index])
+                        }
                     }
                 }
             }

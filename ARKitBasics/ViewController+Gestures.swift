@@ -30,8 +30,8 @@ extension ViewController: UIGestureRecognizerDelegate {
         switch key {
         case "vanish":            
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-                //                self.sound.playSound(named: "swoosh") // Probably not needed since textToSpeech included
-                self?.speech.sayWithInterruption(text: (self?.speech.randomAccolade)!)
+                self?.sound.playSound(named: "swoosh")
+                self?.speech.sayWithInterruptionAndDelay(text: (self?.speech.randomAccolade)!, delay: 0.1)
                 self?.speech.say(text: "For next hit Play.")
                 
                 // Remove existing objects, restart the game.
@@ -49,8 +49,8 @@ extension ViewController: UIGestureRecognizerDelegate {
             }
         case "jump":
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-                //                self.sound.playSound(named: "jump") // Probably not needed since textToSpeech included
-                self?.speech.sayWithInterruption(text: (self?.speech.randomNegation)!)
+                self?.sound.playSound(named: "jump")
+                self?.speech.sayWithInterruptionAndDelay(text: (self?.speech.randomNegation)!, delay: 0.1)
             }
             node.parent?.runAction(actionJump)
         default: break
