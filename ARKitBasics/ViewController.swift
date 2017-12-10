@@ -119,18 +119,39 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         }
     }
     
-    
+    /* User should be provided with audio as well as visual guide as to what the target
+     is. Hence, on the bottom-right, 'display' is a SCNView which shows the target object
+     when play mode is on. */
+    // Outlet for 'display'
     @IBOutlet weak var display: SCNView!
     
-    func addNodeToDisplay(node: SCNNode) {
+    // Check whether there is an existing object in display scene and remove that node so
+    // that nodes are removed there there is no need to keep them in memory
+    private func addNodeToDisplay(node: SCNNode) {
+        removeNodeFromDisplay()
+        // Scale factor and angles have been chosen after some empirical observations.
+        // @TODO: Needs better visuals here.
+        display.scene?.rootNode.addChildNode(node)
+        node.scale = SCNVector3(x: 2.8, y: 2.8, z: 2.8)
+        node.eulerAngles.x = .pi / 8
+    }
+    
+    // Separate nodes are created specifically for the purpose of 'display'
+    private func createNodeForDisplay() -> SCNNode {
+        return virtualObjectInstance.createNodes(from: (chosenScenarioForChallenge?.shape)!,
+                                                 with: virtualObjectInstance.virtualObjectsColors[
+                                                    (chosenScenarioForChallenge?.color)!]!)
+    }
+    
+    // Remove nodes from 'display' in case there already is node in the display
+    // This is used when adding node to 'display' as well as when correct object is chosen
+    // from tap gesture
+    func removeNodeFromDisplay() {
         if let countOfChildNodes = display.scene?.rootNode.childNodes.count {
             if countOfChildNodes >= 2 {
                 display.scene?.rootNode.childNodes.last?.removeFromParentNode()
             }
         }
-        display.scene?.rootNode.addChildNode(node)
-        node.scale = SCNVector3(x: 2.8, y: 2.8, z: 2.8)
-        node.eulerAngles.x = .pi / 8
     }
     
     
@@ -212,6 +233,12 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
                 self?.speech.sayFind(color: (self?.chosenScenarioForChallenge?.color)!,
                                     shape: (self?.chosenScenarioForChallenge?.shape)!
                 )
+                
+                // Add Chosen object to 'display' view
+                if let nodeForDisplay = self?.createNodeForDisplay() {
+                    self?.addNodeToDisplay(node: nodeForDisplay.childNodes.last!)
+                }
+                
                 DispatchQueue.main.async {
                     self?.audio.isHidden = false
                 }

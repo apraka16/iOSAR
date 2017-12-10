@@ -24,10 +24,6 @@ extension ViewController: UIGestureRecognizerDelegate {
     //    }
     
     
-    private func createNodeForDisplay() -> SCNNode {
-        return virtualObjectInstance.createNodes(from: (chosenScenarioForChallenge?.shape)!, with: virtualObjectInstance.virtualObjectsColors[(chosenScenarioForChallenge?.color)!]!)
-    }
-    
     private func action(on node: SCNNode, for key: String) {
         let actionJump = SCNAction.sequence([SCNAction.scale(to: 0.7, duration: 0.1), SCNAction.scale(to: 1, duration: 0.05)])
         
@@ -42,17 +38,13 @@ extension ViewController: UIGestureRecognizerDelegate {
                 DispatchQueue.main.async {
                     node.name = "target"
                     self?.startPlay(playing: false)
-                    
-                    if let nodeForDisplay = self?.createNodeForDisplay() {
-                        self?.addNodeToDisplay(node: nodeForDisplay.childNodes.last!)
-                    }
-
                 }
             }
             node.name = "target"
             
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) { [weak self] in
 //                node.parent?.removeFromParentNode()
+                self?.removeNodeFromDisplay()
                 self?.segueButton.setBackgroundImage(UIImage(named: "cube-blue"), for: .normal)
             }
         case "jump":
