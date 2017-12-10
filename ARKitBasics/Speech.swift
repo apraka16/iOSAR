@@ -25,11 +25,11 @@ class Speech: AVSpeechSynthesizer {
                              "Superb!",
                              "Keep up the good work"]
     
-    private let negation = ["That's not it!",
+    private let negation = ["Oh no!",
                             "Not this!",
-                            "Try again with other object.",
+                            "Try again.",
                             "Missed it!",
-                            "Check out other things."]
+                            "Oops."]
     
     
     var randomAccolade: String {
@@ -67,7 +67,6 @@ class Speech: AVSpeechSynthesizer {
             self.stopSpeaking(at: AVSpeechBoundary.immediate)
         }
         let speechUtterance = AVSpeechUtterance(string: text)
-        speechUtterance.preUtteranceDelay = 1.0
         speechUtterance.voice = voice
         speechUtterance.rate = 0.5
         self.speak(speechUtterance)

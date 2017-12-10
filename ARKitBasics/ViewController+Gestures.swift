@@ -43,14 +43,15 @@ extension ViewController: UIGestureRecognizerDelegate {
             node.name = "target"
             
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) { [weak self] in
-//                node.parent?.removeFromParentNode()
                 self?.removeNodeFromDisplay()
-                self?.segueButton.setBackgroundImage(UIImage(named: "cube-blue"), for: .normal)
             }
         case "jump":
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
                 self?.sound.playSound(named: "jump")
-                self?.speech.sayWithInterruptionAndDelay(text: (self?.speech.randomNegation)!, delay: 0.1)
+                self?.speech.sayWithInterruptionAndDelay(text: (self?.speech.randomNegation)!, delay: 0.05)
+                self?.speech.sayNegativeExplanation(
+                    color: (self?.virtualObjectInstance.findColor(of: node.childNodes.last!))!,
+                    shape: node.name!)
             }
             node.parent?.runAction(actionJump)
         default: break
@@ -67,9 +68,7 @@ extension ViewController: UIGestureRecognizerDelegate {
         let p = gestureRecognize.location(in: sceneView)
         let hitResults = sceneView.hitTest(p, options: [:])
         if hitResults.count > 0 && hitResults.first?.node.name != "anchorPlane" && hitResults.first?.node.name != "crosshair" {
-            let result = hitResults.first!
-            segueButton.isHidden = false
-            
+            let result = hitResults.first!            
             if (result.node.parent?.name) != nil {
                 if let anchorNode = result.node.parent?.parent?.parent?.childNode(withName: "anchorNode", recursively: true) {
                     anchorNode.isHidden = false

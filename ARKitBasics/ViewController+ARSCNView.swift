@@ -27,18 +27,18 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
                 planeNode.name = "anchorPlane"
                 planeNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
                 
-                DispatchQueue.global(qos: .userInitiated).async {
+                DispatchQueue.global(qos: .userInteractive).async {
                     
                     switch numberOfAnchorsInScene {
                     // Says: "That's one. Keep moving around"
                     case 1: self.speech.sayWithInterruption(text: "That's one. Keep moving around")
-                    case 2:
-                        self.speech.sayWithInterruption(text: "Makes it two")
+                    case 2: self.speech.sayWithInterruption(text: "Makes it two")
+                    case 3: self.speech.sayWithInterruption(text: "Three surfaces now")
+                    case 4:
+                        self.speech.sayWithInterruption(text: "Hit Play any time to get started")
                         DispatchQueue.main.async {
                             self.playButton.isHidden = false
                         }
-                    case 3: self.speech.sayWithInterruption(text: "Three surfaces now")
-                        self.speech.sayWithInterruption(text: "Hit Play anytime to get started")
                     default: break
                     }
                 }
