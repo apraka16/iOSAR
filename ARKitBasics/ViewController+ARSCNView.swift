@@ -38,7 +38,6 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
                             self.playButton.isHidden = false
                         }
                     case 3: self.speech.sayWithInterruption(text: "Three surfaces now")
-                    case 4:
                         self.speech.sayWithInterruption(text: "Hit Play anytime to get started")
                     default: break
                     }

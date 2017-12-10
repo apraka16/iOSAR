@@ -137,8 +137,6 @@
 				C3BD93881FCC4F820028C5BE /* Session.swift */,
 				C3BD938A1FCC782F0028C5BE /* DbViewController.swift */,
 				C31966BC1FA0E03F00CA6059 /* VirtualObjects.swift */,
-				C304CADD1FBC98B500982C82 /* ColorOfObjects.swift */,
-				C375353F1FB5A757003AC18F /* ContainerTableViewController.swift */,
 				C39A5C171FCEE25D002B3E16 /* Speech.swift */,
 				C304CAE61FBDA0EC00982C82 /* Sounds.swift */,
 				C304CAF21FBDE6A200982C82 /* SettingsViewController.swift */,
@@ -186,6 +184,8 @@
 		C3EAE1C61FCDD517002937E4 /* Test Table */ = {
 			isa = PBXGroup;
 			children = (
+				C304CADD1FBC98B500982C82 /* ColorOfObjects.swift */,
+				C375353F1FB5A757003AC18F /* ContainerTableViewController.swift */,
 				C3BD938C1FCC7BA50028C5BE /* TestTableViewController.swift */,
 				C3BD93901FCC81DC0028C5BE /* TestTableViewController+Extension.swift */,
 				C3BD938E1FCC7F9D0028C5BE /* FetchedResultsTableViewController.swift */,

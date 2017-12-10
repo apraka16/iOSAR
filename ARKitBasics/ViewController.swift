@@ -10,27 +10,8 @@ import SceneKit
 import ARKit
 import CoreData
 
-/*
- Protocol added so that TableViewController can communicate when color of an object is chosen
- For implementation of protocol, check VirtualObjectTableViewController
- */
-protocol ColorObjectToVCDelegate {
-    func objectColor() -> UIColor
-}
 
-class ViewController: UIViewController,
-VCFinalDelegate,
-UIPopoverPresentationControllerDelegate {
-    
-    /*!
-     @method passVirtualObject
-     @abstract Implementation of ContainerTableView delegate function
-     @param none
-     @discussion Check ContainerTableViewController for protocol implementation
-     */
-    func passVirtualObject() -> [(name: String, count: Int)] {
-        return virtualObjectInstance.virtualObjectsNames
-    }
+class ViewController: UIViewController {
     
     // MARK: - Instance Variables
     
@@ -52,9 +33,6 @@ UIPopoverPresentationControllerDelegate {
     
     // For feature point detection so as to move the crosshair distance away from camera
     var arrayFeaturePointDistance: [CGFloat] = []
-    
-    // Delegate variable used for Protocol
-    var delegate: ColorObjectToVCDelegate?
     
     
     /*
@@ -95,13 +73,6 @@ UIPopoverPresentationControllerDelegate {
     
     // MARK: - IBOutlets
     
-    /*
-     Segue Button at bottom right corner opens tableView (Container...) to keep score of
-     swiped down objects from main view
-     */
-    // Outlet for changing background image of button depending on the object which is swiped down
-    @IBOutlet weak var segueButton: UIButton!
-    
     // Button for changing mode to Playing - toggling image underlying the button
     @IBOutlet weak var playButton: UIButton!
     
@@ -124,6 +95,7 @@ UIPopoverPresentationControllerDelegate {
     /* User should be provided with audio as well as visual guide as to what the target
      is. Hence, on the bottom-right, 'display' is a SCNView which shows the target object
      when play mode is on. */
+    
     // Outlet for 'display'
     @IBOutlet weak var display: SCNView!
     
@@ -148,7 +120,6 @@ UIPopoverPresentationControllerDelegate {
     // Remove nodes from 'display' in case there already is node in the display
     // This is used when adding node to 'display' as well as when correct object is chosen
     // from tap gesture
-    
     func removeNodeFromDisplay() {
         if let countOfChildNodes = display.scene?.rootNode.childNodes.count {
             if countOfChildNodes >= 2 {
@@ -362,7 +333,6 @@ UIPopoverPresentationControllerDelegate {
         resetTracking()
     }
     
-    
     @IBOutlet weak var audio: UIButton!
     
     @IBAction func repeatChallengeAudio(_ sender: UIButton) {
@@ -374,38 +344,7 @@ UIPopoverPresentationControllerDelegate {
         )
     }
     
-    // Segue button to segue to ContainerTableView
-    @IBAction func btnPerformSeguePressed(_ sender: UIButton) {
-        performSegue(withIdentifier: "ARSCNToTabView", sender: nil)
-    }
-    
-    // Other Segue preparations
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        var destinationViewController = segue.destination
-        if let navigationController = destinationViewController as? UINavigationController {
-            destinationViewController = navigationController.visibleViewController
-                ?? destinationViewController
-        }
-        
-        if let TableViewController = destinationViewController as? ContainerTableViewController {
-            TableViewController.delegate = self
-            if let popoverPresentationController = segue.destination.popoverPresentationController {
-                popoverPresentationController.delegate = self
-            }
-        }      
-    }
-    
-    
-    // Function so that popover doesn't adapt to cover full screen on iphones
-    func adaptivePresentationStyle(for controller: UIPresentationController,
-                                   traitCollection: UITraitCollection) -> UIModalPresentationStyle {
-        if traitCollection.verticalSizeClass == .compact {
-            return .none
-        } else {
-            return .none
-        }
-    }
-    
+    // Set up 'display' view, add camera, and other settings
     private func setUpDisplay() {
         display.scene = SCNScene()
         
@@ -437,7 +376,6 @@ UIPopoverPresentationControllerDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        segueButton.isHidden = true
     }
     
     /// - Tag: StartARSession
