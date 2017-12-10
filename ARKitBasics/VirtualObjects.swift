@@ -40,21 +40,7 @@ class VirtualObjects {
         }
     }
     
-    // What's the use?
-    var virtualObjectCount: [(name: String, count: Int)] {
-        get {
-            var result: [(name: String, count: Int)] = []
-            for object in virtualObjectsNames {
-                if virtualObjectsNames.count != 0 {
-                    result.append((name: object.name, count: object.count))
-                }
-            }
-            return result
-        }
-    }
-    
-    
-    // Helper function to find name of the color when nodes are hit test.
+    // Helper function to find name of the color when nodes are hit tested.
     func findColor(of node: SCNNode) -> String {
         if let key = virtualObjectsColors.aKey(forValue: node.geometry?.firstMaterial?.diffuse.contents as! UIColor) {
             return key
@@ -63,17 +49,8 @@ class VirtualObjects {
         }
     }
     
-    // To generate problems for the child randomly
-    var randomCombination: (name: String, color: String) {
-        get {
-            let names = ["cube", "sphere"]
-            let colors = ["red", "blue", "green"]
-            return (name: names[randRange(lower: 0, upper: 1)], color: colors[randRange(lower: 0, upper: 2)])
-        }
-    }
-    
     // Get scenarios out of array of scenario of similar difficulty
-    func getScenarios(expectedLevel: Int) -> [(number: Int, shape: String, color: String, score: Int)] {
+    func getScenarios(expectedLevel: Int) -> [(shape: String, color: String, score: Int)] {
         return brain.getScenarios(expectedScore: expectedLevel)
     }
     

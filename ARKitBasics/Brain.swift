@@ -8,14 +8,13 @@
 
 
 /*
- Algo for calculating complexity should be based on 4 parameters:
- 1. Number of objects (ranges from 1 to 5): respective score
- 2. Color of objects (red, blue, green, white, black, yellow): score of 1
+ Algo for calculating complexity should be based on 3 parameters:
+ 1. Color of objects (red, blue, green, white, black, yellow): score of 1
     - possibly we can include half colors later whose score can be 2
  3. Shape of objects:
-    - Circle, Rectangle, Square: score of 1
-    - Cube, Cylinder, Sphere: score of 2
-    - Cone, Pyramid, Torus, Cuboid: score of 3
+    - Circle, Rectangle, Square, Triangle: score of 1
+    - Cube, Cylinder, Sphere, Cuboid: score of 2
+    - Cone, Pyramid, Torus, Prism: score of 3
  4. Number of objects in scene:
     This is more difficult to calculate.
     Approach: Calculate number of optimum tiles which can be fit onto a detected plane.
@@ -28,8 +27,6 @@
 import Foundation
 
 class Brain {
-    
-    private let maxNumberOfObjects = 5
     
     let colors = ["red", "blue", "green", "white", "black", "yellow"]
 //    let colorsWithDifficultyTwo = ["magenta", "orange", "purple", "gray", "brown", "cyan"]
@@ -96,14 +93,12 @@ class Brain {
     
     // Complete Array of Number of Objects, Color of Objects, Shapes of Objects and
     // their scores
-    private var scenarios: [(number: Int, shape: String, color: String, score: Int)] {
+    private var scenarios: [(shape: String, color: String, score: Int)] {
         get {
-            var result: [(number: Int, shape: String, color: String, score: Int)] = []
-            for i in 1...maxNumberOfObjects {
-                for shape in shapesScore {
-                    for color in colorScores {
-                        result.append((number: i, shape: shape.name, color: color.name, score: i*shape.score*color.score))
-                    }
+            var result: [(shape: String, color: String, score: Int)] = []
+            for shape in shapesScore {
+                for color in colorScores {
+                    result.append((shape: shape.name, color: color.name, score: shape.score * color.score))
                 }
             }
             return result
@@ -111,14 +106,13 @@ class Brain {
     }
     
     // Output of array only for a particular score
-    func getScenarios(expectedScore: Int) -> [(number: Int, shape: String, color: String, score: Int)] {
-        var result: [(number: Int, shape: String, color: String, score: Int)] = []
+    func getScenarios(expectedScore: Int) -> [(shape: String, color: String, score: Int)] {
+        var result: [(shape: String, color: String, score: Int)] = []
         for scenario in scenarios {
             if scenario.score == expectedScore {
                 result.append(scenario)
             }
         }
-        
         return result
     }
     

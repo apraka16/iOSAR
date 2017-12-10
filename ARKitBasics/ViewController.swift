@@ -43,7 +43,7 @@ class ViewController: UIViewController {
     var virtualObjectInstance = VirtualObjects()
     
     // Fetch all scenarios corresponding to a certain "levelOfPlay"
-    var scenarios: [(number: Int, shape: String, color: String, score: Int)] {
+    var scenarios: [(shape: String, color: String, score: Int)] {
         get {
             return virtualObjectInstance.getScenarios(expectedLevel: levelOfPlay)
         }
@@ -52,10 +52,9 @@ class ViewController: UIViewController {
     
     // Generate random scenario from all scenarios to be used while creating
     // challenges and scene for the user.
-    func generateRandomScenario() -> (number: Int, shape: String, color: String) {
+    func generateRandomScenario() -> (shape: String, color: String) {
         let randomScenarios = scenarios[randRange(lower: 0, upper: scenarios.count - 1)]
-        return (number: randomScenarios.number,
-                shape: randomScenarios.shape,
+        return (shape: randomScenarios.shape,
                 color: randomScenarios.color)
     }
     
@@ -129,8 +128,8 @@ class ViewController: UIViewController {
     }
     
     
-    var chosenScenarios: [(number: Int, shape: String, color: String)] = []
-    var chosenScenarioForChallenge: (number: Int, shape: String, color: String)?
+    var chosenScenarios: [(shape: String, color: String)] = []
+    var chosenScenarioForChallenge: (shape: String, color: String)?
     
     /*
      Main method which controls the rhythm of the whole game. Game starts when
@@ -190,15 +189,18 @@ class ViewController: UIViewController {
                                 DispatchQueue.main.async {
                                     nodeInScene.key.addChildNode(shape!)
                                     shape?.simdPosition = float3(
-                                        (nodeInScene.value.first?.x)! + Float(X)*(0.2 + OptimumTiles.margin),
+                                        (nodeInScene.value.first?.x)! +
+                                            Float(X)*(OptimumTiles.fullTileSize + OptimumTiles.margin),
                                         (nodeInScene.value.first?.y)!,
-                                        (nodeInScene.value.first?.z)! + Float(Z)*(0.2 + OptimumTiles.margin)
+                                        (nodeInScene.value.first?.z)! +
+                                            Float(Z)*(OptimumTiles.fullTileSize + OptimumTiles.margin)
                                     )
                                 }
                             }
                         }
                     }
                 }
+                
                 self?.speech.say(text: (self?.speech.welcomeText)!)
                 
                 // Chosen Scenario is used for actual challenge
