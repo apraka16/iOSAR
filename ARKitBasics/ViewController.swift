@@ -16,8 +16,8 @@ class ViewController: UIViewController {
     // MARK: - Instance Variables
     
     // Configurable complexity of the game
-    let levelOfPlay = 10   // 1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15
-    let sceneComplexity = 0.5  // More complex, closer to 1, less complex closer to 0.
+    let levelOfPlay = 15   // 1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15
+    let sceneComplexity = 1.0  // More complex, closer to 1, less complex closer to 0.
     
     // This variable stores a dictionary of the root node which is added by auto-plane
     // detection in ARSCN Delegate and corresponding center of the node and extent, i.e.,

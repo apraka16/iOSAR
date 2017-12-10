@@ -34,9 +34,9 @@ class Brain {
     let colors = ["red", "blue", "green", "white", "black", "yellow"]
 //    let colorsWithDifficultyTwo = ["magenta", "orange", "purple", "gray", "brown", "cyan"]
     
-    private let shapesWithDifficultyOne = ["circle", "rectangle", "square"]
-    private let shapesWithDifficultyTwo = ["cube", "cylinder", "sphere"]
-    private let shapesWithDifficultyThree = ["cone", "pyramid", "torus", "cuboid"]
+    private let shapesWithDifficultyOne = ["circle", "rectangle", "square", "triangle"]
+    private let shapesWithDifficultyTwo = ["cube", "cylinder", "sphere", "cuboid"]
+    private let shapesWithDifficultyThree = ["cone", "pyramid", "torus", "prism"]
     
     var shapes: [String] {
         get {
