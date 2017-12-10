@@ -70,7 +70,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     }
     
     
-    
     // Generate random scenario from all scenarios to be used while creating
     // challenges and scene for the user.
     func generateRandomScenario() -> (number: Int, shape: String, color: String) {
@@ -92,7 +91,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // Controls whether gesture works or not
     var inStateOfPlay = false 
     
-    
     // MARK: - IBOutlets
     
     /*
@@ -105,12 +103,11 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     // Button for changing mode to Playing - toggling image underlying the button
     @IBOutlet weak var playButton: UIButton!
     
-    
     @IBAction func play(_ sender: UIButton) {
         deleteAllObjects()
         if sender.backgroundImage(for: .normal) == imgPlay {
             if !inStateOfPlay {
-                inStateOfPlay(playing: true)
+                startPlay(playing: true)
             }
         } else {
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
@@ -120,11 +117,23 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             sender.setBackgroundImage(imgPlay, for: .normal)
 
         }
-//        if sender.backgroundImage(for: .normal) == imgStop {
-//            deleteAllObjects()
-//            sender.setBackgroundImage(imgPlay, for: .normal)
-//        }
     }
+    
+    
+    @IBOutlet weak var display: SCNView!
+    
+    func addNodeToDisplay(node: SCNNode) {
+        if let countOfChildNodes = display.scene?.rootNode.childNodes.count {
+            if countOfChildNodes >= 2 {
+                display.scene?.rootNode.childNodes.last?.removeFromParentNode()
+            }
+        }
+        display.scene?.rootNode.addChildNode(node)
+        node.scale = SCNVector3(x: 2.8, y: 2.8, z: 2.8)
+        node.eulerAngles.x = .pi / 8
+    }
+    
+    
     var chosenScenarios: [(number: Int, shape: String, color: String)] = []
     var chosenScenarioForChallenge: (number: Int, shape: String, color: String)?
     
@@ -140,10 +149,10 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
     private struct OptimumTiles {
         static let halfTileSize: Float = 0.1
         static let fullTileSize: Float = 0.2
-        static let margin: Float = 0.05
+        static let margin: Float = 0.1
     }
     
-    func inStateOfPlay(playing: Bool) {
+    func startPlay(playing: Bool) {
         if playing {
             
             // To make sure tap gesture is operative only when user is on play more
@@ -212,7 +221,6 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
             playButton.setBackgroundImage(imgPlay, for: .normal)
             animationForObjects()
             audio.isHidden = true
-//            inStateOfPlay(playing: true)
         }
     }
     
@@ -364,10 +372,24 @@ class ViewController: UIViewController, VCFinalDelegate, UIPopoverPresentationCo
         }
     }
     
+    private func setUpDisplay() {
+        display.scene = SCNScene()
+        
+        // Create and add a camera to the scene
+        let cameraNode = SCNNode(); cameraNode.camera = SCNCamera()
+        display.scene?.rootNode.addChildNode(cameraNode)
+        
+        // Place the camera
+        cameraNode.position = SCNVector3(x: 0, y: 0.25, z: 1.5)
+        display.autoenablesDefaultLighting = true
+        display.antialiasingMode = .multisampling4X
+    }
+    
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setUpDisplay()
         
         let crosshair = Crosshairs()
         crosshair.displayAsBillboard()

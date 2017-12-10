@@ -186,15 +186,25 @@
                                     <action selector="repeatChallengeAudio:" destination="7dh-A0-qGE" eventType="touchUpInside" id="o43-c2-YOF"/>
                                 </connections>
                             </button>
+                            <sceneKitView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ej9-oF-qRS">
+                                <rect key="frame" x="295" y="470" width="64" height="64"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="64" id="7gf-hU-H7f"/>
+                                    <constraint firstAttribute="width" constant="64" id="fmc-N8-Lyb"/>
+                                </constraints>
+                            </sceneKitView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="71x-2l-AWw" firstAttribute="trailing" secondItem="ej9-oF-qRS" secondAttribute="trailing" constant="16" id="7kd-5p-T5A"/>
                             <constraint firstAttribute="bottom" secondItem="BrB-h1-WRS" secondAttribute="bottom" id="8rY-15-6Ru"/>
                             <constraint firstItem="ggI-af-33C" firstAttribute="top" secondItem="37h-bD-Iyn" secondAttribute="top" id="ARR-K3-krX"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="37h-bD-Iyn" secondAttribute="top" constant="-20" id="Gvn-CI-bzv"/>
                             <constraint firstItem="bIU-sv-Nyk" firstAttribute="top" secondItem="OMb-B6-59U" secondAttribute="top" id="Hw1-jf-Xtk"/>
                             <constraint firstItem="dpR-3V-pwu" firstAttribute="trailing" secondItem="ggI-af-33C" secondAttribute="trailing" id="LRU-SP-sHM"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="71x-2l-AWw" secondAttribute="leading" id="QIa-Ri-qJo"/>
+                            <constraint firstItem="OMb-B6-59U" firstAttribute="top" secondItem="ej9-oF-qRS" secondAttribute="bottom" id="TsE-Si-1hv"/>
                             <constraint firstItem="dpR-3V-pwu" firstAttribute="leading" secondItem="ggI-af-33C" secondAttribute="leading" id="UhE-Qb-C2w"/>
                             <constraint firstItem="bIU-sv-Nyk" firstAttribute="leading" secondItem="loo-cG-myf" secondAttribute="leadingMargin" id="W1t-I5-UcG"/>
                             <constraint firstItem="dpR-3V-pwu" firstAttribute="top" secondItem="ggI-af-33C" secondAttribute="bottom" constant="6" id="Wxe-k2-d3P"/>
@@ -212,6 +222,7 @@
                     <tabBarItem key="tabBarItem" title="Main" image="game_controller" landscapeImage="game_controller" largeContentSizeImage="game_controller" selectedImage="game_controller" id="qxM-vS-r9h"/>
                     <connections>
                         <outlet property="audio" destination="dpR-3V-pwu" id="5wC-hU-7Jo"/>
+                        <outlet property="display" destination="ej9-oF-qRS" id="AQo-eT-S06"/>
                         <outlet property="playButton" destination="H2O-4a-Dsm" id="j4Q-2I-pLJ"/>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="sgr-g8-kdG"/>
                         <outlet property="segueButton" destination="OMb-B6-59U" id="HE0-9J-PFg"/>

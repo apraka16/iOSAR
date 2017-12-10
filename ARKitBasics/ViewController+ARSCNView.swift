@@ -32,13 +32,16 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
                     switch numberOfAnchorsInScene {
                     // Says: "That's one. Keep moving around"
                     case 1: self.speech.sayWithInterruption(text: "That's one. Keep moving around")
+                            DispatchQueue.main.async {
+                                self.playButton.isHidden = false
+                                }
                     case 2: self.speech.sayWithInterruption(text: "Makes it two")
                     case 3: self.speech.sayWithInterruption(text: "Three surfaces now")
                     case 4:
                         self.speech.sayWithInterruption(text: "Hit Play anytime to get started")
-                        DispatchQueue.main.async {
-                            self.playButton.isHidden = false
-                        }
+//                        DispatchQueue.main.async {
+//                            self.playButton.isHidden = false
+//                        }
                     default: break
                     }
                 }
@@ -214,7 +217,7 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         configuration.planeDetection = .horizontal
         
         // To make sure almost everything re-runs when a user resets his/ her experience.
-        // Game starts only when inStateOfPlayForGestureControl is false
+        // Game starts only when inStateOfPlay is false
         
         inStateOfPlay = false
         playButton.isHidden = true

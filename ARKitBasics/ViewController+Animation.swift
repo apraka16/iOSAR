@@ -16,11 +16,10 @@ extension ViewController: CAAnimationDelegate {
     func riseUpSpinAndFadeAnimation(on shape: SCNNode) {
         let riseUpAnimation = CABasicAnimation(keyPath: "position")
         riseUpAnimation.fromValue = SCNVector3(shape.position.x, shape.position.y, shape.position.z)
-        riseUpAnimation.toValue = SCNVector3(shape.position.x, shape.position.y + 0.5, shape.position.z)
+        riseUpAnimation.toValue = SCNVector3(shape.position.x, shape.position.y + 1.0, shape.position.z)
         
         let spinAnimation = CABasicAnimation(keyPath: "eulerAngles.y")
         spinAnimation.toValue = shape.eulerAngles.y + 180.0
-        spinAnimation.autoreverses = true
         
         let fadeAnimation = CABasicAnimation(keyPath: "opacity")
         fadeAnimation.toValue = 0.0
@@ -38,11 +37,12 @@ extension ViewController: CAAnimationDelegate {
     func fadeAnimation(on shape: SCNNode) {
         let fadeAnimation = CABasicAnimation(keyPath: "opacity")
         fadeAnimation.toValue = 0.0
-        fadeAnimation.duration = 0.5
+        fadeAnimation.duration = 0.3
         fadeAnimation.fillMode = kCAFillModeForwards
         fadeAnimation.isRemovedOnCompletion = false
         shape.addAnimation(fadeAnimation, forKey: "fade")
     }
+
     
 }
 

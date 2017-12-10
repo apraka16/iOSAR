@@ -23,8 +23,12 @@ extension ViewController: UIGestureRecognizerDelegate {
     //        return sceneView.
     //    }
     
+    
+    private func createNodeForDisplay() -> SCNNode {
+        return virtualObjectInstance.createNodes(from: (chosenScenarioForChallenge?.shape)!, with: virtualObjectInstance.virtualObjectsColors[(chosenScenarioForChallenge?.color)!]!)
+    }
+    
     private func action(on node: SCNNode, for key: String) {
-//        let actionVanish = SCNAction.scale(to: 0.5, duration: 0.1) // It's not even visible because node is removed sooner than this happens
         let actionJump = SCNAction.sequence([SCNAction.scale(to: 0.7, duration: 0.1), SCNAction.scale(to: 1, duration: 0.05)])
         
         switch key {
@@ -37,11 +41,15 @@ extension ViewController: UIGestureRecognizerDelegate {
                 // Remove existing objects, restart the game.
                 DispatchQueue.main.async {
                     node.name = "target"
-                    self?.inStateOfPlay(playing: false)
+                    self?.startPlay(playing: false)
+                    
+                    if let nodeForDisplay = self?.createNodeForDisplay() {
+                        self?.addNodeToDisplay(node: nodeForDisplay.childNodes.last!)
+                    }
+
                 }
             }
             node.name = "target"
-//            node.runAction(actionVanish)
             
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) { [weak self] in
 //                node.parent?.removeFromParentNode()
