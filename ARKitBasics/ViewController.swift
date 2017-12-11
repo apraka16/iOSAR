@@ -16,11 +16,17 @@ class ViewController: UIViewController {
     // MARK: - Instance Variables
     let defaults = UserDefaults.standard
     
+    var indexOfPoolProbabilities: Int = 1
     var countOfConsecutiveWins: Int = 1
-    let individualProbabilities = [0.6, 0.2, 0.2]
+    var countOfConsecutiveLosses: Int = 1
+    var individualProbabilities: [Double] {
+        get {
+            return virtualObjectInstance.arrayOfProbabilities[indexOfPoolProbabilities - 1]
+        }
+    }
     
     // Configurable complexity of the game
-    let sceneComplexity = 1.0  // More complex, closer to 1, less complex closer to 0.
+    var sceneComplexity = 0.2  // More complex, closer to 1, less complex closer to 0.
     
     // This variable stores a dictionary of the root node which is added by auto-plane
     // detection in ARSCN Delegate and corresponding center of the node and extent, i.e.,
@@ -277,7 +283,6 @@ class ViewController: UIViewController {
                 self.chosenScenarios.removeAll()
                 for node in self.nodesAddedInScene.keys {
                     while node.childNodes.count > 1 {
-                        //                        node.childNodes.last?.removeAllAnimations()
                         node.childNodes.last?.removeFromParentNode()
                     }
                 }
@@ -360,6 +365,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpDisplay()
+//        print(AVSpeechSynthesisVoice.speechVoices())
         
         let crosshair = Crosshairs()
         crosshair.displayAsBillboard()
@@ -374,18 +380,46 @@ class ViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        let count = defaults.integer(forKey: "countOfConsecutiveWins")
-        if count == 0 {
+        let index = defaults.integer(forKey: "indexOfPoolProbabilities")
+        if index == 0 {
+            indexOfPoolProbabilities = 1
+        } else {
+            indexOfPoolProbabilities = index
+        }
+        
+        let density = defaults.double(forKey: "sceneComplexity")
+        if density > 0.0 {
+            sceneComplexity = density
+        } else {
+            sceneComplexity = 0.2
+        }
+        
+        let countWins = defaults.integer(forKey: "countOfConsecutiveWins")
+        if countWins == 0 {
             countOfConsecutiveWins = 1
         } else {
-            countOfConsecutiveWins = count
+            countOfConsecutiveWins = countWins
         }
+        
+        let countLosses = defaults.integer(forKey: "countOfConsecutiveLosses")
+        if countLosses == 0 {
+            countOfConsecutiveLosses = 1
+        } else  {
+            countOfConsecutiveLosses = countLosses
+        }
+        
         
     }
     
     /// - Tag: StartARSession
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        // Set all userDefaults before building the app
+//        defaults.set(1, forKey: "indexOfPoolProbabilities")
+//        defaults.set(1, forKey: "countOfConsecutiveWins")
+//        defaults.set(1, forKey: "countOfConsecutiveLosses")
+//        defaults.set(0.2, forKey: "sceneComplexity")
         
         guard ARWorldTrackingConfiguration.isSupported else {
             fatalError("""

@@ -29,6 +29,12 @@ class VirtualObjects {
         }
     }
     
+    var arrayOfProbabilities: [[Double]] {
+        get {
+            return brain.arrayOfProbabilities
+        }
+    }
+    
     //  Find name of the color when nodes are hit tested.
     func findColor(of node: SCNNode) -> String {
         if let key = virtualObjectsColors.aKey(forValue: node.geometry?.firstMaterial?.diffuse.contents as! UIColor) {

@@ -57,16 +57,10 @@ class Brain {
         let result = randRange(lower: 1, upper: 10)
         let cumProb = calculateCumulativeProbabilities(with: probabilities)
         if result <= Int(10 * cumProb.first!) {
-            print(result)
-            print(Int(10 * cumProb.first!))
             return shapes.first![randRange(lower: 0, upper: (shapes.first?.count)! - 1)]
         } else if result <= Int(10 * cumProb[1]) {
-            print(result)
-            print(Int(10 * cumProb[1]))
             return shapes[1][randRange(lower: 0, upper: (shapes[1].count) - 1)]
         } else {
-            print(result)
-            print(Int(10 * cumProb.last!))
             return shapes.last![randRange(lower: 0, upper: (shapes.last?.count)! - 1)]
         }
     }
@@ -79,6 +73,32 @@ class Brain {
         let color = colors[randRange(lower: 0, upper: colors.count - 1)]
         return (shape: shape, color: color)
     }
+    
+    // For the lack of a better solution, below is array of individual probabilities.
+    // Index of this array will be stored in userdefaults and will be used to progress
+    // further. Last one of this array is the generic case when all levels for a user has
+    // been exhausted, this will be the fallback untill user RESETS it. @TODO: How to allow
+    // user to reset?
+    let arrayOfProbabilities: [[Double]] = [
+        [1.0, 0.0, 0.0],
+        [0.9, 0.1, 0.0],
+        [0.8, 0.2, 0.0],
+        [0.7, 0.3, 0.0],
+        [0.6, 0.4, 0.0],
+        [0.5, 0.4, 0.1],
+        [0.4, 0.5, 0.1],
+        [0.3, 0.6, 0.1],
+        [0.2, 0.6, 0.2],
+        [0.1, 0.7, 0.2],
+        [0.0, 0.8, 0.2],
+        [0.0, 0.7, 0.3],
+        [0.0, 0.6, 0.4],
+        [0.0, 0.5, 0.5],
+        [0.0, 0.4, 0.6],
+        [0.0, 0.3, 0.7],
+        [0.0, 0.2, 0.8],
+        [0.2, 0.4, 0.4]
+    ]
 
     
     // MARK: - Helper Functions - randRange, cumulativeProbabilities

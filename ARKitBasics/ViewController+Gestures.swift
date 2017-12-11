@@ -42,8 +42,7 @@ extension ViewController: UIGestureRecognizerDelegate {
             }
             
             DispatchQueue.global(qos: .utility).async { [weak self] in
-                self?.countOfConsecutiveWins += 1
-                self?.defaults.set(self?.countOfConsecutiveWins, forKey: "countOfConsecutiveWins")
+                self?.manageGameLevels(for: "vanish")
             }
             
             node.name = "target"
@@ -63,13 +62,72 @@ extension ViewController: UIGestureRecognizerDelegate {
             }
             
             DispatchQueue.global(qos: .utility).async { [weak self] in
-                self?.countOfConsecutiveWins = 1
-                self?.defaults.set(self?.countOfConsecutiveWins, forKey: "countOfConsecutiveWins")
+                self?.manageGameLevels(for: "jump")
             }
             
             node.parent?.runAction(actionJump)
             
         default: break
+        }
+    }
+    
+    // Perform level increment/ decrement and scene complexity increment/ decrement
+    private func manageGameLevels(for key: String) {
+        switch key {
+        case "vanish":
+            countOfConsecutiveLosses = 1
+            if indexOfPoolProbabilities == virtualObjectInstance.arrayOfProbabilities.count {
+                sceneComplexity = 0.8
+            } else if countOfConsecutiveWins == 5 {
+                indexOfPoolProbabilities += 1
+                sceneComplexity = 0.2
+                countOfConsecutiveWins = 1
+            } else {
+                countOfConsecutiveWins += 1
+                if sceneComplexity < 1.0 {
+                    sceneComplexity += 0.2
+                }
+            }
+            
+            // Debug
+//            print("VANISH - Consecutive Wins: \(countOfConsecutiveWins)")
+//            print("VANISH - Consecutive Losses: \(countOfConsecutiveLosses)")
+//            print("VANISH - Index Pool Prob: \(indexOfPoolProbabilities)")
+//            print("VANISH - Scene Complexity: \(sceneComplexity)")
+            
+            defaults.set(countOfConsecutiveWins, forKey: "countOfConsecutiveWins")
+            defaults.set(countOfConsecutiveLosses, forKey: "countOfConsecutiveLosses")
+            defaults.set(indexOfPoolProbabilities, forKey: "indexOfPoolProbabilities")
+            defaults.set(sceneComplexity, forKey: "sceneComplexity")
+            
+        case "jump":
+            countOfConsecutiveWins = 1
+            if indexOfPoolProbabilities == 1 {
+                sceneComplexity = 0.2
+            } else if countOfConsecutiveLosses == 5 {
+                indexOfPoolProbabilities -= 1
+                sceneComplexity = 0.2
+                countOfConsecutiveLosses = 1
+            } else {
+                countOfConsecutiveLosses += 1
+                if sceneComplexity > 0.2 {
+                    sceneComplexity -= 0.2
+                }
+            }
+            
+            // Debug
+//            print("JUMP - Consecutive Wins: \(countOfConsecutiveWins)")
+//            print("JUMP - Consecutive Losses: \(countOfConsecutiveLosses)")
+//            print("JUMP - Index Pool Prob: \(indexOfPoolProbabilities)")
+//            print("JUMP - Scene Complexity: \(sceneComplexity)")
+            
+            defaults.set(countOfConsecutiveWins, forKey: "countOfConsecutiveWins")
+            defaults.set(countOfConsecutiveLosses, forKey: "countOfConsecutiveLosses")
+            defaults.set(indexOfPoolProbabilities, forKey: "indexOfPoolProbabilities")
+            defaults.set(sceneComplexity, forKey: "sceneComplexity")
+            
+        default:
+            break
         }
     }
     
