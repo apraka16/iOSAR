@@ -14,19 +14,8 @@ import SceneKit
 class VirtualObjects {
     
     let brain = Brain()
-    
-    // Name and Count of Objects - @TODO: Count should be increased as the use collects objects
-    var virtualObjectsNames: [(name: String, count: Int)] {
-        get {
-            var result: [(name: String, count: Int)] = []
-            for shape in brain.shapes {
-                result.append((name: shape, count: 0))
-            }
-            return result
-        }
-    }
-    
-    // Name and UIColor object of Colors
+        
+    // List of names and UIColor of Colors
     var virtualObjectsColors: [String: UIColor] {
         get {
             var result = [String: UIColor]()
@@ -40,7 +29,7 @@ class VirtualObjects {
         }
     }
     
-    // Helper function to find name of the color when nodes are hit tested.
+    //  Find name of the color when nodes are hit tested.
     func findColor(of node: SCNNode) -> String {
         if let key = virtualObjectsColors.aKey(forValue: node.geometry?.firstMaterial?.diffuse.contents as! UIColor) {
             return key
@@ -49,14 +38,13 @@ class VirtualObjects {
         }
     }
     
-    // Get scenarios out of array of scenario of similar difficulty
-    func getScenarios(expectedLevel: Int) -> [(shape: String, color: String, score: Int)] {
-        return brain.getScenarios(expectedScore: expectedLevel)
+    // Generate shape using pool's probabilities initialized from main VC
+    func generateObject(using individualProbabilities: [Double]) -> (shape: String, color: String) {
+        return brain.generateRandomObjectWithColor(using: individualProbabilities)
     }
     
     //  Create nodes from Object name - e.g. "cube"
     func createNodes(from object: String, with color: UIColor) -> SCNNode {
-        
         let wrapperNode = SCNNode()
         if let virtualScene = SCNScene(named: object.capitalized + ".scn", inDirectory: "Assets.scnassets/Shapes") {
             for child in virtualScene.rootNode.childNodes {

@@ -42,7 +42,7 @@ extension ViewController: CAAnimationDelegate {
         fadeAnimation.isRemovedOnCompletion = false
         shape.addAnimation(fadeAnimation, forKey: "fade")
     }
-
+    
     
 }
 

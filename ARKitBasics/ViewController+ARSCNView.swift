@@ -98,16 +98,17 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
     // Update distance of crosshair in a timely fashion depending on feature point detection at
     // screen's center.
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-        DispatchQueue.main.async {
-            let featurePointArray = self.sceneView.hitTest(self.screenCenter, types: .featurePoint)
-            if let distanceFromCamera = featurePointArray.first?.distance {
-                self.arrayFeaturePointDistance.append(distanceFromCamera)
-                self.arrayFeaturePointDistance = Array(self.arrayFeaturePointDistance.suffix(10))
-                let average = self.arrayFeaturePointDistance.reduce(CGFloat(0), { $0 + $1 }) / CGFloat(self.arrayFeaturePointDistance.count)
-                self.sceneView.pointOfView?.childNodes[0].position.z = min(-0.6, Float(-average))
-
+        DispatchQueue.main.async { [weak self] in
+            self?.testLabel.text = String(describing: self?.countOfConsecutiveWins)
+            let featurePointArray = self?.sceneView.hitTest((self?.screenCenter)!, types: .featurePoint)
+            if let distanceFromCamera = featurePointArray?.first?.distance {
+                self?.arrayFeaturePointDistance.append(distanceFromCamera)
+                self?.arrayFeaturePointDistance = Array((self?.arrayFeaturePointDistance.suffix(10))!)
+                let average = (self?.arrayFeaturePointDistance.reduce(CGFloat(0), { $0 + $1 }))! / CGFloat((self?.arrayFeaturePointDistance.count)!)
+                self?.sceneView.pointOfView?.childNodes[0].position.z = min(-0.6, Float(-average))
+                
                 // Orients crosshairs to match horizontal orientation
-                self.sceneView.pointOfView?.childNodes[0].eulerAngles.x = -self.switchCameraAngleToLieParallelToGround(angle: (self.sceneView.session.currentFrame?.camera.eulerAngles.x)!)
+                self?.sceneView.pointOfView?.childNodes[0].eulerAngles.x = -(self?.switchCameraAngleToLieParallelToGround(angle: (self?.sceneView.session.currentFrame?.camera.eulerAngles.x)!))!
                 
             }
         }

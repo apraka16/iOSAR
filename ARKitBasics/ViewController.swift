@@ -14,9 +14,12 @@ import CoreData
 class ViewController: UIViewController {
     
     // MARK: - Instance Variables
+    let defaults = UserDefaults.standard
+    
+    var countOfConsecutiveWins: Int = 1
+    let individualProbabilities = [0.6, 0.2, 0.2]
     
     // Configurable complexity of the game
-    let levelOfPlay = 15   // 1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15
     let sceneComplexity = 1.0  // More complex, closer to 1, less complex closer to 0.
     
     // This variable stores a dictionary of the root node which is added by auto-plane
@@ -42,20 +45,10 @@ class ViewController: UIViewController {
     // Instatiate VO
     var virtualObjectInstance = VirtualObjects()
     
-    // Fetch all scenarios corresponding to a certain "levelOfPlay"
-    var scenarios: [(shape: String, color: String, score: Int)] {
-        get {
-            return virtualObjectInstance.getScenarios(expectedLevel: levelOfPlay)
-        }
-    }
-    
-    
     // Generate random scenario from all scenarios to be used while creating
     // challenges and scene for the user.
     func generateRandomScenario() -> (shape: String, color: String) {
-        let randomScenarios = scenarios[randRange(lower: 0, upper: scenarios.count - 1)]
-        return (shape: randomScenarios.shape,
-                color: randomScenarios.color)
+        return virtualObjectInstance.generateObject(using: individualProbabilities)
     }
     
     var material: SCNMaterial?
@@ -87,7 +80,7 @@ class ViewController: UIViewController {
             }
             inStateOfPlay = false
             sender.setBackgroundImage(imgPlay, for: .normal)
-
+            
         }
     }
     
@@ -167,7 +160,7 @@ class ViewController: UIViewController {
              |     7  |  8  |  9      |
              |________________________|
              
-             PlaneAnchor node must be fitted with tiles measuring 0.1*0.1, with central
+             PlaneAnchor node must be fitted with tiles measuring 0.2*0.2, with central
              tile covering center of the PlaneAnchorNode. In order to make sure of this,
              we use the func findOptimumNumberOfNodesToFit. After we obtain the number
              of tile it will take to fill the PlaneAnchorNode, we can safely place
@@ -178,7 +171,7 @@ class ViewController: UIViewController {
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                 self?.sound.playSound(named: "thud")
                 for nodeInScene in (self?.nodesAddedInScene)! {
-//                    nodeInScene.key.childNodes.first?.opacity = 0.0
+                    nodeInScene.key.childNodes.first?.opacity = 0.0
                     let optimumFit = self?.findOptimumNumberOfNodesToFit(extent: nodeInScene.value.last!)
                     for Z in (-(optimumFit?.alongZ)!/2)...((optimumFit?.alongZ)!/2) {
                         for X in (-(optimumFit?.alongX)!/2)...((optimumFit?.alongX)!/2) {
@@ -209,7 +202,7 @@ class ViewController: UIViewController {
                 ]
                 
                 self?.speech.sayFind(color: (self?.chosenScenarioForChallenge?.color)!,
-                                    shape: (self?.chosenScenarioForChallenge?.shape)!
+                                     shape: (self?.chosenScenarioForChallenge?.shape)!
                 )
                 
                 // Add Chosen object to 'display' view
@@ -251,7 +244,7 @@ class ViewController: UIViewController {
         )
         return shape
     }
-
+    
     
     // After a run of the game, clears all objects and empties the array of scenarios used in
     // the game
@@ -274,7 +267,7 @@ class ViewController: UIViewController {
             }
         }
     }
-
+    
     
     // Delete all nodes except the planeAnchor node.
     // Empty chosenScenario array
@@ -284,7 +277,7 @@ class ViewController: UIViewController {
                 self.chosenScenarios.removeAll()
                 for node in self.nodesAddedInScene.keys {
                     while node.childNodes.count > 1 {
-//                        node.childNodes.last?.removeAllAnimations()
+                        //                        node.childNodes.last?.removeAllAnimations()
                         node.childNodes.last?.removeFromParentNode()
                     }
                 }
@@ -337,12 +330,14 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var audio: UIButton!
     
+    @IBOutlet weak var testLabel: UILabel!
+    
     @IBAction func repeatChallengeAudio(_ sender: UIButton) {
         if speech.isSpeaking {
             speech.stopSpeaking(at: AVSpeechBoundary.immediate)
         }
         speech.sayFind(color: (chosenScenarioForChallenge?.color)!,
-                            shape: (chosenScenarioForChallenge?.shape)!
+                       shape: (chosenScenarioForChallenge?.shape)!
         )
     }
     
@@ -378,6 +373,14 @@ class ViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        let count = defaults.integer(forKey: "countOfConsecutiveWins")
+        if count == 0 {
+            countOfConsecutiveWins = 1
+        } else {
+            countOfConsecutiveWins = count
+        }
+        
     }
     
     /// - Tag: StartARSession
@@ -438,12 +441,12 @@ class ViewController: UIViewController {
         super.viewDidDisappear(animated)
     }
     
+    // Helper function to generate random Integers between two Ints both ends inclusive
     func randRange (lower: Int, upper: Int) -> Int {
         return Int(UInt32(lower) + arc4random_uniform(UInt32(upper) - UInt32(lower) + 1))
     }
     
 }
-
 
 /// - Tag: Animation code - not useful, since object is removed before animation can take effect
 // let material = result.node.geometry!.firstMaterial!

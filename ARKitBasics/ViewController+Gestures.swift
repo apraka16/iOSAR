@@ -28,7 +28,7 @@ extension ViewController: UIGestureRecognizerDelegate {
         let actionJump = SCNAction.sequence([SCNAction.scale(to: 0.7, duration: 0.1), SCNAction.scale(to: 1, duration: 0.05)])
         
         switch key {
-        case "vanish":            
+        case "vanish":
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
                 self?.sound.playSound(named: "swoosh")
                 self?.speech.sayWithInterruptionAndDelay(text: (self?.speech.randomAccolade)!, delay: 0.1)
@@ -40,11 +40,19 @@ extension ViewController: UIGestureRecognizerDelegate {
                     self?.startPlay(playing: false)
                 }
             }
+            
+            DispatchQueue.global(qos: .utility).async { [weak self] in
+                self?.countOfConsecutiveWins += 1
+                self?.defaults.set(self?.countOfConsecutiveWins, forKey: "countOfConsecutiveWins")
+            }
+            
             node.name = "target"
             
+            // Removed the node from the 'display' located bottom right
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) { [weak self] in
                 self?.removeNodeFromDisplay()
             }
+            
         case "jump":
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
                 self?.sound.playSound(named: "jump")
@@ -53,7 +61,14 @@ extension ViewController: UIGestureRecognizerDelegate {
                     color: (self?.virtualObjectInstance.findColor(of: node.childNodes.last!))!,
                     shape: node.name!)
             }
+            
+            DispatchQueue.global(qos: .utility).async { [weak self] in
+                self?.countOfConsecutiveWins = 1
+                self?.defaults.set(self?.countOfConsecutiveWins, forKey: "countOfConsecutiveWins")
+            }
+            
             node.parent?.runAction(actionJump)
+            
         default: break
         }
     }
@@ -70,10 +85,6 @@ extension ViewController: UIGestureRecognizerDelegate {
         if hitResults.count > 0 && hitResults.first?.node.name != "anchorPlane" && hitResults.first?.node.name != "crosshair" {
             let result = hitResults.first!            
             if (result.node.parent?.name) != nil {
-                if let anchorNode = result.node.parent?.parent?.parent?.childNode(withName: "anchorNode", recursively: true) {
-                    anchorNode.isHidden = false
-                }
-                
                 let nodeToBeRemoved = result.node.parent!
                 
                 if let nodeWithAttributes = chosenScenarioForChallenge {
@@ -93,8 +104,8 @@ extension ViewController: UIGestureRecognizerDelegate {
                                     color: (self?.virtualObjectInstance.findColor(of: nodeToBeRemoved.childNodes.last!))!,
                                     shape: nodeToBeRemoved.name!)
                             }
-                            
                         }
+                        
                     default:
                         action(on: nodeToBeRemoved, for: "jump")
                         // This actually is a non-hygienic way - think of alternative
