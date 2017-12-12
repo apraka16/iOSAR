@@ -18,7 +18,6 @@
 		C304CAE71FBDA0EC00982C82 /* Sounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = C304CAE61FBDA0EC00982C82 /* Sounds.swift */; };
 		C304CAE91FBDA2ED00982C82 /* swoosh.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C304CAE81FBDA2EC00982C82 /* swoosh.mp3 */; };
 		C304CAEB1FBDA32500982C82 /* thud.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C304CAEA1FBDA32400982C82 /* thud.mp3 */; };
-		C304CAED1FBDA4F400982C82 /* zip.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C304CAEC1FBDA4F400982C82 /* zip.mp3 */; };
 		C304CAF31FBDE6A200982C82 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C304CAF21FBDE6A200982C82 /* SettingsViewController.swift */; };
 		C30AD7941FDC4A4200394298 /* ViewController+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30AD7931FDC4A4200394298 /* ViewController+Animation.swift */; };
 		C314EB541FC6AEFD00E92B64 /* Crosshairs.swift in Sources */ = {isa = PBXBuildFile; fileRef = C314EB531FC6AEFD00E92B64 /* Crosshairs.swift */; };
@@ -42,7 +41,7 @@
 /* Begin PBXFileReference section */
 		112FE5661F4F95A200BF85EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		42C7E84282F6D67073B8CDDB /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
-		842316DC1F2030C300D189D1 /* ARKitBasics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARKitBasics.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		842316DC1F2030C300D189D1 /* iOSAR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSAR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		842316DF1F2030C300D189D1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		842316E31F2030C300D189D1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		842316E61F2030C300D189D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -54,7 +53,6 @@
 		C304CAE61FBDA0EC00982C82 /* Sounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sounds.swift; sourceTree = "<group>"; };
 		C304CAE81FBDA2EC00982C82 /* swoosh.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = swoosh.mp3; sourceTree = "<group>"; };
 		C304CAEA1FBDA32400982C82 /* thud.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = thud.mp3; sourceTree = "<group>"; };
-		C304CAEC1FBDA4F400982C82 /* zip.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = zip.mp3; sourceTree = "<group>"; };
 		C304CAF21FBDE6A200982C82 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		C30AD7931FDC4A4200394298 /* ViewController+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Animation.swift"; sourceTree = "<group>"; };
 		C314EB531FC6AEFD00E92B64 /* Crosshairs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Crosshairs.swift; sourceTree = "<group>"; };
@@ -108,7 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				C85709121F34FC2200BB957F /* README.md */,
-				842316DE1F2030C300D189D1 /* ARKitBasics */,
+				842316DE1F2030C300D189D1 /* iOSAR */,
 				842316DD1F2030C300D189D1 /* Products */,
 				514B1E6DF77628ED68C81BC6 /* Configuration */,
 				3362F185EF089823CE82E01A /* LICENSE */,
@@ -118,12 +116,12 @@
 		842316DD1F2030C300D189D1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				842316DC1F2030C300D189D1 /* ARKitBasics.app */,
+				842316DC1F2030C300D189D1 /* iOSAR.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		842316DE1F2030C300D189D1 /* ARKitBasics */ = {
+		842316DE1F2030C300D189D1 /* iOSAR */ = {
 			isa = PBXGroup;
 			children = (
 				842316E51F2030C300D189D1 /* Main.storyboard */,
@@ -152,7 +150,7 @@
 				112FE5661F4F95A200BF85EA /* Assets.xcassets */,
 				C304CAE31FBD9E9200982C82 /* Resources */,
 			);
-			path = ARKitBasics;
+			path = iOSAR;
 			sourceTree = "<group>";
 		};
 		C304CAE31FBD9E9200982C82 /* Resources */ = {
@@ -161,7 +159,6 @@
 				C3BD93B41FCD2C830028C5BE /* jump.mp3 */,
 				C304CAE81FBDA2EC00982C82 /* swoosh.mp3 */,
 				C304CAEA1FBDA32400982C82 /* thud.mp3 */,
-				C304CAEC1FBDA4F400982C82 /* zip.mp3 */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -196,9 +193,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		842316DB1F2030C300D189D1 /* ARKitBasics */ = {
+		842316DB1F2030C300D189D1 /* iOSAR */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 842316F01F2030C300D189D1 /* Build configuration list for PBXNativeTarget "ARKitBasics" */;
+			buildConfigurationList = 842316F01F2030C300D189D1 /* Build configuration list for PBXNativeTarget "iOSAR" */;
 			buildPhases = (
 				842316D81F2030C300D189D1 /* Sources */,
 				842316D91F2030C300D189D1 /* Frameworks */,
@@ -208,9 +205,9 @@
 			);
 			dependencies = (
 			);
-			name = ARKitBasics;
+			name = iOSAR;
 			productName = ARKitBasics;
-			productReference = 842316DC1F2030C300D189D1 /* ARKitBasics.app */;
+			productReference = 842316DC1F2030C300D189D1 /* iOSAR.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -228,7 +225,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 842316D71F2030C300D189D1 /* Build configuration list for PBXProject "ARKitBasics" */;
+			buildConfigurationList = 842316D71F2030C300D189D1 /* Build configuration list for PBXProject "iOSAR" */;
 			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -241,7 +238,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				842316DB1F2030C300D189D1 /* ARKitBasics */,
+				842316DB1F2030C300D189D1 /* iOSAR */,
 			);
 		};
 /* End PBXProject section */
@@ -254,7 +251,6 @@
 				84ABEA0A1F3D15E70052D547 /* Assets.scnassets in Resources */,
 				C304CAEB1FBDA32500982C82 /* thud.mp3 in Resources */,
 				C3BD93B51FCD2C830028C5BE /* jump.mp3 in Resources */,
-				C304CAED1FBDA4F400982C82 /* zip.mp3 in Resources */,
 				842316EC1F2030C300D189D1 /* LaunchScreen.storyboard in Resources */,
 				C304CAE91FBDA2ED00982C82 /* swoosh.mp3 in Resources */,
 				112FE5671F4F95A200BF85EA /* Assets.xcassets in Resources */,
@@ -431,7 +427,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = Z6364RF362;
-				INFOPLIST_FILE = ARKitBasics/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/iOSAR/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.ARKitBasics${SAMPLE_CODE_DISAMBIGUATOR}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -447,7 +443,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = Z6364RF362;
-				INFOPLIST_FILE = ARKitBasics/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/iOSAR/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.ARKitBasics${SAMPLE_CODE_DISAMBIGUATOR}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -460,7 +456,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		842316D71F2030C300D189D1 /* Build configuration list for PBXProject "ARKitBasics" */ = {
+		842316D71F2030C300D189D1 /* Build configuration list for PBXProject "iOSAR" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				842316EE1F2030C300D189D1 /* Debug */,
@@ -469,7 +465,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		842316F01F2030C300D189D1 /* Build configuration list for PBXNativeTarget "ARKitBasics" */ = {
+		842316F01F2030C300D189D1 /* Build configuration list for PBXNativeTarget "iOSAR" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				842316F11F2030C300D189D1 /* Debug */,
