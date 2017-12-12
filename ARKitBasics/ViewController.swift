@@ -351,9 +351,7 @@ class ViewController: UIViewController, UITabBarControllerDelegate {
     }
     
     @IBOutlet weak var audio: UIButton!
-    
-    @IBOutlet weak var testLabel: UILabel!
-    
+        
     @IBAction func repeatChallengeAudio(_ sender: UIButton) {
         if speech.isSpeaking {
             speech.stopSpeaking(at: AVSpeechBoundary.immediate)

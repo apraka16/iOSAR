@@ -99,7 +99,6 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
     // screen's center.
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         DispatchQueue.main.async { [weak self] in
-            self?.testLabel.text = String(describing: self?.countOfConsecutiveWins)
             let featurePointArray = self?.sceneView.hitTest((self?.screenCenter)!, types: .featurePoint)
             if let distanceFromCamera = featurePointArray?.first?.distance {
                 self?.arrayFeaturePointDistance.append(distanceFromCamera)
