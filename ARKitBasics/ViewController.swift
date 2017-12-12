@@ -43,7 +43,7 @@ class ViewController: UIViewController, UITabBarControllerDelegate {
     // For feature point detection so as to move the crosshair distance away from camera
     var arrayFeaturePointDistance: [CGFloat] = []
     
-    
+    // If user goes to Settings Tab Bar, reset the whole game
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         if viewController.tabBarItem.tag == 2 {
             self.resetTracking()
@@ -74,7 +74,6 @@ class ViewController: UIViewController, UITabBarControllerDelegate {
     
     // Controls whether gesture works or not
     var inStateOfPlay = false 
-    
     
     
     // MARK: - IBOutlets
@@ -287,23 +286,18 @@ class ViewController: UIViewController, UITabBarControllerDelegate {
     private func animationForObjects() {
         DispatchQueue.global(qos: .userInteractive).async { [weak self] in
             for node in (self?.nodesAddedInScene.keys)! {
-                if node.childNodes.count > 1 {
-                    // Index being started at 1, since planeAnchors should not be animated
-                    for index in 1...node.childNodes.count - 1 {
-                        // user tapped node is being named "target" in gesture controller
-                        if node.childNodes[index].childNodes.first?.name == "target" {
-                            // user tapped node should run transition, rotation and fading animation
-                            self?.riseUpSpinAndFadeAnimation(on: node.childNodes[index])
-                        } else {
-                            // All other nodes should run fading animation
-                            self?.fadeAnimation(on: node.childNodes[index])
-                        }
-                    }
+                
+                node.childNodes.filter { $0.name != "target" && $0.name != "anchorPlane" }.forEach {
+                    $0.removeFromParentNode()
                 }
+                
+                node.childNodes.filter { $0.name == "target" }.forEach {
+                    self?.riseUpSpinAndFadeAnimation(on: $0)
+                }
+                
             }
         }
-    }
-    
+    }    
     
     // Delete all nodes except the planeAnchor node.
     // Empty chosenScenario array
@@ -312,8 +306,8 @@ class ViewController: UIViewController, UITabBarControllerDelegate {
             if self.chosenScenarios.count > 0 {
                 self.chosenScenarios.removeAll()
                 for node in self.nodesAddedInScene.keys {
-                    while node.childNodes.count > 1 {
-                        node.childNodes.last?.removeFromParentNode()
+                    node.childNodes.filter { $0.name != "anchorPlane" }.forEach {
+                        $0.removeFromParentNode()
                     }
                 }
             }

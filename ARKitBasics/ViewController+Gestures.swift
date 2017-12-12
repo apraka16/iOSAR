@@ -36,7 +36,7 @@ extension ViewController: UIGestureRecognizerDelegate {
                 
                 // Remove existing objects, restart the game.
                 DispatchQueue.main.async {
-                    node.name = "target"
+                    node.parent?.name = "target"
                     self?.startPlay(playing: false)
                 }
             }
@@ -45,7 +45,7 @@ extension ViewController: UIGestureRecognizerDelegate {
                 self?.manageGameLevels(for: "vanish")
             }
             
-            node.name = "target"
+//            node.name = "target"
             
             // Removed the node from the 'display' located bottom right
             DispatchQueue.main.async { [weak self] in
