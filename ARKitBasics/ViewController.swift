@@ -111,8 +111,7 @@ class ViewController: UIViewController, UITabBarControllerDelegate {
         // Scale factor and angles have been chosen after some empirical observations.
         // @TODO: Needs better visuals here.
         display.scene?.rootNode.addChildNode(node)
-        node.scale = SCNVector3(x: 2.8, y: 2.8, z: 2.8)
-        node.eulerAngles.x = .pi / 8
+        virtualObjectInstance.adjustNodes(node: node)
     }
     
     // Separate nodes are created specifically for the purpose of 'display'
@@ -128,13 +127,7 @@ class ViewController: UIViewController, UITabBarControllerDelegate {
     func removeNodeFromDisplay() {
         display.scene?.rootNode.childNodes.filter
             { $0.name != "camera" }.forEach { $0.removeFromParentNode() }
-//        if let countOfChildNodes = display.scene?.rootNode.childNodes.count {
-//            if countOfChildNodes > 1 {
-//                display.scene?.rootNode.childNodes.last?.removeFromParentNode()
-//            }
-//        }
     }
-    
     
     var chosenScenarios: [(shape: String, color: String)] = []
     var chosenScenarioForChallenge: (shape: String, color: String)?

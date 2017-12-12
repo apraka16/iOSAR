@@ -113,7 +113,7 @@
                                 </connections>
                             </button>
                             <sceneKitView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ej9-oF-qRS">
-                                <rect key="frame" x="208" y="419" width="96" height="96"/>
+                                <rect key="frame" x="220" y="419" width="96" height="96"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="96" id="fte-Py-KUh"/>
@@ -140,7 +140,7 @@
                             <constraint firstItem="71x-2l-AWw" firstAttribute="bottom" secondItem="ej9-oF-qRS" secondAttribute="bottom" constant="4" id="YSS-qP-jyF"/>
                             <constraint firstItem="71x-2l-AWw" firstAttribute="trailing" secondItem="BrB-h1-WRS" secondAttribute="trailing" id="a3B-9u-pb1"/>
                             <constraint firstItem="l8D-JO-FCo" firstAttribute="leading" secondItem="37h-bD-Iyn" secondAttribute="leading" id="aBf-gk-jss"/>
-                            <constraint firstItem="71x-2l-AWw" firstAttribute="trailing" secondItem="ej9-oF-qRS" secondAttribute="trailing" constant="16" id="ccO-q8-qf1"/>
+                            <constraint firstItem="71x-2l-AWw" firstAttribute="trailing" secondItem="ej9-oF-qRS" secondAttribute="trailing" constant="4" id="ccO-q8-qf1"/>
                             <constraint firstItem="71x-2l-AWw" firstAttribute="bottom" secondItem="bIU-sv-Nyk" secondAttribute="bottom" constant="20" id="eup-fx-Jpg"/>
                             <constraint firstItem="37h-bD-Iyn" firstAttribute="leading" secondItem="71x-2l-AWw" secondAttribute="leading" constant="15" id="lLK-x7-VyJ"/>
                             <constraint firstItem="bIU-sv-Nyk" firstAttribute="leading" secondItem="71x-2l-AWw" secondAttribute="leading" constant="16" id="tHp-Ru-3yG"/>

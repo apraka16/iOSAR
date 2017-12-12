@@ -62,6 +62,39 @@ class VirtualObjects {
         return wrapperNode
     }
     
+    // Adjust node to fit 'display'
+    func adjustNodes(node: SCNNode) {
+        switch node.name! {
+        case "circle", "square", "rectangle", "triangle":
+            node.scale = SCNVector3(x: 5.0, y: 5.0, z: 5.0)
+            node.eulerAngles.x = .pi / 2.4
+            node.position.y += 0.25
+        case "sphere":
+            node.scale = SCNVector3(x: 5.0, y: 5.0, z: 5.0)
+            node.position.y -= 0.2
+        case "cuboid":
+            node.scale = SCNVector3(x: 2.2, y: 2.2, z: 2.2)
+            node.eulerAngles.x = .pi / 7
+        case "cube":
+            node.scale = SCNVector3(x: 2.8, y: 2.8, z: 2.8)
+            node.eulerAngles.x = .pi / 8
+        case "cylinder":
+            node.scale = SCNVector3(x: 2.6, y: 2.6, z: 2.6)
+            node.eulerAngles.x = .pi / 6
+        case "prism", "cone", "pyramid":
+            node.scale = SCNVector3(x: 3.0, y: 3.0, z: 3.0)
+            node.eulerAngles.x = .pi / 6
+        case "torus":
+            node.scale = SCNVector3(x: 4.0, y: 4.0, z: 4.0)
+            node.eulerAngles.x = .pi / 6
+            node.position.y += 0.2
+        default:
+            node.scale = SCNVector3(x: 2.8, y: 2.8, z: 2.8)
+            node.eulerAngles.x = .pi / 8
+
+        }
+    }
+    
     // Private method to generate random Int between two given numbers.
     private func randRange (lower: Int, upper: Int) -> Int {
         return Int(UInt32(lower) + arc4random_uniform(UInt32(upper) - UInt32(lower) + 1))
