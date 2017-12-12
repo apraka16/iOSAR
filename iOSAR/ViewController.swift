@@ -14,31 +14,33 @@ import CoreData
 class ViewController: UIViewController {
     
     // MARK: - Instance Variables
-    let defaults = UserDefaults.standard
     
+    /*
+     UserDefaults is used to save following parameters, which ultimately is used to
+     persist the levels of game so that when user logs in to the app repeatedly, the
+     levels are the same as they were when application was closed.
+     */
+    let defaults = UserDefaults.standard
     var indexOfPoolProbabilities: Int = 1
     var countOfConsecutiveWins: Int = 1
     var countOfConsecutiveLosses: Int = 1
+    var sceneComplexity = 0.2  // More complex, closer to 1, less complex closer to 0.
     var individualProbabilities: [Double] {
         get {
             return virtualObjectInstance.arrayOfProbabilities[indexOfPoolProbabilities - 1]
         }
     }
     
-    // Configurable complexity of the game
-    var sceneComplexity = 0.2  // More complex, closer to 1, less complex closer to 0.
-    
-    // This variable stores a dictionary of the root node which is added by auto-plane
-    // detection in ARSCN Delegate and corresponding center of the node and extent, i.e.,
+    // Store a dictionary of the root nodes which is added by auto-plane
+    // detection by ARSCNDelegate; corresponding center of the node and extent, i.e.,
     // width(x) and height(z) of the PlaneAnchorNode which is added upon the root node.
     var nodesAddedInScene: [SCNNode: [vector_float3]] = [:]
-    
     
     // Instantiate Speech Class for text to speech conversion
     let speech = Speech()
     
     // Instantiate Sound Class for playing short mp3 files
-    var sound = Sounds()
+    let sound = Sounds()
     
     // For feature point detection so as to move the crosshair distance away from camera
     var arrayFeaturePointDistance: [CGFloat] = []
@@ -56,7 +58,8 @@ class ViewController: UIViewController {
         return virtualObjectInstance.generateObject(using: individualProbabilities)
     }
     
-//    var material: SCNMaterial?
+    // Find center of the screen which is used for featurepoint testing, ultimately
+    // resulting in updating the location of crosshair and its distance from camera
     var screenCenter: CGPoint {
         return sceneView.center
     }
@@ -381,14 +384,13 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        print(AVSpeechSynthesisVoice.speechVoices())
+        // set delegate to self for tabBarController
         self.tabBarController?.delegate = self
         
         let crosshair = Crosshairs()
         crosshair.displayAsBillboard()
         playButton.isHidden = true
         audio.isHidden = true
-        
         sceneView.pointOfView?.addChildNode(crosshair)
     }
     
@@ -513,17 +515,6 @@ class ViewController: UIViewController {
     
 }
 
-/// - Tag: Animation code - not useful, since object is removed before animation can take effect
-// let material = result.node.geometry!.firstMaterial!
-// SCNTransaction.begin()
-// SCNTransaction.animationDuration = 0.5
-// SCNTransaction.completionBlock = {
-//    SCNTransaction.begin()
-//    SCNTransaction.animationDuration = 0.5
-//    material.emission.contents = UIColor.black
-//    SCNTransaction.commit()
-// }
-// material.emission.contents = UIColor.red
-// SCNTransaction.commit()
+
 
 

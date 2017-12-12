@@ -31,7 +31,7 @@
         <!--Main-->
         <scene sceneID="WeU-Be-bo7">
             <objects>
-                <viewController id="7dh-A0-qGE" customClass="DbViewController" customModule="ARKitBasics" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="7dh-A0-qGE" customClass="ViewController" customModule="iOSAR" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="loo-cG-myf">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -158,7 +158,7 @@
         <!--Settings-->
         <scene sceneID="6if-45-5pL">
             <objects>
-                <tableViewController id="pQY-8V-t9L" customClass="SettingsViewController" customModule="ARKitBasics" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="pQY-8V-t9L" customClass="SettingsViewController" customModule="iOSAR" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="OJ5-vk-ZII">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -214,7 +214,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8OQ-Ti-3gJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1425" y="820"/>
+            <point key="canvasLocation" x="1463" y="699"/>
         </scene>
         <!--Settings-->
         <scene sceneID="0ay-UY-Onp">
