@@ -203,7 +203,6 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
             
         case .limited(.initializing):
             message = "Initializing AR session."
-            speech.say(text: "We will detect a few surfaces. Please move your device around")
         }
         
         sessionInfoLabel.text = message
@@ -217,11 +216,21 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
         // To make sure almost everything re-runs when a user resets his/ her experience.
         // Game starts only when inStateOfPlay is false
         
+        // Get out of play mode, so that game restarts with plane detection occuring first
         inStateOfPlay = false
+        
         playButton.isHidden = true
         playButton.setBackgroundImage(imgPlay, for: .normal)
         audio.isHidden = true
+        
+        // Remove all chosenScenarios array so that game starts afresh
         chosenScenarios.removeAll()
+        // Remove object from bottom right display
+        removeNodeFromDisplay()
+        // If any voiceovers are happening, stop the voiceovers.
+        if speech.isSpeaking {
+            speech.stopSpeaking(at: .immediate)
+        }
         sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
     }
 }

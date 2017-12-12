@@ -11,7 +11,7 @@ import ARKit
 import CoreData
 
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITabBarControllerDelegate {
     
     // MARK: - Instance Variables
     let defaults = UserDefaults.standard
@@ -44,6 +44,12 @@ class ViewController: UIViewController {
     var arrayFeaturePointDistance: [CGFloat] = []
     
     
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        if viewController.tabBarItem.tag == 2 {
+            self.resetTracking()
+        }
+    }
+    
     /*
      Initialize virtual object and fetch the array of all scenarios dependent
      on the level of play
@@ -68,6 +74,8 @@ class ViewController: UIViewController {
     
     // Controls whether gesture works or not
     var inStateOfPlay = false 
+    
+    
     
     // MARK: - IBOutlets
     
@@ -119,11 +127,13 @@ class ViewController: UIViewController {
     // This is used when adding node to 'display' as well as when correct object is chosen
     // from tap gesture
     func removeNodeFromDisplay() {
-        if let countOfChildNodes = display.scene?.rootNode.childNodes.count {
-            if countOfChildNodes >= 2 {
-                display.scene?.rootNode.childNodes.last?.removeFromParentNode()
-            }
-        }
+        display.scene?.rootNode.childNodes.filter
+            { $0.name != "camera" }.forEach { $0.removeFromParentNode() }
+//        if let countOfChildNodes = display.scene?.rootNode.childNodes.count {
+//            if countOfChildNodes > 1 {
+//                display.scene?.rootNode.childNodes.last?.removeFromParentNode()
+//            }
+//        }
     }
     
     
@@ -166,11 +176,15 @@ class ViewController: UIViewController {
              |     7  |  8  |  9      |
              |________________________|
              
-             PlaneAnchor node must be fitted with tiles measuring 0.2*0.2, with central
-             tile covering center of the PlaneAnchorNode. In order to make sure of this,
-             we use the func findOptimumNumberOfNodesToFit. After we obtain the number
-             of tile it will take to fill the PlaneAnchorNode, we can safely place
-             random objects on each tile, without any interaction between them.
+             If the sceneComplexity is 0.6, generateRandomBool() will return true with 0.6
+             probability. If bool returns true, object will be placed otherwise it will not.
+             First off, one object will be placed on all detected surfaces in the center
+             irrespective of sceneComplexity and randomBool. Then, function will start from
+             tile 1 (as shown above) traverse across horizontal and vertical and depending
+             on result of randomBool with sceneComplexity place random 3D objects on all tiles
+             
+             optimumNodeToFit is used to find the total number of tiles measuring a certain
+             dimension, which can fit the detected surface. 
              */
             
             
@@ -181,7 +195,24 @@ class ViewController: UIViewController {
                     let optimumFit = self?.findOptimumNumberOfNodesToFit(extent: nodeInScene.value.last!)
                     for Z in (-(optimumFit?.alongZ)!/2)...((optimumFit?.alongZ)!/2) {
                         for X in (-(optimumFit?.alongX)!/2)...((optimumFit?.alongX)!/2) {
-                            if (self?.generateRandomBool(with: (self?.sceneComplexity)!))! {
+                            
+                            // All planes to have at least on object which will be at the center.
+                            // Hence, sceneComplexity var is not used to place object(s) at the
+                            // center
+                            if Z == 0 && X == 0 {
+                                let shape = self?.generateShapesRandomly()
+                                DispatchQueue.main.async {
+                                    nodeInScene.key.addChildNode(shape!)
+                                    shape?.simdPosition = float3((nodeInScene.value.first?.x)!,
+                                                                 (nodeInScene.value.first?.y)!,
+                                                                 (nodeInScene.value.first?.z)!)
+                                }
+                            }
+                                
+                            // After placing objects on center of each detected surfaces, sceneComplexity
+                            // along with randomBool is used to add objects across the detected surfaces
+                            // other than centers of the detected surfaces.
+                            else if (self?.generateRandomBool(with: (self?.sceneComplexity)!))! {
                                 // Generate random shape and add to array
                                 let shape = self?.generateShapesRandomly()
                                 // Add shapes to the center as calculated by optimum node function
@@ -201,7 +232,6 @@ class ViewController: UIViewController {
                 }
                 
                 self?.speech.say(text: (self?.speech.welcomeText)!)
-                
                 // Chosen Scenario is used for actual challenge
                 self?.chosenScenarioForChallenge = self?.chosenScenarios[
                     (self?.randRange(lower: 0, upper: (self?.chosenScenarios.count)! - 1))!
@@ -353,6 +383,7 @@ class ViewController: UIViewController {
         // Create and add a camera to the scene
         let cameraNode = SCNNode(); cameraNode.camera = SCNCamera()
         display.scene?.rootNode.addChildNode(cameraNode)
+        cameraNode.name = "camera"
         
         // Place the camera
         cameraNode.position = SCNVector3(x: 0, y: 0.25, z: 1.5)
@@ -360,12 +391,20 @@ class ViewController: UIViewController {
         display.antialiasingMode = .multisampling4X
     }
     
+    // Remove all nodes from 'display'
+    private func clearDisplay() {
+        for child in (display.scene?.rootNode.childNodes)! {
+            child.removeFromParentNode()
+        }
+    }
+    
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUpDisplay()
+        
 //        print(AVSpeechSynthesisVoice.speechVoices())
+        self.tabBarController?.delegate = self
         
         let crosshair = Crosshairs()
         crosshair.displayAsBillboard()
@@ -373,12 +412,33 @@ class ViewController: UIViewController {
         audio.isHidden = true
         
         sceneView.pointOfView?.addChildNode(crosshair)
-        
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setUpDisplay()
+        prepareForGameLevelLoad()
+    }
+    
+    /*
+     When view is appearing, indexOfPoolProbabilities, sceneComplexity, countOfConsecutiveWins,
+     countOfConsecutiveLosses will be loaded from userDefaults, in case there are no such
+     objects in userDefaults such as when the app is user for the first time, default values
+     (mimimum allowed) will be set for these variables.
+     In case user resets the game levels, there 4 objects will be removed from userDefaults, so
+     that it assigns defaults for these vars when view is appearing.
+     
+     Note: minimum values for indexOfPoolProbabilities, countOfConsecutiveWins,
+     countOfConsecutiveLosses are kept at 1, since userDefaults in case non-existent returns
+     a value of 0, which is why we can't set it as 0 which would have made logical sense.
+     */
+    private func prepareForGameLevelLoad() {
+        if Settings.sharedInstance.resetLevel {
+            defaults.removeObject(forKey: "countOfConsecutiveWins")
+            defaults.removeObject(forKey: "countOfConsecutiveLosses")
+            defaults.removeObject(forKey: "indexOfPoolProbabilities")
+            defaults.removeObject(forKey: "sceneComplexity")
+        }
         
         let index = defaults.integer(forKey: "indexOfPoolProbabilities")
         if index == 0 {
@@ -406,15 +466,13 @@ class ViewController: UIViewController {
             countOfConsecutiveLosses = 1
         } else  {
             countOfConsecutiveLosses = countLosses
-        }
-        
-        
+        }        
     }
     
     /// - Tag: StartARSession
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+        speech.say(text: "We will detect a few surfaces. Please move your device around")
         // Set all userDefaults before building the app
 //        defaults.set(1, forKey: "indexOfPoolProbabilities")
 //        defaults.set(1, forKey: "countOfConsecutiveWins")
@@ -473,6 +531,7 @@ class ViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        clearDisplay()
     }
     
     // Helper function to generate random Integers between two Ints both ends inclusive

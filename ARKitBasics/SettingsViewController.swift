@@ -16,6 +16,11 @@ class SettingsViewController: UITableViewController {
         Settings.sharedInstance.autoPlay = autoset.isOn
     }
     
+    
+    @IBAction func reset(_ sender: UIButton) {
+        Settings.sharedInstance.resetLevel = true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

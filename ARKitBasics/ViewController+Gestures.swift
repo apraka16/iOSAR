@@ -48,14 +48,14 @@ extension ViewController: UIGestureRecognizerDelegate {
             node.name = "target"
             
             // Removed the node from the 'display' located bottom right
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) { [weak self] in
+            DispatchQueue.main.async { [weak self] in
                 self?.removeNodeFromDisplay()
             }
             
         case "jump":
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
                 self?.sound.playSound(named: "jump")
-                self?.speech.sayWithInterruptionAndDelay(text: (self?.speech.randomNegation)!, delay: 0.05)
+                self?.speech.sayWithInterruptionAndDelay(text: (self?.speech.randomNegation)!, delay: 0.03)
                 self?.speech.sayNegativeExplanation(
                     color: (self?.virtualObjectInstance.findColor(of: node.childNodes.last!))!,
                     shape: node.name!)
