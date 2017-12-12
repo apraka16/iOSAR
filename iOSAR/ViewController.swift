@@ -11,7 +11,7 @@ import ARKit
 import CoreData
 
 
-class ViewController: UIViewController, UITabBarControllerDelegate {
+class ViewController: UIViewController {
     
     // MARK: - Instance Variables
     let defaults = UserDefaults.standard
@@ -42,13 +42,6 @@ class ViewController: UIViewController, UITabBarControllerDelegate {
     
     // For feature point detection so as to move the crosshair distance away from camera
     var arrayFeaturePointDistance: [CGFloat] = []
-    
-    // If user goes to Settings Tab Bar, reset the whole game
-    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        if viewController.tabBarItem.tag == 2 {
-            self.resetTracking()
-        }
-    }
     
     /*
      Initialize virtual object and fetch the array of all scenarios dependent

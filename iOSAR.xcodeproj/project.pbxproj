@@ -36,6 +36,7 @@
 		C3BD938F1FCC7F9D0028C5BE /* FetchedResultsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD938E1FCC7F9D0028C5BE /* FetchedResultsTableViewController.swift */; };
 		C3BD93911FCC81DC0028C5BE /* TestTableViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3BD93901FCC81DC0028C5BE /* TestTableViewController+Extension.swift */; };
 		C3BD93B51FCD2C830028C5BE /* jump.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C3BD93B41FCD2C830028C5BE /* jump.mp3 */; };
+		C3C088961FE03376009A9D56 /* ViewController+TabBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C088951FE03376009A9D56 /* ViewController+TabBarDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -71,6 +72,7 @@
 		C3BD938E1FCC7F9D0028C5BE /* FetchedResultsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchedResultsTableViewController.swift; sourceTree = "<group>"; };
 		C3BD93901FCC81DC0028C5BE /* TestTableViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TestTableViewController+Extension.swift"; sourceTree = "<group>"; };
 		C3BD93B41FCD2C830028C5BE /* jump.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = jump.mp3; sourceTree = "<group>"; };
+		C3C088951FE03376009A9D56 /* ViewController+TabBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+TabBarDelegate.swift"; sourceTree = "<group>"; };
 		C85709121F34FC2200BB957F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E992F9D8F8B95C1D0CEEB4BF /* SampleCode.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = SampleCode.xcconfig; path = Configuration/SampleCode.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -130,6 +132,7 @@
 				C304CAE11FBD74E300982C82 /* ViewController+Gestures.swift */,
 				C3BC389F1FB48323002E6844 /* ViewController+ARSCNView.swift */,
 				C30AD7931FDC4A4200394298 /* ViewController+Animation.swift */,
+				C3C088951FE03376009A9D56 /* ViewController+TabBarDelegate.swift */,
 				C3BD93861FCC4F770028C5BE /* Object.swift */,
 				C344D8821FD01C350068042C /* Brain.swift */,
 				C3BD93881FCC4F820028C5BE /* Session.swift */,
@@ -281,6 +284,7 @@
 				C304CAE71FBDA0EC00982C82 /* Sounds.swift in Sources */,
 				842316E01F2030C300D189D1 /* AppDelegate.swift in Sources */,
 				C37535401FB5A757003AC18F /* ContainerTableViewController.swift in Sources */,
+				C3C088961FE03376009A9D56 /* ViewController+TabBarDelegate.swift in Sources */,
 				C304CAF31FBDE6A200982C82 /* SettingsViewController.swift in Sources */,
 				C304CADE1FBC98B500982C82 /* ColorOfObjects.swift in Sources */,
 				C3BD938F1FCC7F9D0028C5BE /* FetchedResultsTableViewController.swift in Sources */,
