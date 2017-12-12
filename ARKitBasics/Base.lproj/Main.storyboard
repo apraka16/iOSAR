@@ -174,45 +174,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <sections>
-                            <tableViewSection headerTitle="Play Mode" id="XtI-z9-Hqg">
-                                <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="6IL-KH-LVY">
-                                        <rect key="frame" x="0.0" y="28" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="6IL-KH-LVY" id="For-mu-eaQ">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Auto" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yax-H8-pY0">
-                                                    <rect key="frame" x="16" y="11" width="36" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2YL-dp-6At">
-                                                    <rect key="frame" x="253" y="6" width="51" height="31"/>
-                                                    <connections>
-                                                        <action selector="setAutoMode:" destination="pQY-8V-t9L" eventType="valueChanged" id="mYe-aY-A5p"/>
-                                                    </connections>
-                                                </switch>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="2YL-dp-6At" secondAttribute="trailing" constant="18" id="8ba-Cj-3F5"/>
-                                                <constraint firstItem="2YL-dp-6At" firstAttribute="top" secondItem="For-mu-eaQ" secondAttribute="top" constant="6" id="Hvs-ZT-Fc0"/>
-                                                <constraint firstAttribute="bottom" secondItem="yax-H8-pY0" secondAttribute="bottom" constant="11.5" id="PrC-w7-Lui"/>
-                                                <constraint firstAttribute="bottom" secondItem="2YL-dp-6At" secondAttribute="bottom" constant="6.5" id="UBj-8v-rhB"/>
-                                                <constraint firstItem="yax-H8-pY0" firstAttribute="leading" secondItem="For-mu-eaQ" secondAttribute="leading" constant="16" id="j4W-aH-q4O"/>
-                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="yax-H8-pY0" secondAttribute="trailing" constant="20" symbolic="YES" id="uQo-Fm-016"/>
-                                                <constraint firstItem="yax-H8-pY0" firstAttribute="top" secondItem="For-mu-eaQ" secondAttribute="top" constant="11" id="vyD-70-U9F"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
                             <tableViewSection headerTitle="Levels" id="e4A-Vp-ZGw">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="vFb-eF-qnB">
-                                        <rect key="frame" x="0.0" y="100" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="28" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="vFb-eF-qnB" id="Cod-eb-WB8">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
@@ -256,9 +221,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Settings" id="3sS-Ql-3Uc"/>
-                    <connections>
-                        <outlet property="autoset" destination="2YL-dp-6At" id="Ay2-w3-2ee"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8OQ-Ti-3gJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -63,7 +63,7 @@ class ViewController: UIViewController, UITabBarControllerDelegate {
         return virtualObjectInstance.generateObject(using: individualProbabilities)
     }
     
-    var material: SCNMaterial?
+//    var material: SCNMaterial?
     var screenCenter: CGPoint {
         return sceneView.center
     }
@@ -460,12 +460,6 @@ class ViewController: UIViewController, UITabBarControllerDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         speech.say(text: "We will detect a few surfaces. Please move your device around")
-        // Set all userDefaults before building the app
-//        defaults.set(1, forKey: "indexOfPoolProbabilities")
-//        defaults.set(1, forKey: "countOfConsecutiveWins")
-//        defaults.set(1, forKey: "countOfConsecutiveLosses")
-//        defaults.set(0.2, forKey: "sceneComplexity")
-        
         guard ARWorldTrackingConfiguration.isSupported else {
             fatalError("""
                 ARKit is not available on this device. For apps that require ARKit

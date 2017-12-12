@@ -10,6 +10,5 @@ import Foundation
 
 class Settings {
     static let sharedInstance = Settings()
-    var autoPlay = true
     var resetLevel = false
 }

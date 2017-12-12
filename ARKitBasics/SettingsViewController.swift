@@ -9,14 +9,7 @@
 import UIKit
 
 class SettingsViewController: UITableViewController {
-    
-    @IBOutlet weak var autoset: UISwitch!
-    
-    @IBAction func setAutoMode(_ sender: UISwitch) {
-        Settings.sharedInstance.autoPlay = autoset.isOn
-    }
-    
-    
+        
     @IBAction func reset(_ sender: UIButton) {
         Settings.sharedInstance.resetLevel = true
     }

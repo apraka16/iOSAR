@@ -35,7 +35,7 @@ extension ViewController: UIGestureRecognizerDelegate {
                 self?.speech.say(text: "For next hit Play.")
                 
                 // Remove existing objects, restart the game.
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
                     node.parent?.name = "target"
                     self?.startPlay(playing: false)
                 }
@@ -44,9 +44,7 @@ extension ViewController: UIGestureRecognizerDelegate {
             DispatchQueue.global(qos: .utility).async { [weak self] in
                 self?.manageGameLevels(for: "vanish")
             }
-            
-//            node.name = "target"
-            
+                        
             // Removed the node from the 'display' located bottom right
             DispatchQueue.main.async { [weak self] in
                 self?.removeNodeFromDisplay()
@@ -89,12 +87,6 @@ extension ViewController: UIGestureRecognizerDelegate {
                 }
             }
             
-            // Debug
-//            print("VANISH - Consecutive Wins: \(countOfConsecutiveWins)")
-//            print("VANISH - Consecutive Losses: \(countOfConsecutiveLosses)")
-//            print("VANISH - Index Pool Prob: \(indexOfPoolProbabilities)")
-//            print("VANISH - Scene Complexity: \(sceneComplexity)")
-            
             defaults.set(countOfConsecutiveWins, forKey: "countOfConsecutiveWins")
             defaults.set(countOfConsecutiveLosses, forKey: "countOfConsecutiveLosses")
             defaults.set(indexOfPoolProbabilities, forKey: "indexOfPoolProbabilities")
@@ -114,12 +106,6 @@ extension ViewController: UIGestureRecognizerDelegate {
                     sceneComplexity -= 0.2
                 }
             }
-            
-            // Debug
-//            print("JUMP - Consecutive Wins: \(countOfConsecutiveWins)")
-//            print("JUMP - Consecutive Losses: \(countOfConsecutiveLosses)")
-//            print("JUMP - Index Pool Prob: \(indexOfPoolProbabilities)")
-//            print("JUMP - Scene Complexity: \(sceneComplexity)")
             
             defaults.set(countOfConsecutiveWins, forKey: "countOfConsecutiveWins")
             defaults.set(countOfConsecutiveLosses, forKey: "countOfConsecutiveLosses")
