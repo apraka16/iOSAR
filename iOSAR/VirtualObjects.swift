@@ -52,7 +52,7 @@ class VirtualObjects {
     //  Create nodes from Object name - e.g. "cube"
     func createNodes(from object: String, with color: UIColor) -> SCNNode {
         let wrapperNode = SCNNode()
-        if let virtualScene = SCNScene(named: object.capitalized + ".scn", inDirectory: "Assets.scnassets/Shapes") {
+        if let virtualScene = SCNScene(named: object.capitalized + ".scn", inDirectory: "Assets.scnassets/Shapes/Geometry") {
             for child in virtualScene.rootNode.childNodes {
                 wrapperNode.addChildNode(child)
             }
