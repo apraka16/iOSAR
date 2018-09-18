@@ -1,6 +1,6 @@
 # App that runs an AR session and uses plane detection to place 3D content using SceneKit.  
 
-## REPO HAS BEEN MOVED PERMENENTLY AND IS NOT UPDATED ANYMORE. If one is interested for a conversation on this, they can get in touch at https://twitter.com/abhinavpraksh
+## REPO HAS BEEN MOVED PERMENENTLY AND IS NOT UPDATED ANYMORE. If one is interested in a conversation on this, one can get in touch at https://twitter.com/abhinavpraksh
 
 ## Basic 3D shapes to start off have been created using iOS SceneKit native codes. 
 
